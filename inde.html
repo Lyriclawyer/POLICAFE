@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Policafé - El punto de encuentro de la UPSLP</title>
+    <!-- Tailwind CSS vía CDN para diseño profesional instantáneo -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Iconos Lucide para detalles visuales -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="bg-[#faf7f2] text-[#3e2723] font-sans">
+
+    <!-- 1. BARRA DE NAVEGACIÓN -->
+    <nav class="fixed w-full bg-[#faf7f2]/90 backdrop-blur-md z-50 shadow-sm border-b border-[#efebe9]">
+        <div class="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="#" class="text-2xl font-serif font-bold tracking-wider text-[#5d4037] flex items-center gap-2">
+                <i data-lucide="coffee" class="text-amber-700"></i>POLICAFIÉ
+            </a>
+            <div class="hidden md:flex space-x-8 font-medium">
+                <a href="#inicio" class="hover:text-[#8d6e63] transition">Inicio</a>
+                <a href="#menu" class="hover:text-[#8d6e63] transition">Menú Lince</a>
+                <a href="#nosotros" class="hover:text-[#8d6e63] transition">Nuestra Esencia</a>
+                <a href="#contacto" class="hover:text-[#8d6e63] transition">Ubicación</a>
+            </div>
+            <a href="#menu" class="bg-[#5d4037] text-white px-5 py-2 rounded-full text-sm font-semibold hover:bg-[#4e342e] transition shadow-md">Ver Menú</a>
+        </div>
+    </nav>
+
+    <!-- 2. SECCIÓN DE INICIO (HERO) -->
+    <header id="inicio" class="relative h-screen flex items-center justify-center bg-cover bg-center" style="background-image: linear-gradient(rgba(0,0,0,0.55), rgba(0,0,0,0.55)), url('https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?q=80&w=1600');">
+        <div class="text-center text-white px-4 max-w-3xl">
+            <span class="text-amber-400 font-semibold tracking-widest uppercase text-sm block mb-3">Energía para tu día académico</span>
+            <h1 class="text-5xl md:text-7xl font-serif font-bold mb-6 leading-tight">El café que despierta el ingenio lince</h1>
+            <p class="text-lg md:text-xl mb-8 font-light text-gray-200">Tu espacio ideal en la UPSLP para recargar energía entre clases, trabajar en equipo o disfrutar de un buen desayuno.</p>
+            <div class="flex flex-col sm:flex-row justify-center gap-4">
+                <a href="#menu" class="bg-amber-500 hover:bg-amber-600 text-neutral-900 font-bold px-8 py-3 rounded-full shadow-lg transition">Explorar Menú</a>
+                <a href="#contacto" class="border-2 border-white hover:bg-white hover:text-neutral-900 text-white font-bold px-8 py-3 rounded-full transition">¿Dónde encontrarnos?</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- 3. SECCIÓN DE MENÚ INTERACTIVO -->
+    <section id="menu" class="py-24 max-w-6xl mx-auto px-6">
+        <div class="text-center mb-16">
+            <h2 class="text-4xl font-serif font-bold text-[#4e342e] mb-2">Nuestro Menú</h2>
+            <div class="w-16 h-1 bg-amber-600 mx-auto rounded-full mb-6"></div>
+            <p class="text-gray-600">Opciones rápidas y deliciosas para aguantar toda la jornada escolar.</p>
+        </div>
+
+        <!-- Filtros de Categorías -->
+        <div class="flex justify-center space-x-4 mb-12">
+            <button onclick="filtrarMenu('todos')" class="cat-btn bg-[#5d4037] text-white px-6 py-2 rounded-full font-medium transition shadow">Todos</button>
+            <button onclick="filtrarMenu('cafes')" class="cat-btn bg-white text-[#5d4037] border border-[#efebe9] px-6 py-2 rounded-full font-medium transition hover:bg-[#efebe9]">Cafés y Bebidas</button>
+            <button onclick="filtrarMenu('reposteria')" class="cat-btn bg-white text-[#5d4037] border border-[#efebe9] px-6 py-2 rounded-full font-medium transition hover:bg-[#efebe9]">Snacks y Repostería</button>
+        </div>
+
+        <!-- Rejilla de Productos -->
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <!-- Producto 1 -->
+            <div class="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition border border-[#efebe9]" data-categoria="cafes">
+                <img src="https://images.unsplash.com/photo-1541167760496-1628856ab772?q=80&w=600" alt="Espresso" class="h-48 w-full object-cover">
+                <div class="p-6">
+                    <div class="flex justify-between items-center mb-2">
+                        <h3 class="font-bold text-xl text-[#4e342e]">Capuccino Lince</h3>
+                        <span class="text-amber-700 font-bold">$45.00</span>
+                    </div>
+                    <p class="text-gray-600 text-sm">Espresso balanceado con leche vaporizada y el toque perfecto de energía para tus exámenes.</p>
+                </div>
+            </div>
+
+            <!-- Producto 2 -->
+            <div class="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition border border-[#efebe9]" data-categoria="cafes">
+                <img src="https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?q=80&w=600" alt="Iced Coffee" class="h-48 w-full object-cover">
+                <div class="p-6">
+                    <div class="flex justify-between items-center mb-2">
+                        <h3 class="font-bold text-xl text-[#4e342e]">Carga Politécnica</h3>
+                        <span class="text-amber-700 font-bold">$48.00</span>
+                    </div>
+                    <p class="text-gray-600 text-sm">Café americano frío con un shot extra de espresso, jarabe de vainilla y hielo.</p>
+                </div>
+            </div>
+
+            <!-- Producto 3 -->
+            <div class="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition border border-[#efebe9]" data-categoria="reposteria">
+                <img src="https://images.unsplash.com/photo-1555507036-ab1f4038808a?q=80&w=600" alt="Croissant" class="h-48 w-full object-cover">
+                <div class="p-6">
+                    <div class="flex justify-between items-center mb-2">
+                        <h3 class="font-bold text-xl text-[#4e342e]">Croissant de Mantequilla</h3>
+                        <span class="text-amber-700 font-bold">$32.00</span>
+                    </div>
+                    <p class="text-gray-600 text-sm">Hojaldre crujiente horneado cada mañana, ideal para acompañar tus horas de estudio.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 4. SECCIÓN NOSOTROS -->
+    <section id="nosotros" class="bg-[#f5f0ea] py-24">
+        <div class="max-w-6xl mx-auto px-6 grid md:grid-cols-2 gap-12 items-center">
+            <div class="relative">
+                <img src="https://images.unsplash.com/photo-1498804103079-a6351b050096?q=80&w=600" alt="Ambiente Cafetería" class="rounded-2xl shadow-lg relative z-10 w-full object-cover h-[450px]">
+                <div class="absolute -bottom-6 -right-6 w-48 h-48 bg-amber-200 rounded-2xl -z-0 hidden sm:block"></div>
+            </div>
+            <div>
+                <span class="text-amber-700 font-semibold tracking-widest uppercase text-sm block mb-2">Comunidad Universitaria</span>
+                <h2 class="text-4xl font-serif font-bold text-[#4e342e] mb-6">Más que una cafetería, tu zona de recarga</h2>
+                <p class="text-gray-700 mb-6 leading-relaxed">En **Policafé** entendemos el ritmo de la vida universitaria. Nos enfocamos en ofrecer un servicio rápido, de calidad y un espacio cómodo diseñado para que la comunidad de la Universidad Politécnica de San Luis Potosí encuentre el combustible necesario para innovar y crear el futuro.</p>
+                
+                <!-- Iconos de características -->
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="flex items-center space-x-3">
+                        <div class="bg-amber-100 p-2 rounded-lg text-amber-800"><i data-lucide="zap"></i></div>
+                        <span class="font-medium text-[#4e342e]">Servicio Veloz</span>
+                    </div>
+                    <div class="flex items-center space-x-3">
+                        <div class="bg-amber-100 p-2 rounded-lg text-amber-800"><i data-lucide="users"></i></div>
+                        <span class="font-medium text-[#4e342e]">Ambiente Lince</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 5. CONTACTO Y UBICACIÓN -->
+    <section id="contacto" class="py-24 max-w-6xl mx-auto px-6">
+        <div class="text-center mb-16">
+            <h2 class="text-4xl font-serif font-bold text-[#4e342e] mb-2">Visítanos o Escríbenos</h2>
+            <div class="w-16 h-1 bg-amber-600 mx-auto rounded-full mb-6"></div>
+        </div>
+
+        <div class="grid md:grid-cols-2 gap-12">
+            <!-- Info e Horarios -->
+            <div class="bg-white p-8 rounded-2xl shadow-sm border border-[#efebe9] flex flex-col justify-between">
+                <div>
+                    <h3 class="text-2xl font-serif font-bold text-[#4e342e] mb-6">Policafé UPSLP</h3>
+                    <div class="space-y-4 mb-8">
+                        <p class="flex items-start text-gray-700">
+                            <i data-lucide="map-pin" class="mr-3 text-amber-700 mt-1 shrink-0"></i> 
+                            <span>C. Urbano Villalón 500, Himno Nacional 2da, 78363 San Luis Potosí, S.L.P.<br><span class="text-sm text-gray-500 font-medium">(Ubicado en: Universidad Politécnica de San Luis Potosí)</span></span>
+                        </p>
+                        <p class="flex items-center text-gray-700"><i data-lucide="clock" class="mr-3 text-amber-700"></i> Lun - Vie: 7:00 AM - 8:00 PM / Sáb: 8:00 AM - 2:00 PM</p>
+                        <p class="flex items-center text-amber-800 font-medium">
+                            <i data-lucide="utensils" class="mr-3 text-amber-700"></i> Consumo en el lugar
+                        </p>
+                    </div>
+                </div>
+                <!-- Mapa de Google interactivo real de la Cafetería de la UPSLP -->
+                <div class="w-full h-56 bg-neutral-200 rounded-xl overflow-hidden shadow-inner border border-gray-100">
+                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1493.323263619349!2d-100.9842329!3d22.1219325!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x842a990039e2ab6b%3A0x2053004040f74d40!2sCafeteria%20de%20la%20UPSLP!5e0!3m2!1ses-419!2smx!4v1717880000000!5m2!1ses-419!2smx" class="w-full h-full border-0" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                </div>
+            </div>
+
+            <!-- Formulario de Mensaje -->
+            <form class="space-y-6 bg-white p-8 rounded-2xl shadow-sm border border-[#efebe9]">
+                <div>
+                    <label class="block text-sm font-semibold mb-2">Nombre Completo</label>
+                    <input type="text" class="w-full p-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-amber-600 bg-neutral-50" placeholder="Tu nombre">
+                </div>
+                <div>
+                    <label class="block text-sm font-semibold mb-2">Correo Institucional o Matrícula</label>
+                    <input type="text" class="w-full p-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-amber-600 bg-neutral-50" placeholder="ejemplo@upslp.edu.mx">
+                </div>
+                <div>
+                    <label class="block text-sm font-semibold mb-2">Buzón de Sugerencias / Comentarios</label>
+                    <textarea class="w-full p-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-amber-600 bg-neutral-50 h-32" placeholder="¿Qué te gustaría ver en el menú o qué comentario tienes para mejorar el servicio?"></textarea>
+                </div>
+                <button type="submit" class="w-full bg-[#5d4037] text-white p-3 rounded-lg font-bold hover:bg-[#4e342e] transition">Enviar Comentario</button>
+            </form>
+        </div>
+    </section>
+
+    <!-- 6. PIE DE PÁGINA -->
+    <footer class="bg-[#3e2723] text-stone-300 py-8 text-center border-t border-[#4e342e]">
+        <p>&copy; 2026 Policafé UPSLP. Todos los derechos reservados.</p>
+    </footer>
+
+    <!-- LÓGICA JAVASCRIPT (Filtro del Menú e Iconos) -->
+    <script>
+        // Inicializar los iconos de Lucide
+        lucide.createIcons();
+
+        // Función interactiva para filtrar el menú
+        function filtrarMenu(categoria) {
+            const items = document.querySelectorAll('[data-categoria]');
+            const botones = document.querySelectorAll('.cat-btn');
+
+            // Cambiar estilos de los botones de filtro
+            botones.forEach(btn => {
+                btn.classList.remove('bg-[#5d4037]', 'text-white', 'shadow');
+                btn.classList.add('bg-white', 'text-[#5d4037]', 'border', 'border-[#efebe9]');
+            });
+            event.target.classList.add('bg-[#5d4037]', 'text-white', 'shadow');
+            event.target.classList.remove('bg-white', 'text-[#5d4037]', 'border', 'border-[#efebe9]');
+
+            // Mostrar/Ocultar elementos
+            items.forEach(item => {
+                if (categoria === 'todos' || item.getAttribute('data-categoria') === categoria) {
+                    item.style.display = 'block';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        }
+    </script>
+</body>
+</html>
