@@ -3,289 +3,267 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Policafé - El Rugido del Sabor en la UPSLP</title>
-    <!-- Tailwind CSS vía CDN para diseño profesional instantáneo -->
+    <title>Policafé Premium - El Rugido Innovador de la UPSLP</title>
+    <!-- Tailwind CSS vía CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Iconos Lucide para detalles visuales -->
+    <!-- Iconos Lucide -->
     <script src="https://unpkg.com/lucide@latest"></script>
-    <!-- Librería para generar códigos QR de forma local y ultrarrápida -->
+    <!-- Generador de QR -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <style>
         @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
-        .menu-item {
-            animation: fadeInUp 0.5s ease backwards;
-        }
+        .menu-item { animation: fadeInUp 0.4s ease backwards; }
+        /* Animación para la tómbola giratoria */
+        .girar-ruleta { animation: spin 3s cubic-bezier(0.1, 0.8, 0.1, 1) forwards; }
+        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(1440deg); } }
     </style>
 </head>
-<body class="bg-[#fdfbf7] text-[#2d1b10] font-sans selection:bg-amber-500 selection:text-white">
+<body class="bg-[#fdfbf7] text-[#2d1b10] font-sans selection:bg-orange-500 selection:text-white">
 
     <!-- 1. BARRA DE NAVEGACIÓN -->
-    <nav class="fixed w-full bg-[#fdfbf7]/80 backdrop-blur-lg z-50 shadow-md border-b border-orange-100 transition-all duration-300">
+    <nav class="fixed w-full bg-[#fdfbf7]/80 backdrop-blur-lg z-50 shadow-md border-b border-orange-100">
         <div class="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
-            <a href="#" class="text-2xl font-serif font-black tracking-wider text-orange-700 flex items-center gap-2 hover:scale-105 transition-transform">
-                <i data-lucide="coffee" class="text-amber-500 animate-pulse"></i>POLICAFÉ
+            <a href="#" class="text-2xl font-serif font-black tracking-wider text-orange-700 flex items-center gap-2">
+                <i data-lucide="coffee" class="text-amber-500 animate-pulse"></i>POLICAFÉ <span class="text-xs bg-orange-600 text-white px-2 py-0.5 rounded-md font-mono">v2.0</span>
             </a>
-            <div class="hidden md:flex space-x-8 font-semibold text-neutral-700">
-                <a href="#inicio" class="hover:text-orange-600 transition-colors">Inicio</a>
-                <a href="#menu" class="hover:text-orange-600 transition-colors">Menú de Garras</a>
-                <a href="#nosotros" class="hover:text-orange-600 transition-colors">Orgullo León</a>
-                <a href="#contacto" class="hover:text-orange-600 transition-colors">Ubicación</a>
+            
+            <!-- Barra de Estado de Recompensas en el Nav -->
+            <div class="hidden lg:flex items-center gap-2 bg-amber-50 px-3 py-1.5 rounded-full border border-amber-200 text-xs font-bold text-amber-950">
+                <i data-lucide="award" class="w-4 h-4 text-amber-600"></i>
+                <span>Tus Garras de Oro: <span id="nav-puntos" class="text-orange-700 font-black">0</span> 🐾</span>
             </div>
-            <!-- Botón flotante del Carrito en la Barra -->
-            <button onclick="abrirModalCarrito()" class="relative bg-gradient-to-r from-orange-600 to-amber-500 text-white px-5 py-2.5 rounded-full text-sm font-bold flex items-center gap-2 hover:shadow-md transition-all">
-                <i data-lucide="shopping-cart" class="w-4 h-4"></i>
-                <span>Mi Carrito</span>
-                <span id="badge-carrito" class="absolute -top-2 -right-2 bg-red-600 text-white text-xs font-black rounded-full w-5 h-5 flex items-center justify-center hidden">0</span>
-            </button>
+
+            <div class="flex items-center gap-4">
+                <button onclick="abrirTombola()" class="bg-amber-100 hover:bg-amber-200 text-amber-900 p-2.5 rounded-full transition relative" title="Tómbola Diaria">
+                    <i data-lucide="dices" class="w-5 h-5"></i>
+                    <span class="absolute -top-1 -right-1 bg-red-500 w-2 h-2 rounded-full"></span>
+                </button>
+                
+                <button onclick="abrirModalCarrito()" class="relative bg-gradient-to-r from-orange-600 to-amber-500 text-white px-5 py-2.5 rounded-full text-sm font-bold flex items-center gap-2 hover:shadow-md transition-all">
+                    <i data-lucide="shopping-cart" class="w-4 h-4"></i>
+                    <span class="hidden sm:inline">Mi Carrito</span>
+                    <span id="badge-carrito" class="bg-red-600 text-white text-xs font-black rounded-full w-5 h-5 flex items-center justify-center hidden">0</span>
+                </button>
+            </div>
         </div>
     </nav>
 
-    <!-- 2. SECCIÓN DE INICIO (HERO) -->
-    <header id="inicio" class="relative h-screen flex items-center justify-center bg-cover bg-center overflow-hidden" style="background-image: linear-gradient(rgba(45, 27, 16, 0.6), rgba(45, 27, 16, 0.6)), url('https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?q=80&w=1600');">
-        <div class="absolute bottom-0 left-0 w-full overflow-hidden leading-[0]">
-            <svg viewBox="0 0 1200 120" preserveAspectRatio="none" class="relative block w-full h-[60px] fill-[#fdfbf7]">
-                <path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V120H0V27.35C26.05,43.3,74.74,54.74,121.39,56.44Z"></path>
-            </svg>
-        </div>
-
+    <!-- 2. INICIO (HERO) -->
+    <header id="inicio" class="relative h-screen flex items-center justify-center bg-cover bg-center" style="background-image: linear-gradient(rgba(45, 27, 16, 0.65), rgba(45, 27, 16, 0.65)), url('https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?q=80&w=1600');">
         <div class="text-center text-white px-4 max-w-4xl relative z-10">
-            <span class="bg-amber-500/90 text-neutral-900 font-extrabold tracking-widest uppercase text-xs px-4 py-1.5 rounded-full inline-block mb-4 animate-bounce">
-                ¡Pide en Línea y Ahórrate la Fila!
+            <span class="bg-gradient-to-r from-amber-500 to-orange-500 text-neutral-900 font-black tracking-widest uppercase text-xs px-4 py-1.5 rounded-full inline-block mb-4">
+                Ecosistema Tecnológico Inteligente
             </span>
-            <h1 class="text-5xl md:text-7xl font-serif font-black mb-6 leading-tight drop-shadow-md">
-                El combustible de los <span class="text-amber-400">Leones</span>
+            <h1 class="text-5xl md:text-7xl font-serif font-black mb-6 leading-tight">
+                El Campus Inteligente <span class="text-amber-400">Come Bien</span>
             </h1>
-            <p class="text-lg md:text-xl mb-10 font-light text-stone-200 max-w-2xl mx-auto">
-                Arma tu pedido tipo Uber Eats, genera tu código QR personalizado, muéstralo en caja y ¡listo para disfrutar!
+            <p class="text-lg md:text-xl mb-8 font-light text-stone-200 max-w-2xl mx-auto">
+                Pide por voz, programa tu receso, acumula Garras de Oro y canjea premios con tu código QR directo en barra.
             </p>
-            <div class="flex flex-col sm:flex-row justify-center gap-4">
-                <a href="#menu" class="bg-amber-500 hover:bg-amber-600 text-neutral-950 font-black px-8 py-4 rounded-full shadow-lg transition-all duration-300 transform hover:scale-105">
-                    ¡Hacer Pedido Ahora!
-                </a>
-                <a href="#contacto" class="border-2 border-white/80 hover:bg-white hover:text-neutral-900 text-white font-bold px-8 py-4 rounded-full transition-all duration-300 backdrop-blur-sm">
-                    ¿Dónde estamos?
-                </a>
+            
+            <!-- Buscador por Voz Súper Innovador -->
+            <div class="max-w-md mx-auto bg-white/10 backdrop-blur-md p-2 rounded-2xl border border-white/20 flex items-center gap-2 mb-6 shadow-2xl">
+                <i data-lucide="search" class="text-stone-300 ml-3 shrink-0"></i>
+                <input type="text" id="buscador-input" oninput="buscarProducto(this.value)" class="bg-transparent w-full text-white placeholder-stone-300 text-sm focus:outline-none" placeholder="Busca tu comida o di 'Asistente'...">
+                <button onclick="activarMicrofono()" id="btn-micro" class="bg-amber-500 hover:bg-amber-600 text-neutral-950 p-2.5 rounded-xl transition shrink-0" title="Pedir por Voz">
+                    <i data-lucide="mic" id="icono-micro"></i>
+                </button>
             </div>
+            <p id="status-voz" class="text-xs text-amber-300 font-medium h-4"></p>
         </div>
     </header>
 
-    <!-- 3. SECCIÓN DE MENÚ INTERACTIVO CON CARRITO -->
+    <!-- 3. MENÚ E INVENTARIO -->
     <section id="menu" class="py-24 max-w-6xl mx-auto px-6">
-        <div class="text-center mb-16">
-            <h2 class="text-4xl md:text-5xl font-serif font-black text-neutral-800 mb-3">Menú de Garras Exclusivo</h2>
+        <div class="text-center mb-12">
+            <h2 class="text-4xl md:text-5xl font-serif font-black text-neutral-800 mb-3">Menú León Automatizado</h2>
             <div class="w-24 h-1.5 bg-gradient-to-r from-orange-600 to-amber-500 mx-auto rounded-full mb-6"></div>
-            <p class="text-neutral-600 text-lg">Selecciona tus productos favoritos agregándolos directamente al carrito digital.</p>
         </div>
 
-        <!-- Botones de Filtro -->
-        <div class="flex flex-wrap justify-center gap-3 mb-16">
-            <button onclick="filtrarMenu('todos')" class="cat-btn bg-orange-700 text-white px-6 py-3 rounded-xl font-bold shadow-md transition-all">Todos</button>
-            <button onclick="filtrarMenu('platillos')" class="cat-btn bg-white text-orange-800 border border-orange-100 px-6 py-3 rounded-xl font-bold transition-all hover:bg-orange-50">Platillos Fuertes</button>
-            <button onclick="filtrarMenu('bebidas')" class="cat-btn bg-white text-orange-800 border border-orange-100 px-6 py-3 rounded-xl font-bold transition-all hover:bg-orange-50">Bebidas</button>
-            <button onclick="filtrarMenu('snacks')" class="cat-btn bg-white text-orange-800 border border-orange-100 px-6 py-3 rounded-xl font-bold transition-all hover:bg-orange-50">Botanas y Farmacia</button>
-        </div>
-
-        <!-- Rejilla de Productos -->
-        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6" id="contenedor-menu">
+        <!-- Filtros Combinados: Categoría + Nutrición -->
+        <div class="flex flex-col md:flex-row gap-4 justify-between items-center border-b pb-8 mb-12">
+            <div class="flex flex-wrap gap-2" id="filtros-categoria">
+                <button onclick="filtrarCategoria('todos')" class="cat-btn bg-orange-700 text-white px-5 py-2.5 rounded-xl font-bold transition shadow-sm">Todos</button>
+                <button onclick="filtrarCategoria('platillos')" class="cat-btn bg-white text-orange-800 border px-5 py-2.5 rounded-xl font-bold transition">Platillos</button>
+                <button onclick="filtrarCategoria('bebidas')" class="cat-btn bg-white text-orange-800 border px-5 py-2.5 rounded-xl font-bold transition">Bebidas</button>
+                <button onclick="filtrarCategoria('snacks')" class="cat-btn bg-white text-orange-800 border px-5 py-2.5 rounded-xl font-bold transition">Snacks y Más</button>
+            </div>
             
-            <!-- PLATILLOS FUERTES -->
-            <div class="menu-item bg-white p-5 rounded-2xl shadow-sm border border-orange-50/60 hover:shadow-xl hover:border-amber-200 transition-all flex flex-col justify-between" data-categoria="platillos">
+            <div class="flex items-center gap-2 bg-neutral-100 p-1.5 rounded-xl border">
+                <span class="text-xs font-bold text-neutral-500 px-2">Nutrición:</span>
+                <button onclick="filtrarNutricion('todos')" class="nutri-btn bg-amber-500 text-neutral-950 px-3 py-1.5 rounded-lg text-xs font-bold transition shadow-sm">Cualquiera</button>
+                <button onclick="filtrarNutricion('alta-proteina')" class="nutri-btn bg-white text-neutral-700 px-3 py-1.5 rounded-lg text-xs font-bold transition">💪 Alta Proteína</button>
+                <button onclick="filtrarNutricion('fit')" class="nutri-btn bg-white text-neutral-700 px-3 py-1.5 rounded-lg text-xs font-bold transition">🥗 Bajo en Calorías</button>
+            </div>
+        </div>
+
+        <!-- Rejilla Dinámica de Productos -->
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6" id="contenedor-menu">
+            <div class="menu-item bg-white p-5 rounded-2xl shadow-sm border border-orange-50 hover:shadow-xl transition flex flex-col justify-between" data-cat="platillos" data-nutri="alta-proteina" data-nombre="comida corrida">
                 <div>
                     <div class="flex justify-between items-start gap-2 mb-2">
-                        <h3 class="font-black text-xl text-neutral-800">Comida Corrida</h3>
-                        <span class="bg-orange-100 text-orange-800 font-extrabold px-3 py-1 rounded-full text-sm shrink-0">$100.00</span>
+                        <h3 class="font-black text-lg text-neutral-800">Comida Corrida</h3>
+                        <span class="bg-orange-100 text-orange-800 font-black px-3 py-1 rounded-full text-xs shrink-0">$100.00</span>
                     </div>
-                    <p class="text-neutral-500 text-sm mb-4">El clásico completo del día para aguantar las jornadas pesadas de laboratorio.</p>
+                    <p class="text-neutral-500 text-xs mb-3">El paquete completo del día. Cambia a diario en cocina.</p>
+                    <span class="text-[10px] bg-red-50 text-red-700 font-bold px-2.5 py-1 rounded-md">💪 Alta Proteína</span>
                 </div>
-                <button onclick="agregarAlCarrito('Comida Corrida', 100.00)" class="w-full bg-orange-50 hover:bg-orange-600 hover:text-white text-orange-700 font-bold py-2 rounded-xl transition flex items-center justify-center gap-2 text-sm">
-                    <i data-lucide="plus" class="w-4 h-4"></i> Agregar al Pedido
+                <button onclick="agregarAlCarrito('Comida Corrida', 100.00)" class="w-full mt-4 bg-orange-50 hover:bg-orange-600 hover:text-white text-orange-700 font-bold py-2 rounded-xl transition text-xs flex items-center justify-center gap-2">
+                    <i data-lucide="plus" class="w-3.5 h-3.5"></i> Agregar
                 </button>
             </div>
 
-            <div class="menu-item bg-white p-5 rounded-2xl shadow-sm border border-orange-50/60 hover:shadow-xl hover:border-amber-200 transition-all flex flex-col justify-between" data-categoria="platillos">
+            <div class="menu-item bg-white p-5 rounded-2xl shadow-sm border border-orange-50 hover:shadow-xl transition flex flex-col justify-between" data-cat="platillos" data-nutri="alta-proteina" data-nombre="tecolota torta chilaquiles">
                 <div>
                     <div class="flex justify-between items-start gap-2 mb-2">
-                        <h3 class="font-black text-xl text-neutral-800">Chilaquiles con Guiso</h3>
-                        <span class="bg-orange-100 text-orange-800 font-extrabold px-3 py-1 rounded-full text-sm shrink-0">$75.00</span>
+                        <h3 class="font-black text-lg text-neutral-800">Tecolota (Torta Chilaquil)</h3>
+                        <span class="bg-orange-100 text-orange-800 font-black px-3 py-1 rounded-full text-xs shrink-0">$70.00</span>
                     </div>
-                    <p class="text-neutral-500 text-sm mb-4">Crujientes chilaquiles bañados con salsa y acompañados de tu guiso preferido.</p>
+                    <p class="text-neutral-500 text-xs mb-3">Torta rellena de chilaquiles crujientes con queso y crema.</p>
+                    <span class="text-[10px] bg-red-50 text-red-700 font-bold px-2.5 py-1 rounded-md">💪 Alta Proteína</span>
                 </div>
-                <button onclick="agregarAlCarrito('Chilaquiles con Guiso', 75.00)" class="w-full bg-orange-50 hover:bg-orange-600 hover:text-white text-orange-700 font-bold py-2 rounded-xl transition flex items-center justify-center gap-2 text-sm">
-                    <i data-lucide="plus" class="w-4 h-4"></i> Agregar al Pedido
+                <button onclick="agregarAlCarrito('Tecolota', 70.00)" class="w-full mt-4 bg-orange-50 hover:bg-orange-600 hover:text-white text-orange-700 font-bold py-2 rounded-xl transition text-xs flex items-center justify-center gap-2">
+                    <i data-lucide="plus" class="w-3.5 h-3.5"></i> Agregar
                 </button>
             </div>
 
-            <div class="menu-item bg-white p-5 rounded-2xl shadow-sm border border-orange-50/60 hover:shadow-xl hover:border-amber-200 transition-all flex flex-col justify-between" data-categoria="platillos">
+            <div class="menu-item bg-white p-5 rounded-2xl shadow-sm border border-orange-50 hover:shadow-xl transition flex flex-col justify-between" data-cat="platillos" data-nutri="fit" data-nombre="club sandwich integral">
                 <div>
                     <div class="flex justify-between items-start gap-2 mb-2">
-                        <h3 class="font-black text-xl text-neutral-800">Enchiladas Potosinas</h3>
-                        <span class="bg-orange-100 text-orange-800 font-extrabold px-3 py-1 rounded-full text-sm shrink-0">$65.00</span>
+                        <h3 class="font-black text-lg text-neutral-800">Club Sándwich Integral</h3>
+                        <span class="bg-orange-100 text-orange-800 font-black px-3 py-1 rounded-full text-xs shrink-0">$70.00</span>
                     </div>
-                    <p class="text-neutral-500 text-sm mb-4">La tradición de nuestro estado directo al plato universitario con su queso y sazón local.</p>
+                    <p class="text-neutral-500 text-xs mb-3">Pan integral, pechuga, verduras frescas y aderezo ligero.</p>
+                    <span class="text-[10px] bg-emerald-50 text-emerald-700 font-bold px-2.5 py-1 rounded-md">🥗 Bajo en Calorías</span>
                 </div>
-                <button onclick="agregarAlCarrito('Enchiladas Potosinas', 65.00)" class="w-full bg-orange-50 hover:bg-orange-600 hover:text-white text-orange-700 font-bold py-2 rounded-xl transition flex items-center justify-center gap-2 text-sm">
-                    <i data-lucide="plus" class="w-4 h-4"></i> Agregar al Pedido
+                <button onclick="agregarAlCarrito('Club Sándwich Integral', 70.00)" class="w-full mt-4 bg-orange-50 hover:bg-orange-600 hover:text-white text-orange-700 font-bold py-2 rounded-xl transition text-xs flex items-center justify-center gap-2">
+                    <i data-lucide="plus" class="w-3.5 h-3.5"></i> Agregar
                 </button>
             </div>
 
-            <div class="menu-item bg-white p-5 rounded-2xl shadow-sm border border-orange-50/60 hover:shadow-xl hover:border-amber-200 transition-all flex flex-col justify-between" data-categoria="platillos">
+            <div class="menu-item bg-white p-5 rounded-2xl shadow-sm border border-orange-50 hover:shadow-xl transition flex flex-col justify-between" data-cat="bebidas" data-nutri="fit" data-nombre="cafe caliente">
                 <div>
                     <div class="flex justify-between items-start gap-2 mb-2">
-                        <h3 class="font-black text-xl text-neutral-800">Tecolota</h3>
-                        <span class="bg-orange-100 text-orange-800 font-extrabold px-3 py-1 rounded-full text-sm shrink-0">$70.00</span>
+                        <h3 class="font-black text-lg text-neutral-800">Café Caliente</h3>
+                        <span class="bg-amber-100 text-amber-900 font-black px-3 py-1 rounded-full text-xs shrink-0">$25.00</span>
                     </div>
-                    <p class="text-neutral-500 text-sm mb-4">Exquisita torta rellena de chilaquiles, perfecta para arrancar la mañana con todo.</p>
+                    <p class="text-neutral-500 text-xs mb-3">Café americano bien cargado, ideal para despertar el cerebro.</p>
+                    <span class="text-[10px] bg-emerald-50 text-emerald-700 font-bold px-2.5 py-1 rounded-md">🥗 Bajo en Calorías</span>
                 </div>
-                <button onclick="agregarAlCarrito('Tecolota', 70.00)" class="w-full bg-orange-50 hover:bg-orange-600 hover:text-white text-orange-700 font-bold py-2 rounded-xl transition flex items-center justify-center gap-2 text-sm">
-                    <i data-lucide="plus" class="w-4 h-4"></i> Agregar al Pedido
+                <button onclick="agregarAlCarrito('Café Caliente', 25.00)" class="w-full mt-4 bg-orange-50 hover:bg-orange-600 hover:text-white text-orange-700 font-bold py-2 rounded-xl transition text-xs flex items-center justify-center gap-2">
+                    <i data-lucide="plus" class="w-3.5 h-3.5"></i> Agregar
                 </button>
             </div>
 
-            <div class="menu-item bg-white p-5 rounded-2xl shadow-sm border border-orange-50/60 hover:shadow-xl hover:border-amber-200 transition-all flex flex-col justify-between" data-categoria="platillos">
+            <div class="menu-item bg-white p-5 rounded-2xl shadow-sm border border-orange-50 hover:shadow-xl transition flex flex-col justify-between" data-cat="snacks" data-nutri="todos" data-nombre="nachos con guiso">
                 <div>
                     <div class="flex justify-between items-start gap-2 mb-2">
-                        <h3 class="font-black text-xl text-neutral-800">Milanesa de Pollo/Puerco</h3>
-                        <span class="bg-orange-100 text-orange-800 font-extrabold px-3 py-1 rounded-full text-sm shrink-0">$70.00</span>
+                        <h3 class="font-black text-lg text-neutral-800">Nachos con Guiso</h3>
+                        <span class="bg-orange-100 text-orange-800 font-black px-3 py-1 rounded-full text-xs shrink-0">$80.00</span>
                     </div>
-                    <p class="text-neutral-500 text-sm mb-4">Servida con ensalada fresca o frijoles calientitos para un almuerzo bien equilibrado.</p>
+                    <p class="text-neutral-500 text-xs mb-3">Totopos crujientes bañados en queso fundido de nachos y guiso.</p>
+                    <span class="text-[10px] bg-stone-100 text-stone-700 font-bold px-2.5 py-1 rounded-md">🍔 Munchies</span>
                 </div>
-                <button onclick="agregarAlCarrito('Milanesa', 70.00)" class="w-full bg-orange-50 hover:bg-orange-600 hover:text-white text-orange-700 font-bold py-2 rounded-xl transition flex items-center justify-center gap-2 text-sm">
-                    <i data-lucide="plus" class="w-4 h-4"></i> Agregar al Pedido
+                <button onclick="agregarAlCarrito('Nachos con Guiso', 80.00)" class="w-full mt-4 bg-orange-50 hover:bg-orange-600 hover:text-white text-orange-700 font-bold py-2 rounded-xl transition text-xs flex items-center justify-center gap-2">
+                    <i data-lucide="plus" class="w-3.5 h-3.5"></i> Agregar
                 </button>
             </div>
-
-            <div class="menu-item bg-white p-5 rounded-2xl shadow-sm border border-orange-50/60 hover:shadow-xl hover:border-amber-200 transition-all flex flex-col justify-between" data-categoria="platillos">
-                <div>
-                    <div class="flex justify-between items-start gap-2 mb-2">
-                        <h3 class="font-black text-xl text-neutral-800">Burrito de Harina</h3>
-                        <span class="bg-orange-100 text-orange-800 font-extrabold px-3 py-1 rounded-full text-sm shrink-0">$19.00</span>
-                    </div>
-                    <p class="text-neutral-500 text-sm mb-4">Práctico y sabroso para comer rápido entre clases.</p>
-                </div>
-                <button onclick="agregarAlCarrito('Burrito de Harina', 19.00)" class="w-full bg-orange-50 hover:bg-orange-600 hover:text-white text-orange-700 font-bold py-2 rounded-xl transition flex items-center justify-center gap-2 text-sm">
-                    <i data-lucide="plus" class="w-4 h-4"></i> Agregar al Pedido
-                </button>
-            </div>
-
-            <!-- BEBIDAS -->
-            <div class="menu-item bg-white p-5 rounded-2xl shadow-sm border border-orange-50/60 hover:shadow-xl hover:border-amber-200 transition-all flex flex-col justify-between" data-categoria="bebidas">
-                <div>
-                    <div class="flex justify-between items-start gap-2 mb-2">
-                        <h3 class="font-black text-xl text-neutral-800">Café Caliente</h3>
-                        <span class="bg-amber-100 text-amber-900 font-extrabold px-3 py-1 rounded-full text-sm shrink-0">$25.00</span>
-                    </div>
-                    <p class="text-neutral-500 text-sm mb-4">El motor de los Leones. Caliente, aromático y listo para las clases de las 7 AM.</p>
-                </div>
-                <button onclick="agregarAlCarrito('Café Caliente', 25.00)" class="w-full bg-orange-50 hover:bg-orange-600 hover:text-white text-orange-700 font-bold py-2 rounded-xl transition flex items-center justify-center gap-2 text-sm">
-                    <i data-lucide="plus" class="w-4 h-4"></i> Agregar al Pedido
-                </button>
-            </div>
-
-            <div class="menu-item bg-white p-5 rounded-2xl shadow-sm border border-orange-50/60 hover:shadow-xl hover:border-amber-200 transition-all flex flex-col justify-between" data-categoria="bebidas">
-                <div>
-                    <div class="flex justify-between items-start gap-2 mb-2">
-                        <h3 class="font-black text-xl text-neutral-800">Agua de Frutas Natural</h3>
-                        <span class="bg-amber-100 text-amber-900 font-extrabold px-3 py-1 rounded-full text-sm shrink-0">$40.00</span>
-                    </div>
-                    <p class="text-neutral-500 text-sm mb-4">Litro completo de agua fresca de temporada elaborada diariamente.</p>
-                </div>
-                <button onclick="agregarAlCarrito('Agua de Frutas 1L', 40.00)" class="w-full bg-orange-50 hover:bg-orange-600 hover:text-white text-orange-700 font-bold py-2 rounded-xl transition flex items-center justify-center gap-2 text-sm">
-                    <i data-lucide="plus" class="w-4 h-4"></i> Agregar al Pedido
-                </button>
-            </div>
-
-            <!-- SNACKS -->
-            <div class="menu-item bg-white p-5 rounded-2xl shadow-sm border border-orange-50/60 hover:shadow-xl hover:border-amber-200 transition-all flex flex-col justify-between" data-categoria="snacks">
-                <div>
-                    <div class="flex justify-between items-start gap-2 mb-2">
-                        <h3 class="font-black text-xl text-neutral-800">Nachos con Guiso</h3>
-                        <span class="bg-red-100 text-red-900 font-extrabold px-3 py-1 rounded-full text-sm shrink-0">$80.00</span>
-                    </div>
-                    <p class="text-neutral-500 text-sm mb-4">Totopos crujientes cubiertos de queso fundido y tu guiso favorito.</p>
-                </div>
-                <button onclick="agregarAlCarrito('Nachos con Guiso', 80.00)" class="w-full bg-orange-50 hover:bg-orange-600 hover:text-white text-orange-700 font-bold py-2 rounded-xl transition flex items-center justify-center gap-2 text-sm">
-                    <i data-lucide="plus" class="w-4 h-4"></i> Agregar al Pedido
-                </button>
-            </div>
-
-            <div class="menu-item bg-white p-5 rounded-2xl shadow-sm border border-orange-50/60 hover:shadow-xl hover:border-amber-200 transition-all flex flex-col justify-between" data-categoria="snacks">
-                <div>
-                    <div class="flex justify-between items-start gap-2 mb-2">
-                        <h3 class="font-black text-xl text-neutral-800">Papas en Gajo Horneadas</h3>
-                        <span class="bg-red-100 text-red-900 font-extrabold px-3 py-1 rounded-full text-sm shrink-0">$50.00</span>
-                    </div>
-                    <p class="text-neutral-500 text-sm mb-4">Papas sazonadas y horneadas, una alternativa deliciosa para botanear en equipo.</p>
-                </div>
-                <button onclick="agregarAlCarrito('Papas en Gajo', 50.00)" class="w-full bg-orange-50 hover:bg-orange-600 hover:text-white text-orange-700 font-bold py-2 rounded-xl transition flex items-center justify-center gap-2 text-sm">
-                    <i data-lucide="plus" class="w-4 h-4"></i> Agregar al Pedido
-                </button>
-            </div>
-
         </div>
     </section>
 
-    <!-- 4. MODAL DEL CARRITO DE COMPRAS (ESTILO UBER EATS) -->
+    <!-- 4. MODAL DEL CARRITO AVANZADO -->
     <div id="modal-carrito" class="fixed inset-0 bg-black/60 z-50 flex justify-end opacity-0 pointer-events-none transition-opacity duration-300">
-        <div class="bg-white w-full max-w-md h-full shadow-2xl p-6 flex flex-col justify-between transform translate-x-full transition-transform duration-300" id="cuerpo-modal-carrito">
-            <div>
-                <div class="flex justify-between items-center border-b pb-4 mb-6">
-                    <h3 class="text-2xl font-serif font-black text-neutral-800 flex items-center gap-2">
-                        <i data-lucide="shopping-bag" class="text-orange-600"></i> Tu Pedido Lince
-                    </h3>
-                    <button onclick="cerrarModalCarrito()" class="p-2 hover:bg-neutral-100 rounded-full transition">
-                        <i data-lucide="x" class="text-neutral-500"></i>
-                    </button>
+        <div class="bg-white w-full max-w-md h-full p-6 flex flex-col justify-between transform translate-x-full transition-transform duration-300" id="cuerpo-modal-carrito">
+            <div class="flex flex-col h-[75vh]">
+                <div class="flex justify-between items-center border-b pb-4 mb-4">
+                    <h3 class="text-xl font-black text-neutral-800 flex items-center gap-2"><i data-lucide="shopping-bag" class="text-orange-600"></i> Tu Pedido Inteligente</h3>
+                    <button onclick="cerrarModalCarrito()"><i data-lucide="x" class="text-neutral-500"></i></button>
                 </div>
 
-                <!-- Lista de productos dentro del carrito -->
-                <div id="items-carrito" class="space-y-4 overflow-y-auto max-h-[50vh] pr-2">
-                    <p class="text-center text-neutral-400 py-8">Tu carrito está vacío. ¡Empieza a rugir de hambre!</p>
+                <!-- Logística Integrada en Tiempo Real -->
+                <div class="grid grid-cols-2 gap-2 mb-4 bg-orange-50/60 p-3 rounded-xl border border-orange-100 text-xs">
+                    <div class="flex items-center gap-2 text-orange-950 font-bold">
+                        <i data-lucide="timer" class="text-orange-600 w-4 h-4"></i>
+                        <div>
+                            <p class="text-[10px] text-neutral-500 font-normal">Espera Estimada:</p>
+                            <p id="tiempo-espera">~3 mins</p>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="text-[10px] text-neutral-500 block">¿A qué hora recoges?</label>
+                        <select id="hora-recogida" class="bg-white border rounded font-bold p-1 w-full text-neutral-800 mt-0.5 focus:outline-none">
+                            <option value="Ahora mismo">Ahora mismo</option>
+                            <option value="En 15 minutos">En 15 minutos</option>
+                            <option value="En el próximo receso">Próximo Receso</option>
+                        </select>
+                    </div>
                 </div>
+
+                <!-- Lista de Compra -->
+                <div id="items-carrito" class="space-y-3 overflow-y-auto flex-1 pr-1"></div>
             </div>
 
-            <!-- Footer del Carrito con Totales y Creador del QR -->
-            <div class="border-t pt-4 bg-white">
-                <div class="flex justify-between items-center text-lg font-bold text-neutral-800 mb-6">
-                    <span>Total a pagar:</span>
+            <!-- Totales, Recompensas y Despacho -->
+            <div class="border-t pt-4">
+                <div class="flex justify-between items-center text-sm font-bold text-neutral-600 mb-2">
+                    <span>Ganas con esta compra:</span>
+                    <span class="text-amber-600" id="puntos-ganados">+0 Garras 🐾</span>
+                </div>
+                <div class="flex justify-between items-center text-lg font-black text-neutral-800 mb-4">
+                    <span>Total:</span>
                     <span id="total-carrito" class="text-orange-700 text-2xl">$0.00</span>
                 </div>
-                <button onclick="procesarPedidoQR()" id="btn-generar-qr" class="w-full bg-gradient-to-r from-orange-600 to-amber-500 text-white p-4 rounded-xl font-bold transition shadow-md flex items-center justify-center gap-2 text-base hover:from-orange-700 disabled:opacity-50 disabled:pointer-events-none">
-                    <i data-lucide="qr-code"></i> Generar Ticket QR
-                </button>
+                
+                <div class="grid grid-cols-2 gap-2">
+                    <button onclick="procesarPedidoQR()" id="btn-generar-qr" class="bg-gradient-to-r from-orange-600 to-amber-500 text-white p-3.5 rounded-xl font-bold transition flex items-center justify-center gap-1.5 text-xs shadow-md disabled:opacity-40">
+                        <i data-lucide="qr-code" class="w-4 h-4"></i> Obtener Ticket QR
+                    </button>
+                    <button onclick="enviarWhatsApp()" id="btn-whatsapp" class="bg-emerald-600 hover:bg-emerald-700 text-white p-3.5 rounded-xl font-bold transition flex items-center justify-center gap-1.5 text-xs shadow-md disabled:opacity-40">
+                        <i data-lucide="message-circle" class="w-4 h-4"></i> Enviar a WhatsApp
+                    </button>
+                </div>
             </div>
         </div>
     </div>
 
-    <!-- 5. MODAL DE EXHIBICIÓN DEL CÓDIGO QR GENERADO -->
+    <!-- 5. INTERFAZ DE LA TÓMBOLA LEÓN (GAMIFICACIÓN) -->
+    <div id="modal-tombola" class="fixed inset-0 bg-black/70 z-50 flex items-center justify-center opacity-0 pointer-events-none transition-opacity duration-300 p-4">
+        <div class="bg-white rounded-3xl p-6 max-w-sm w-full text-center shadow-2xl relative">
+            <button onclick="cerrarTombola()" class="absolute top-4 right-4 p-1 rounded-full hover:bg-neutral-100"><i data-lucide="x" class="w-5 h-5"></i></button>
+            <h4 class="text-2xl font-serif font-black text-neutral-800 mb-1">🎰 Tómbola León</h4>
+            <p class="text-xs text-neutral-500 mb-6">¡Gira una vez al día para ganar descuentos en tu Policafé!</p>
+            
+            <!-- Ruleta Visual Interactiva -->
+            <div class="w-40 h-40 bg-gradient-to-tr from-orange-500 via-amber-400 to-red-500 rounded-full mx-auto mb-6 flex items-center justify-center border-4 border-neutral-900 shadow-xl relative overflow-hidden" id="ruleta-grafica">
+                <div class="absolute w-1 h-12 bg-neutral-950 top-0 left-1/2 -translate-x-1/2 origin-bottom z-20"></div>
+                <div class="w-12 h-12 bg-white rounded-full shadow-md z-10 flex items-center justify-center font-black text-xs text-orange-800">POLI</div>
+            </div>
+
+            <button onclick="girarTombola()" id="btn-girar" class="w-full bg-orange-600 hover:bg-orange-700 text-white py-3 rounded-xl font-bold shadow-md transition">
+                ¡Probar mi Suerte!
+            </button>
+            <p id="resultado-tombola" class="mt-4 font-black text-sm text-orange-700 h-6"></p>
+        </div>
+    </div>
+
+    <!-- 6. MODAL MOSTRADOR DE TICKET QR -->
     <div id="modal-qr" class="fixed inset-0 bg-black/70 z-50 flex items-center justify-center opacity-0 pointer-events-none transition-opacity duration-300 p-4">
         <div class="bg-white rounded-3xl p-6 max-w-sm w-full text-center shadow-2xl transform scale-95 transition-transform duration-300" id="cuerpo-modal-qr">
-            <h4 class="text-xl font-serif font-black text-neutral-800 mb-1">¡Pedido Confirmado!</h4>
-            <p class="text-xs text-orange-600 font-bold mb-4 uppercase tracking-wider">Muestra este QR en el mostrador</p>
-            
-            <!-- Contenedor donde se dibuja físicamente el código QR -->
+            <h4 class="text-xl font-serif font-black text-neutral-800 mb-1">¡Código QR Listo!</h4>
+            <p class="text-xs text-orange-600 font-bold mb-4 uppercase tracking-wider">Paga directo en el mostrador</p>
             <div id="qrcode" class="bg-white p-4 rounded-2xl inline-block shadow-inner border mb-4"></div>
             
-            <div class="bg-neutral-50 p-4 rounded-xl border border-dashed border-neutral-300 text-left mb-6 text-sm">
-                <p class="font-bold text-neutral-700 mb-1">Resumen del Ticket:</p>
-                <div id="resumen-ticket-qr" class="text-neutral-600 text-xs space-y-1"></div>
+            <div class="bg-neutral-50 p-4 rounded-xl border border-dashed text-left mb-4 text-xs font-mono">
+                <div id="resumen-ticket-qr" class="text-neutral-600 space-y-1"></div>
             </div>
-
-            <button onclick="cerrarModalQR()" class="w-full bg-neutral-900 hover:bg-neutral-800 text-white py-3 rounded-xl font-bold transition">
-                Entendido, Cerrar
-            </button>
+            <button onclick="cerrarModalQR()" class="w-full bg-neutral-900 text-white py-3 rounded-xl font-bold text-sm">Cerrar y Vaciar Carrito</button>
         </div>
     </div>
 
-    <!-- 6. SECCIÓN NOSOTROS -->
+    <!-- 7. SECCIÓN NOSOTROS -->
     <section id="nosotros" class="bg-gradient-to-b from-[#f5f0ea] to-[#fdfbf7] py-24">
         <div class="max-w-6xl mx-auto px-6 grid md:grid-cols-2 gap-12 items-center">
             <div class="relative group">
@@ -295,13 +273,13 @@
                 <span class="text-orange-700 font-black tracking-widest uppercase text-xs px-3 py-1 bg-orange-100 rounded-md inline-block mb-3">Punto de Encuentro</span>
                 <h2 class="text-4xl font-serif font-black text-neutral-800 mb-6">¡Donde la comunidad de la UPSLP recarga sus garras!</h2>
                 <p class="text-neutral-600 mb-6 leading-relaxed text-lg">
-                    Evita las molestas filas en las horas pico del break escolar. Con nuestra innovación digital, diseñas tu combo, descargas tu QR y solo te enfocas en disfrutar.
+                    Evita las molestas filas en las horas pico del break escolar. Con nuestra innovación digital, diseñas tu combo, descargas tu QR y solo te enfocas en disfrutar como todo un León.
                 </p>
             </div>
         </div>
     </section>
 
-    <!-- 7. CONTACTO, MAPA Y PIE DE PÁGINA -->
+    <!-- 8. CONTACTO, MAPA Y PIE DE PÁGINA -->
     <section id="contacto" class="py-24 max-w-6xl mx-auto px-6 border-t border-orange-100">
         <div class="grid md:grid-cols-2 gap-12 items-center">
             <div class="bg-white p-6 rounded-3xl shadow-sm border">
@@ -310,7 +288,7 @@
                 <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1493.323263619349!2d-100.9842329!3d22.1219325!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x842a990039e2ab6b%3A0x2053004040f74d40!2sCafeteria%20de%20la%20UPSLP!5e0!3m2!1ses-419!2smx!4v1717880000000!5m2!1ses-419!2smx" class="w-full h-48 rounded-xl border-0" allowfullscreen="" loading="lazy"></iframe>
             </div>
             <div class="text-center md:text-left">
-                <h4 class="font-serif font-black text-2xl mb-2">Horarios Lince:</h4>
+                <h4 class="font-serif font-black text-2xl mb-2">Horarios León:</h4>
                 <p class="text-neutral-600 text-sm">Lunes a Viernes: 7:00 AM - 8:00 PM<br>Sábados: 8:00 AM - 2:00 PM</p>
             </div>
         </div>
@@ -323,169 +301,236 @@
 
     <!-- LÓGICA DEL CARRITO Y CÓDIGO QR -->
     <script>
+        // Inicializar iconos de Lucide
         lucide.createIcons();
 
-        // Estado global del carrito de compras
         let carrito = [];
+        let filtroCatActual = 'todos';
+        let filtroNutriActual = 'todos';
+        let puntosUsuario = parseInt(localStorage.getItem('puntosLince')) || 0;
+        let descuentoAplicado = 0;
 
-        function filtrarMenu(categoria) {
+        document.getElementById('nav-puntos').innerText = puntosUsuario;
+
+        // FILTRADO COMBINADO INTELIGENTE
+        function filtrarCategoria(cat) {
+            filtroCatActual = cat;
+            actualizarEstilosBotones('filtros-categoria', 'cat-btn', event.target, 'bg-orange-700', 'text-white');
+            aplicarFiltros();
+        }
+
+        function filtrarNutricion(nutri) {
+            filtroNutriActual = nutri;
+            actualizarEstilosBotones(null, 'nutri-btn', event.target, 'bg-amber-500', 'text-neutral-950');
+            aplicarFiltros();
+        }
+
+        function aplicarFiltros() {
             const items = document.querySelectorAll('.menu-item');
-            const botones = document.querySelectorAll('.cat-btn');
-            botones.forEach(btn => {
-                btn.classList.remove('bg-orange-700', 'text-white', 'shadow-md');
-                btn.classList.add('bg-white', 'text-orange-800', 'border', 'border-orange-100');
-            });
-            event.target.classList.add('bg-orange-700', 'text-white', 'shadow-md');
-            event.target.classList.remove('bg-white', 'text-orange-800', 'border', 'border-orange-100');
-
-            items.forEach((item, index) => {
-                if (categoria === 'todos' || item.getAttribute('data-categoria') === categoria) {
-                    item.style.display = 'flex';
-                    item.style.animation = 'none';
-                    item.offsetHeight;
-                    item.style.animation = `fadeInUp 0.4s ease ${index * 0.02}s backwards`;
-                } else {
-                    item.style.display = 'none';
-                }
+            items.forEach(item => {
+                const matchCat = (filtroCatActual === 'todos' || item.getAttribute('data-cat') === filtroCatActual);
+                const matchNutri = (filtroNutriActual === 'todos' || item.getAttribute('data-nutri') === filtroNutriActual);
+                item.style.display = (matchCat && matchNutri) ? 'flex' : 'none';
             });
         }
 
-        // FUNCIONES DEL CARRITO (TIPO UBER EATS)
-        function agregarAlCarrito(nombre, precio) {
-            const itemExistente = carrito.find(item => item.nombre === nombre);
-            if (itemExistente) {
-                itemExistente.cantidad += 1;
-            } else {
-                carrito.push({ nombre, precio, cantidad: 1 });
+        function actualizarEstilosBotones(contenedorId, claseBoton, botonActivo, bgActivo, textActivo) {
+            const botones = contenedorId ? document.getElementById(contenedorId).querySelectorAll('.' + claseBoton) : document.querySelectorAll('.' + claseBoton);
+            botones.forEach(btn => {
+                btn.classList.remove(bgActivo, textActivo, 'shadow-sm');
+                btn.classList.add('bg-white', 'text-neutral-700', 'border');
+            });
+            botonActivo.classList.add(bgActivo, textActivo, 'shadow-sm');
+            botonActivo.classList.remove('bg-white', 'text-neutral-700', 'border');
+        }
+
+        // BUSCADOR EN TIEMPO REAL
+        function buscarProducto(query) {
+            const q = query.toLowerCase().trim();
+            const items = document.querySelectorAll('.menu-item');
+            items.forEach(item => {
+                const nombre = item.getAttribute('data-nombre');
+                item.style.display = nombre.includes(q) ? 'flex' : 'none';
+            });
+        }
+
+        // ACCESIBILIDAD: CONTROL POR VOZ DE VANGUARDIA
+        function activarMicrofono() {
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            if (!SpeechRecognition) {
+                alert("Tu navegador no soporta control por voz. Prueba con Google Chrome.");
+                return;
             }
+            const recognition = new SpeechRecognition();
+            recognition.lang = 'es-MX';
+            
+            const btnMicro = document.getElementById('btn-micro');
+            const statusVoz = document.getElementById('status-voz');
+            
+            recognition.onstart = () => {
+                btnMicro.classList.add('bg-red-500', 'animate-ping');
+                statusVoz.innerText = "🎙 Rose: 'Quiero agregar Tecolota'";
+            };
+
+            recognition.onresult = (event) => {
+                const comando = event.results[0][0].transcript.toLowerCase();
+                statusVoz.innerText = `Escuché: "${comando}"`;
+                
+                if (comando.includes('agregar') || comando.includes('añadir')) {
+                    if (comando.includes('corrida')) { agregarAlCarrito('Comida Corrida', 100.00); }
+                    else if (comando.includes('tecolota') || comando.includes('torta')) { agregarAlCarrito('Tecolota', 70.00); }
+                    else if (comando.includes('sándwich') || comando.includes('integral')) { agregarAlCarrito('Club Sándwich Integral', 70.00); }
+                    else if (comando.includes('café') || comando.includes('caliente')) { agregarAlCarrito('Café Caliente', 25.00); }
+                    else if (comando.includes('nachos')) { agregarAlCarrito('Nachos con Guiso', 80.00); }
+                } else {
+                    document.getElementById('buscador-input').value = comando;
+                    buscarProducto(comando);
+                }
+            };
+
+            recognition.onend = () => {
+                btnMicro.classList.remove('bg-red-500', 'animate-ping');
+            };
+            recognition.start();
+        }
+
+        // ADMINISTRACIÓN DEL CARRITO
+        function agregarAlCarrito(nombre, precio) {
+            const item = carrito.find(i => i.nombre === nombre);
+            if (item) { item.cantidad += 1; } 
+            else { carrito.push({ nombre, precio, cantidad: 1 }); }
             actualizarInterfazCarrito();
         }
 
         function cambiarCantidad(nombre, cambio) {
-            const item = carrito.find(item => item.nombre === nombre);
+            const item = carrito.find(i => i.nombre === nombre);
             if (item) {
                 item.cantidad += cambio;
-                if (item.cantidad <= 0) {
-                    carrito = carrito.filter(i => i.nombre !== nombre);
-                }
+                if (item.cantidad <= 0) carrito = carrito.filter(i => i.nombre !== nombre);
             }
             actualizarInterfazCarrito();
         }
 
         function actualizarInterfazCarrito() {
-            const contenedorItems = document.getElementById('items-carrito');
-            const totalCarrito = document.getElementById('total-carrito');
+            const contenedor = document.getElementById('items-carrito');
+            const txtTotal = document.getElementById('total-carrito');
             const badge = document.getElementById('badge-carrito');
-            const btnQR = document.getElementById('btn-generar-qr');
-
+            const txtPuntosGarras = document.getElementById('puntos-ganados');
+            
             if (carrito.length === 0) {
-                contenedorItems.innerHTML = `<p class="text-center text-neutral-400 py-8">Tu carrito está vacío. ¡Empieza a rugir de hambre!</p>`;
-                totalCarrito.innerText = "$0.00";
+                contenedor.innerHTML = `<p class="text-center text-neutral-400 py-12">Carrito vacío.</p>`;
+                txtTotal.innerText = "$0.00";
                 badge.classList.add('hidden');
-                btnQR.disabled = true;
+                txtPuntosGarras.innerText = "+0 Garras 🐾";
                 return;
             }
 
-            btnQR.disabled = false;
-            let total = 0;
-            let totalArticulos = 0;
-            contenedorItems.innerHTML = "";
-
+            let total = 0, totalItems = 0;
+            contenedor.innerHTML = "";
+            
             carrito.forEach(item => {
-                const subtotal = item.precio * item.cantidad;
-                total += subtotal;
-                totalArticulos += item.cantidad;
-
-                contenedorItems.innerHTML += `
-                    <div class="flex justify-between items-center bg-neutral-50 p-3 rounded-xl border border-neutral-100">
-                        <div class="flex-1">
-                            <h5 class="font-bold text-sm text-neutral-800">${item.nombre}</h5>
-                            <p class="text-xs text-orange-700 font-medium">$${item.precio.toFixed(2)} c/u</p>
+                const sub = item.precio * item.cantidad;
+                total += sub;
+                totalItems += item.cantidad;
+                contenedor.innerHTML += `
+                    <div class="flex justify-between items-center bg-neutral-50 p-2.5 rounded-xl border border-neutral-100 text-xs">
+                        <div class="flex-1"><h5 class="font-bold text-neutral-800">${item.nombre}</h5><p class="text-neutral-500">$${item.precio.toFixed(2)} c/u</p></div>
+                        <div class="flex items-center gap-2.5 bg-white border rounded-lg px-2 py-1">
+                            <button onclick="cambiarCantidad('${item.nombre}', -1)" class="font-bold text-neutral-400 hover:text-red-500">-</button>
+                            <span class="font-bold text-neutral-800">${item.cantidad}</span>
+                            <button onclick="cambiarCantidad('${item.nombre}', 1)" class="font-bold text-neutral-400 hover:text-orange-500">+</button>
                         </div>
-                        <div class="flex items-center gap-3 bg-white border rounded-lg px-2 py-1">
-                            <button onclick="cambiarCantidad('${item.nombre}', -1)" class="text-neutral-500 font-bold hover:text-red-600">-</button>
-                            <span class="text-sm font-bold text-neutral-800 w-4 text-center">${item.cantidad}</span>
-                            <button onclick="cambiarCantidad('${item.nombre}', 1)" class="text-neutral-500 font-bold hover:text-orange-600">+</button>
-                        </div>
-                        <span class="text-sm font-black text-neutral-800 ml-4 w-16 text-right">$${subtotal.toFixed(2)}</span>
-                    </div>
-                `;
+                        <span class="font-black text-neutral-800 ml-4 w-12 text-right">$${sub.toFixed(2)}</span>
+                    </div>`;
             });
 
-            totalCarrito.innerText = `$${total.toFixed(2)}`;
-            badge.innerText = totalArticulos;
+            if (descuentoAplicado > 0) { total = total * ((100 - descuentoAplicado) / 100); }
+            
+            txtTotal.innerText = `$${total.toFixed(2)}`;
+            badge.innerText = totalItems;
             badge.classList.remove('hidden');
+            
+            document.getElementById('tiempo-espera').innerText = `~${totalItems * 3} mins`;
+            txtPuntosGarras.innerText = `+${Math.floor(total * 0.1)} Garras 🐾`;
         }
 
-        function abrirModalCarrito() {
-            const modal = document.getElementById('modal-carrito');
-            const cuerpo = document.getElementById('cuerpo-modal-carrito');
-            modal.classList.remove('opacity-0', 'pointer-events-none');
-            cuerpo.classList.remove('translate-x-full');
-        }
-
-        function cerrarModalCarrito() {
-            const modal = document.getElementById('modal-carrito');
-            const cuerpo = document.getElementById('cuerpo-modal-carrito');
-            modal.classList.add('opacity-0', 'pointer-events-none');
-            cuerpo.classList.add('translate-x-full');
-        }
-
-        // GENERACIÓN REVOLUCIONARIA DEL CÓDIGO QR
-        let qrcodeInstance = null;
-
-        function procesarPedidoQR() {
-            const contenedorQR = document.getElementById('qrcode');
-            const resumenTicket = document.getElementById('resumen-ticket-qr');
-            contenedorQR.innerHTML = ""; // Limpiar QR anterior
-
-            let textoQR = "POLICAFE-TICKET\n";
+        // GENERADOR DE ENLACES EXTERNOS (WHATSAPP)
+        function enviarWhatsApp() {
+            let msg = `*NUEVO PEDIDO POLICAFÉ*\n`;
             let total = 0;
-            let resumenHTML = "";
-            const folio = Math.floor(1000 + Math.random() * 9000); // Genera un ID de órden aleatorio de 4 dígitos
+            carrito.forEach(i => {
+                msg += `• ${i.cantidad}x ${i.nombre} ($${(i.precio*i.cantidad).toFixed(2)})\n`;
+                total += i.precio*i.cantidad;
+            });
+            if(descuentoAplicado > 0) total = total * ((100 - descuentoAplicado)/100);
+            msg += `\n*Hora programada:* ${document.getElementById('hora-recogida').value}`;
+            msg += `\n*Total a pagar en mostrador:* $${total.toFixed(2)}`;
+            
+            window.open(`https://api.whatsapp.com/send?phone=521234567890&text=${encodeURIComponent(msg)}`);
+        }
 
-            carrito.forEach(item => {
-                const subtotal = item.precio * item.cantidad;
-                total += subtotal;
-                textoQR += `${item.cantidad}x ${item.nombre} = $${subtotal.toFixed(2)}\n`;
-                resumenHTML += `<div class="flex justify-between"><span>${item.cantidad}x ${item.nombre}</span><span class="font-bold">$${subtotal.toFixed(2)}</span></div>`;
+        // DESPLIEGUE FINAL EN CÓDIGO QR
+        function procesarPedidoQR() {
+            document.getElementById('qrcode').innerHTML = "";
+            let dataQR = "POLICAFE-ORDER\n";
+            let resHTML = "", total = 0;
+            const folio = Math.floor(1000 + Math.random() * 9000);
+
+            carrito.forEach(i => {
+                const sub = i.precio * i.cantidad;
+                total += sub;
+                dataQR += `${i.cantidad}x ${i.nombre} = $${sub.toFixed(2)}\n`;
+                resHTML += `<div class="flex justify-between"><span>${i.cantidad}x ${i.nombre}</span><span>$${sub.toFixed(2)}</span></div>`;
             });
 
-            textoQR += `FOLIO: #${folio}\nTOTAL: $${total.toFixed(2)}`;
-            resumenHTML += `<div class="flex justify-between border-t pt-1 mt-2 font-black text-neutral-800 text-sm"><span>Total:</span><span>$${total.toFixed(2)}</span></div>`;
-            resumenHTML += `<div class="text-center text-[10px] text-neutral-400 mt-2 font-mono">Folio Orden: #${folio}</div>`;
+            if(descuentoAplicado > 0) {
+                total = total * ((100 - descuentoAplicado) / 100);
+                dataQR += `DESC: ${descuentoAplicado}%\n`;
+                resHTML += `<div class="flex justify-between text-orange-600 font-bold"><span>Desc. Aplicado:</span><span>-${descuentoAplicado}%</span></div>`;
+            }
 
-            resumenTicket.innerHTML = resumenHTML;
+            dataQR += `HORA: ${document.getElementById('hora-recogida').value}\nTOTAL: $${total.toFixed(2)}\nFOLIO: #${folio}`;
+            resHTML += `<div class="flex justify-between border-t pt-1 mt-2 font-black text-sm text-neutral-800"><span>Total a Pagar:</span><span>$${total.toFixed(2)}</span></div>`;
+            resHTML += `<div class="mt-2 text-[10px] text-neutral-400">Hora de entrega: ${document.getElementById('hora-recogida').value} | Folio: #${folio}</div>`;
 
-            // Instanciar el dibujado del Código QR
-            qrcodeInstance = new QRCode(contenedorQR, {
-                text: textoQR,
-                width: 180,
-                height: 180,
-                colorDark : "#2d1b10",
-                colorLight : "#ffffff",
-                correctLevel : QRCode.CorrectLevel.H
+            document.getElementById('resumen-ticket-qr').innerHTML = resHTML;
+
+            new QRCode(document.getElementById('qrcode'), {
+                text: dataQR, width: 160, height: 160, colorDark : "#2d1b10", colorLight : "#ffffff", correctLevel : QRCode.CorrectLevel.M
             });
+
+            puntosUsuario += Math.floor(total * 0.1);
+            localStorage.setItem('puntosLince', puntosUsuario);
+            document.getElementById('nav-puntos').innerText = puntosUsuario;
 
             cerrarModalCarrito();
-            
-            // Mostrar modal de QR con animaciones
-            const modalQR = document.getElementById('modal-qr');
-            const cuerpoQR = document.getElementById('cuerpo-modal-qr');
-            modalQR.classList.remove('opacity-0', 'pointer-events-none');
-            cuerpoQR.classList.remove('scale-95');
+            document.getElementById('modal-qr').classList.remove('opacity-0', 'pointer-events-none');
         }
 
-        function cerrarModalQR() {
-            const modalQR = document.getElementById('modal-qr');
-            const cuerpoQR = document.getElementById('cuerpo-modal-qr');
-            modalQR.classList.add('opacity-0', 'pointer-events-none');
-            cuerpoQR.classList.add('scale-95');
+        // GAMIFICACIÓN (TÓMBOLA DIARIA)
+        function girarTombola() {
+            const ruleta = document.getElementById('ruleta-grafica');
+            const resultado = document.getElementById('resultado-tombola');
             
-            // Vaciar el carrito tras concluir el pedido de forma exitosa
-            carrito = [];
-            actualizarInterfazCarrito();
+            ruleta.classList.add('girar-ruleta');
+            document.getElementById('btn-girar').disabled = true;
+
+            setTimeout(() => {
+                const premios = [10, 15, 5, 20];
+                const premioGanado = premios[Math.floor(Math.random() * premios.length)];
+                
+                descuentoAplicado = premioGanado;
+                resultado.innerText = `🎉 ¡Felicidades! Ganaste ${premioGanado}% de descuento para tu carrito.`;
+                actualizarInterfazCarrito();
+            }, 3000);
         }
+
+        // CONTROLADORES DE MODALES
+        function abrirModalCarrito() { document.getElementById('modal-carrito').classList.remove('opacity-0', 'pointer-events-none'); document.getElementById('cuerpo-modal-carrito').classList.remove('translate-x-full'); }
+        function cerrarModalCarrito() { document.getElementById('modal-carrito').classList.add('opacity-0', 'pointer-events-none'); document.getElementById('cuerpo-modal-carrito').classList.add('translate-x-full'); }
+        function abrirTombola() { document.getElementById('modal-tombola').classList.remove('opacity-0', 'pointer-events-none'); }
+        function cerrarTombola() { document.getElementById('modal-tombola').classList.add('opacity-0', 'pointer-events-none'); document.getElementById('ruleta-grafica').classList.remove('girar-ruleta'); document.getElementById('btn-girar').disabled = false; document.getElementById('resultado-tombola').innerText = ""; }
+        function cerrarModalQR() { document.getElementById('modal-qr').classList.add('opacity-0', 'pointer-events-none'); carrito = []; descuentoAplicado = 0; actualizarInterfazCarrito(); }
     </script>
 </body>
 </html>
