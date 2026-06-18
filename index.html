@@ -3,119 +3,269 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Policafé - El punto de encuentro de la UPSLP</title>
+    <title>Policafé - El Rugido del Sabor en la UPSLP</title>
     <!-- Tailwind CSS vía CDN para diseño profesional instantáneo -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Iconos Lucide para detalles visuales -->
     <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        /* Animación fluida de entrada para las tarjetas */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .menu-item {
+            animation: fadeInUp 0.5s ease backwards;
+        }
+    </style>
 </head>
-<body class="bg-[#faf7f2] text-[#3e2723] font-sans">
+<body class="bg-[#fdfbf7] text-[#2d1b10] font-sans selection:bg-amber-500 selection:text-white">
 
-    <!-- 1. BARRA DE NAVEGACIÓN -->
-    <nav class="fixed w-full bg-[#faf7f2]/90 backdrop-blur-md z-50 shadow-sm border-b border-[#efebe9]">
+    <!-- 1. BARRA DE NAVEGACIÓN CON EFECTO TRASLÚCIDO -->
+    <nav class="fixed w-full bg-[#fdfbf7]/80 backdrop-blur-lg z-50 shadow-md border-b border-orange-100 transition-all duration-300">
         <div class="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
-            <a href="#" class="text-2xl font-serif font-bold tracking-wider text-[#5d4037] flex items-center gap-2">
-                <i data-lucide="coffee" class="text-amber-700"></i>POLICAFÉ
+            <a href="#" class="text-2xl font-serif font-black tracking-wider text-orange-700 flex items-center gap-2 hover:scale-105 transition-transform">
+                <i data-lucide="coffee" class="text-amber-500 animate-pulse"></i>POLICAFÉ
             </a>
-            <div class="hidden md:flex space-x-8 font-medium">
-                <a href="#inicio" class="hover:text-[#8d6e63] transition">Inicio</a>
-                <a href="#menu" class="hover:text-[#8d6e63] transition">Menú Lince</a>
-                <a href="#nosotros" class="hover:text-[#8d6e63] transition">Nuestra Esencia</a>
-                <a href="#contacto" class="hover:text-[#8d6e63] transition">Ubicación</a>
+            <div class="hidden md:flex space-x-8 font-semibold text-neutral-700">
+                <a href="#inicio" class="hover:text-orange-600 transition-colors">Inicio</a>
+                <a href="#menu" class="hover:text-orange-600 transition-colors">Menú de Garras</a>
+                <a href="#nosotros" class="hover:text-orange-600 transition-colors">Orgullo León</a>
+                <a href="#contacto" class="hover:text-orange-600 transition-colors">Ubicación</a>
             </div>
-            <a href="#menu" class="bg-[#5d4037] text-white px-5 py-2 rounded-full text-sm font-semibold hover:bg-[#4e342e] transition shadow-md">Ver Menú</a>
+            <a href="#menu" class="bg-gradient-to-r from-orange-600 to-amber-500 text-white px-6 py-2.5 rounded-full text-sm font-bold hover:from-orange-700 hover:to-amber-600 transition-all duration-300 shadow-md hover:shadow-orange-200 hover:-translate-y-0.5">
+                ¡Rugir de Hambre!
+            </a>
         </div>
     </nav>
 
-    <!-- 2. SECCIÓN DE INICIO (HERO) -->
-    <header id="inicio" class="relative h-screen flex items-center justify-center bg-cover bg-center" style="background-image: linear-gradient(rgba(0,0,0,0.55), rgba(0,0,0,0.55)), url('https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?q=80&w=1600');">
-        <div class="text-center text-white px-4 max-w-3xl">
-            <span class="text-amber-400 font-semibold tracking-widest uppercase text-sm block mb-3">Energía para tu día académico</span>
-            <h1 class="text-5xl md:text-7xl font-serif font-bold mb-6 leading-tight">El café que despierta el ingenio León</h1>
-            <p class="text-lg md:text-xl mb-8 font-light text-gray-200">Tu espacio ideal en la UPSLP para recargar energía entre clases, trabajar en equipo o disfrutar de un buen desayuno.</p>
+    <!-- 2. SECCIÓN DE INICIO DINÁMICA (HERO) -->
+    <header id="inicio" class="relative h-screen flex items-center justify-center bg-cover bg-center overflow-hidden" style="background-image: linear-gradient(rgba(45, 27, 16, 0.6), rgba(45, 27, 16, 0.6)), url('https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?q=80&w=1600');">
+        <!-- Onda decorativa fluida al fondo -->
+        <div class="absolute bottom-0 left-0 w-full overflow-hidden leading-[0]">
+            <svg viewBox="0 0 1200 120" preserveAspectRatio="none" class="relative block w-full h-[60px] fill-[#fdfbf7]">
+                <path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V120H0V27.35C26.05,43.3,74.74,54.74,121.39,56.44Z"></path>
+            </svg>
+        </div>
+
+        <div class="text-center text-white px-4 max-w-4xl relative z-10">
+            <span class="bg-amber-500/90 text-neutral-900 font-extrabold tracking-widest uppercase text-xs px-4 py-1.5 rounded-full inline-block mb-4 animate-bounce">
+                100% Comunidad Politécnica
+            </span>
+            <h1 class="text-5xl md:text-7xl font-serif font-black mb-6 leading-tight drop-shadow-md">
+                El combustible de los <span class="text-amber-400">Leones</span>
+            </h1>
+            <p class="text-lg md:text-xl mb-10 font-light text-stone-200 max-w-2xl mx-auto">
+                ¿Hora libre o un break antes del laboratorio? Ven a Policafé por la mejor energía para tus proyectos y exámenes.
+            </p>
             <div class="flex flex-col sm:flex-row justify-center gap-4">
-                <a href="#menu" class="bg-amber-500 hover:bg-amber-600 text-neutral-900 font-bold px-8 py-3 rounded-full shadow-lg transition">Explorar Menú</a>
-                <a href="#contacto" class="border-2 border-white hover:bg-white hover:text-neutral-900 text-white font-bold px-8 py-3 rounded-full transition">¿Dónde encontrarnos?</a>
+                <a href="#menu" class="bg-amber-500 hover:bg-amber-600 text-neutral-950 font-black px-8 py-4 rounded-full shadow-lg transition-all duration-300 transform hover:scale-105">
+                    Explorar Menú Real
+                </a>
+                <a href="#contacto" class="border-2 border-white/80 hover:bg-white hover:text-neutral-900 text-white font-bold px-8 py-4 rounded-full transition-all duration-300 backdrop-blur-sm">
+                    ¿Dónde estamos?
+                </a>
             </div>
         </div>
     </header>
 
-    <!-- 3. SECCIÓN DE MENÚ INTERACTIVO -->
+    <!-- 3. SECCIÓN DE MENÚ INTERACTIVO CON FILTRADO FLUIDO -->
     <section id="menu" class="py-24 max-w-6xl mx-auto px-6">
         <div class="text-center mb-16">
-            <h2 class="text-4xl font-serif font-bold text-[#4e342e] mb-2">Nuestro Menú</h2>
-            <div class="w-16 h-1 bg-amber-600 mx-auto rounded-full mb-6"></div>
-            <p class="text-gray-600">Opciones rápidas y deliciosas para aguantar toda la jornada escolar.</p>
+            <h2 class="text-4xl md:text-5xl font-serif font-black text-neutral-800 mb-3">Menú Oficial del Campus</h2>
+            <div class="w-24 h-1.5 bg-gradient-to-r from-orange-600 to-amber-500 mx-auto rounded-full mb-6"></div>
+            <p class="text-neutral-600 text-lg">Los precios e ingredientes exactos que ves en las barras de atención.</p>
         </div>
 
-        <!-- Filtros de Categorías -->
-        <div class="flex justify-center space-x-4 mb-12">
-            <button onclick="filtrarMenu('todos')" class="cat-btn bg-[#5d4037] text-white px-6 py-2 rounded-full font-medium transition shadow">Todos</button>
-            <button onclick="filtrarMenu('cafes')" class="cat-btn bg-white text-[#5d4037] border border-[#efebe9] px-6 py-2 rounded-full font-medium transition hover:bg-[#efebe9]">Cafés y Bebidas</button>
-            <button onclick="filtrarMenu('reposteria')" class="cat-btn bg-white text-[#5d4037] border border-[#efebe9] px-6 py-2 rounded-full font-medium transition hover:bg-[#efebe9]">Snacks y Repostería</button>
+        <!-- Botones de Filtro Estilizados -->
+        <div class="flex flex-wrap justify-center gap-3 mb-16">
+            <button onclick="filtrarMenu('todos')" class="cat-btn bg-orange-700 text-white px-6 py-3 rounded-xl font-bold shadow-md shadow-orange-100 transition-all duration-300 transform hover:-translate-y-0.5">Todos</button>
+            <button onclick="filtrarMenu('platillos')" class="cat-btn bg-white text-orange-800 border border-orange-100 px-6 py-3 rounded-xl font-bold transition-all duration-300 transform hover:-translate-y-0.5 hover:bg-orange-50">Platillos Fuertes</button>
+            <button onclick="filtrarMenu('bebidas')" class="cat-btn bg-white text-orange-800 border border-orange-100 px-6 py-3 rounded-xl font-bold transition-all duration-300 transform hover:-translate-y-0.5 hover:bg-orange-50">Bebidas</button>
+            <button onclick="filtrarMenu('snacks')" class="cat-btn bg-white text-orange-800 border border-orange-100 px-6 py-3 rounded-xl font-bold transition-all duration-300 transform hover:-translate-y-0.5 hover:bg-orange-50">Botanas y Farmacia</button>
         </div>
 
-        <!-- Rejilla de Productos -->
-        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <!-- Producto 1 -->
-            <div class="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition border border-[#efebe9]" data-categoria="cafes">
-                <img src="https://images.unsplash.com/photo-1541167760496-1628856ab772?q=80&w=600" alt="Espresso" class="h-48 w-full object-cover">
-                <div class="p-6">
-                    <div class="flex justify-between items-center mb-2">
-                        <h3 class="font-bold text-xl text-[#4e342e]">Capuccino León</h3>
-                        <span class="text-amber-700 font-bold">$45.00</span>
-                    </div>
-                    <p class="text-gray-600 text-sm">Espresso balanceado con leche vaporizada y el toque perfecto de energía para tus exámenes.</p>
+        <!-- Rejilla de Productos con Efecto Hover Potente -->
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 transition-all duration-500" id="contenedor-menu">
+            
+            <!-- PLATILLOS FUERTES -->
+            <div class="menu-item bg-white p-5 rounded-2xl shadow-sm border border-orange-50/60 hover:shadow-xl hover:border-amber-200 transition-all duration-300 transform hover:-translate-y-1.5" data-categoria="platillos">
+                <div class="flex justify-between items-start gap-2 mb-2">
+                    <h3 class="font-black text-xl text-neutral-800">Comida Corrida</h3>
+                    <span class="bg-orange-100 text-orange-800 font-extrabold px-3 py-1 rounded-full text-sm shrink-0">$100.00</span>
                 </div>
+                <p class="text-neutral-500 text-sm">El clásico completo del día para aguantar las jornadas pesadas de laboratorio.</p>
             </div>
 
-            <!-- Producto 2 -->
-            <div class="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition border border-[#efebe9]" data-categoria="cafes">
-                <img src="https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?q=80&w=600" alt="Iced Coffee" class="h-48 w-full object-cover">
-                <div class="p-6">
-                    <div class="flex justify-between items-center mb-2">
-                        <h3 class="font-bold text-xl text-[#4e342e]">Carga Politécnica</h3>
-                        <span class="text-amber-700 font-bold">$48.00</span>
-                    </div>
-                    <p class="text-gray-600 text-sm">Café americano frío con un shot extra de espresso, jarabe de vainilla y hielo.</p>
+            <div class="menu-item bg-white p-5 rounded-2xl shadow-sm border border-orange-50/60 hover:shadow-xl hover:border-amber-200 transition-all duration-300 transform hover:-translate-y-1.5" data-categoria="platillos">
+                <div class="flex justify-between items-start gap-2 mb-2">
+                    <h3 class="font-black text-xl text-neutral-800">Chilaquiles con Guiso</h3>
+                    <span class="bg-orange-100 text-orange-800 font-extrabold px-3 py-1 rounded-full text-sm shrink-0">$75.00</span>
                 </div>
+                <p class="text-neutral-500 text-sm">Crujientes chilaquiles bañados con salsa y acompañados de tu guiso preferido.</p>
             </div>
 
-            <!-- Producto 3 -->
-            <div class="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition border border-[#efebe9]" data-categoria="reposteria">
-                <img src="https://images.unsplash.com/photo-1555507036-ab1f4038808a?q=80&w=600" alt="Croissant" class="h-48 w-full object-cover">
-                <div class="p-6">
-                    <div class="flex justify-between items-center mb-2">
-                        <h3 class="font-bold text-xl text-[#4e342e]">Croissant de Mantequilla</h3>
-                        <span class="text-amber-700 font-bold">$32.00</span>
-                    </div>
-                    <p class="text-gray-600 text-sm">Hojaldre crujiente horneado cada mañana, ideal para acompañar tus horas de estudio.</p>
+            <div class="menu-item bg-white p-5 rounded-2xl shadow-sm border border-orange-50/60 hover:shadow-xl hover:border-amber-200 transition-all duration-300 transform hover:-translate-y-1.5" data-categoria="platillos">
+                <div class="flex justify-between items-start gap-2 mb-2">
+                    <h3 class="font-black text-xl text-neutral-800">Enchiladas Potosinas</h3>
+                    <span class="bg-orange-100 text-orange-800 font-extrabold px-3 py-1 rounded-full text-sm shrink-0">$65.00</span>
                 </div>
+                <p class="text-neutral-500 text-sm">La tradición de nuestro estado directo al plato universitario con su queso y sazón local.</p>
+            </div>
+
+            <div class="menu-item bg-white p-5 rounded-2xl shadow-sm border border-orange-50/60 hover:shadow-xl hover:border-amber-200 transition-all duration-300 transform hover:-translate-y-1.5" data-categoria="platillos">
+                <div class="flex justify-between items-start gap-2 mb-2">
+                    <h3 class="font-black text-xl text-neutral-800">Tecolota</h3>
+                    <span class="bg-orange-100 text-orange-800 font-extrabold px-3 py-1 rounded-full text-sm shrink-0">$70.00</span>
+                </div>
+                <p class="text-neutral-500 text-sm">Exquisita torta rellena de chilaquiles, perfecta para arrancar la mañana con todo.</p>
+            </div>
+
+            <div class="menu-item bg-white p-5 rounded-2xl shadow-sm border border-orange-50/60 hover:shadow-xl hover:border-amber-200 transition-all duration-300 transform hover:-translate-y-1.5" data-categoria="platillos">
+                <div class="flex justify-between items-start gap-2 mb-2">
+                    <h3 class="font-black text-xl text-neutral-800">Milanesa (Pollo / Puerco)</h3>
+                    <span class="bg-orange-100 text-orange-800 font-extrabold px-3 py-1 rounded-full text-sm shrink-0">$70.00</span>
+                </div>
+                <p class="text-neutral-500 text-sm">Servida con ensalada fresca o frijoles calientitos para un almuerzo bien equilibrado.</p>
+            </div>
+
+            <div class="menu-item bg-white p-5 rounded-2xl shadow-sm border border-orange-50/60 hover:shadow-xl hover:border-amber-200 transition-all duration-300 transform hover:-translate-y-1.5" data-categoria="platillos">
+                <div class="flex justify-between items-start gap-2 mb-2">
+                    <h3 class="font-black text-xl text-neutral-800">Club Sándwich Integral</h3>
+                    <span class="bg-orange-100 text-orange-800 font-extrabold px-3 py-1 rounded-full text-sm shrink-0">$70.00</span>
+                </div>
+                <p class="text-neutral-500 text-sm">Clásico sándwich de varios pisos preparado con ingredientes frescos y pan integral.</p>
+            </div>
+
+            <div class="menu-item bg-white p-5 rounded-2xl shadow-sm border border-orange-50/60 hover:shadow-xl hover:border-amber-200 transition-all duration-300 transform hover:-translate-y-1.5" data-categoria="platillos">
+                <div class="flex justify-between items-start gap-2 mb-2">
+                    <h3 class="font-black text-xl text-neutral-800">Flautas de Pollo o Queso</h3>
+                    <span class="bg-orange-100 text-orange-800 font-extrabold px-3 py-1 rounded-full text-sm shrink-0">$60.00</span>
+                </div>
+                <p class="text-neutral-500 text-sm">Orden de 4 flautas doraditas y crujientes, servidas al momento.</p>
+            </div>
+
+            <div class="menu-item bg-white p-5 rounded-2xl shadow-sm border border-orange-50/60 hover:shadow-xl hover:border-amber-200 transition-all duration-300 transform hover:-translate-y-1.5" data-categoria="platillos">
+                <div class="flex justify-between items-start gap-2 mb-2">
+                    <h3 class="font-black text-xl text-neutral-800">Molletes Orden (2)</h3>
+                    <span class="bg-orange-100 text-orange-800 font-extrabold px-3 py-1 rounded-full text-sm shrink-0">$40.00</span>
+                </div>
+                <p class="text-neutral-500 text-sm">Dos piezas de pan crujiente con frijoles y queso derretido gratinado. (1 pieza por $23.00).</p>
+            </div>
+
+            <div class="menu-item bg-white p-5 rounded-2xl shadow-sm border border-orange-50/60 hover:shadow-xl hover:border-amber-200 transition-all duration-300 transform hover:-translate-y-1.5" data-categoria="platillos">
+                <div class="flex justify-between items-start gap-2 mb-2">
+                    <h3 class="font-black text-xl text-neutral-800">Burrito de Harina</h3>
+                    <span class="bg-orange-100 text-orange-800 font-extrabold px-3 py-1 rounded-full text-sm shrink-0">$19.00</span>
+                </div>
+                <p class="text-neutral-500 text-sm">Práctico y sabroso para comer rápido entre clases. ¡Paquete de 4 por $65.00!</p>
+            </div>
+
+            <div class="menu-item bg-white p-5 rounded-2xl shadow-sm border border-orange-50/60 hover:shadow-xl hover:border-amber-200 transition-all duration-300 transform hover:-translate-y-1.5" data-categoria="platillos">
+                <div class="flex justify-between items-start gap-2 mb-2">
+                    <h3 class="font-black text-xl text-neutral-800">Gorditas o Tacos de Maíz</h3>
+                    <span class="bg-orange-100 text-orange-800 font-extrabold px-3 py-1 rounded-full text-sm shrink-0">$20.00</span>
+                </div>
+                <p class="text-neutral-500 text-sm">Gorditas rellenas o Tacos con guiso y queso ($20). Opción de taco sencillo por $17.</p>
+            </div>
+
+            <!-- BEBIDAS -->
+            <div class="menu-item bg-white p-5 rounded-2xl shadow-sm border border-orange-50/60 hover:shadow-xl hover:border-amber-200 transition-all duration-300 transform hover:-translate-y-1.5" data-categoria="bebidas">
+                <div class="flex justify-between items-start gap-2 mb-2">
+                    <h3 class="font-black text-xl text-neutral-800">Café Caliente</h3>
+                    <span class="bg-amber-100 text-amber-900 font-extrabold px-3 py-1 rounded-full text-sm shrink-0">$25.00</span>
+                </div>
+                <p class="text-neutral-500 text-sm">El motor de los Leones. Caliente, aromático y listo para las clases de las 7 AM.</p>
+            </div>
+
+            <div class="menu-item bg-white p-5 rounded-2xl shadow-sm border border-orange-50/60 hover:shadow-xl hover:border-amber-200 transition-all duration-300 transform hover:-translate-y-1.5" data-categoria="bebidas">
+                <div class="flex justify-between items-start gap-2 mb-2">
+                    <h3 class="font-black text-xl text-neutral-800">Agua de Frutas Natural</h3>
+                    <span class="bg-amber-100 text-amber-900 font-extrabold px-3 py-1 rounded-full text-sm shrink-0">$40.00</span>
+                </div>
+                <p class="text-neutral-500 text-sm">Litro completo de agua fresca de temporada. El vaso mediano (#16) a solo $20.00.</p>
+            </div>
+
+            <div class="menu-item bg-white p-5 rounded-2xl shadow-sm border border-orange-50/60 hover:shadow-xl hover:border-amber-200 transition-all duration-300 transform hover:-translate-y-1.5" data-categoria="bebidas">
+                <div class="flex justify-between items-start gap-2 mb-2">
+                    <h3 class="font-black text-xl text-neutral-800">Agua de Lourdes (355ml)</h3>
+                    <span class="bg-amber-100 text-amber-900 font-extrabold px-3 py-1 rounded-full text-sm shrink-0">$25.00</span>
+                </div>
+                <p class="text-neutral-500 text-sm">Tradicional agua mineral de la región para refrescar tu tarde en el campus.</p>
+            </div>
+
+            <div class="menu-item bg-white p-5 rounded-2xl shadow-sm border border-orange-50/60 hover:shadow-xl hover:border-amber-200 transition-all duration-300 transform hover:-translate-y-1.5" data-categoria="bebidas">
+                <div class="flex justify-between items-start gap-2 mb-2">
+                    <h3 class="font-black text-xl text-neutral-800">Electrolit</h3>
+                    <span class="bg-amber-100 text-amber-900 font-extrabold px-3 py-1 rounded-full text-sm shrink-0">$40.00</span>
+                </div>
+                <p class="text-neutral-500 text-sm">Perfecto para rehidratarte después de las retas de fútbol o un día caluroso.</p>
+            </div>
+
+            <!-- SNACKS / BOTANAS Y VARIOS -->
+            <div class="menu-item bg-white p-5 rounded-2xl shadow-sm border border-orange-50/60 hover:shadow-xl hover:border-amber-200 transition-all duration-300 transform hover:-translate-y-1.5" data-categoria="snacks">
+                <div class="flex justify-between items-start gap-2 mb-2">
+                    <h3 class="font-black text-xl text-neutral-800">Nachos con Guiso</h3>
+                    <span class="bg-red-100 text-red-900 font-extrabold px-3 py-1 rounded-full text-sm shrink-0">$80.00</span>
+                </div>
+                <p class="text-neutral-500 text-sm">Totopos crujientes cubiertos de queso fundido y tu guiso favorito. Sencillos a $60.00.</p>
+            </div>
+
+            <div class="menu-item bg-white p-5 rounded-2xl shadow-sm border border-orange-50/60 hover:shadow-xl hover:border-amber-200 transition-all duration-300 transform hover:-translate-y-1.5" data-categoria="snacks">
+                <div class="flex justify-between items-start gap-2 mb-2">
+                    <h3 class="font-black text-xl text-neutral-800">Papas en Gajo Horneadas</h3>
+                    <span class="bg-red-100 text-red-900 font-extrabold px-3 py-1 rounded-full text-sm shrink-0">$50.00</span>
+                </div>
+                <p class="text-neutral-500 text-sm">Papas sazonadas y horneadas, una alternativa deliciosa para botanear en equipo.</p>
+            </div>
+
+            <div class="menu-item bg-white p-5 rounded-2xl shadow-sm border border-orange-50/60 hover:shadow-xl hover:border-amber-200 transition-all duration-300 transform hover:-translate-y-1.5" data-categoria="snacks">
+                <div class="flex justify-between items-start gap-2 mb-2">
+                    <h3 class="font-black text-xl text-neutral-800">Muffin u Obleas</h3>
+                    <span class="bg-red-100 text-red-900 font-extrabold px-3 py-1 rounded-full text-sm shrink-0">$30 / $40</span>
+                </div>
+                <p class="text-neutral-500 text-sm">El antojo dulce. Muffin integral esponjoso ($30) u obleas de deliciosos sabores ($40).</p>
+            </div>
+
+            <div class="menu-item bg-white p-5 rounded-2xl shadow-sm border border-orange-50/60 hover:shadow-xl hover:border-amber-200 transition-all duration-300 transform hover:-translate-y-1.5" data-categoria="snacks">
+                <div class="flex justify-between items-start gap-2 mb-2">
+                    <h3 class="font-black text-xl text-neutral-800">Kit de Emergencia Médica</h3>
+                    <span class="bg-emerald-100 text-emerald-900 font-extrabold px-3 py-1 rounded-full text-xs shrink-0">Desde $10</span>
+                </div>
+                <p class="text-neutral-500 text-sm">¿Te dio dolor de cabeza en el examen? Cafiaspirina ($10), Buscapina ($15) o Sal de Uvas ($15).</p>
             </div>
         </div>
     </section>
 
-    <!-- 4. SECCIÓN NOSOTROS -->
-    <section id="nosotros" class="bg-[#f5f0ea] py-24">
+    <!-- 4. SECCIÓN NOSOTROS (ORGULLO LEÓN) -->
+    <section id="nosotros" class="bg-gradient-to-b from-[#f5f0ea] to-[#fdfbf7] py-24">
         <div class="max-w-6xl mx-auto px-6 grid md:grid-cols-2 gap-12 items-center">
-            <div class="relative">
-                <img src="https://images.unsplash.com/photo-1498804103079-a6351b050096?q=80&w=600" alt="Ambiente Cafetería" class="rounded-2xl shadow-lg relative z-10 w-full object-cover h-[450px]">
-                <div class="absolute -bottom-6 -right-6 w-48 h-48 bg-amber-200 rounded-2xl -z-0 hidden sm:block"></div>
+            <div class="relative group">
+                <img src="https://images.unsplash.com/photo-1498804103079-a6351b050096?q=80&w=600" alt="Comunidad Universitaria" class="rounded-3xl shadow-xl relative z-10 w-full object-cover h-[450px] group-hover:scale-[1.02] transition-transform duration-500">
+                <div class="absolute -bottom-4 -right-4 w-48 h-48 bg-amber-300/40 rounded-3xl -z-0 group-hover:translate-x-2 group-hover:translate-y-2 transition-transform duration-500 hidden sm:block"></div>
             </div>
             <div>
-                <span class="text-amber-700 font-semibold tracking-widest uppercase text-sm block mb-2">Comunidad Universitaria</span>
-                <h2 class="text-4xl font-serif font-bold text-[#4e342e] mb-6">Más que una cafetería, tu zona de recarga</h2>
-                <p class="text-gray-700 mb-6 leading-relaxed">En **Policafé** entendemos el ritmo de la vida universitaria. Nos enfocamos en ofrecer un servicio rápido, de calidad y un espacio cómodo diseñado para que la comunidad de la Universidad Politécnica de San Luis Potosí encuentre el combustible necesario para innovar y crear el futuro.</p>
+                <span class="text-orange-700 font-black tracking-widest uppercase text-xs px-3 py-1 bg-orange-100 rounded-md inline-block mb-3">Punto de Encuentro</span>
+                <h2 class="text-4xl font-serif font-black text-neutral-800 mb-6 leading-tight">¡Donde la comunidad de la UPSLP recarga sus garras!</h2>
+                <p class="text-neutral-600 mb-6 leading-relaxed text-lg">
+                    Policafé no es solo una cafetería escolar; es el lugar donde nacen los proyectos de ingeniería, donde se repasa antes de un examen decisivo y donde se festeja con los amigos tras una semana intensa. Nos comprometemos con darte un servicio dinámico, precios justos y comida deliciosa.
+                </p>
                 
-                <!-- Iconos de características -->
+                <!-- Beneficios en tarjetas con micro-movimientos -->
                 <div class="grid grid-cols-2 gap-4">
-                    <div class="flex items-center space-x-3">
-                        <div class="bg-amber-100 p-2 rounded-lg text-amber-800"><i data-lucide="zap"></i></div>
-                        <span class="font-medium text-[#4e342e]">Servicio Veloz</span>
+                    <div class="flex items-center space-x-3 bg-white p-3 rounded-xl border border-orange-100/40 shadow-sm hover:shadow-md hover:border-amber-300 transition-all duration-300">
+                        <div class="bg-orange-100 p-2.5 rounded-lg text-orange-700"><i data-lucide="zap"></i></div>
+                        <span class="font-bold text-sm text-neutral-700">Servicio Ultra Rápido</span>
                     </div>
-                    <div class="flex items-center space-x-3">
-                        <div class="bg-amber-100 p-2 rounded-lg text-amber-800"><i data-lucide="users"></i></div>
-                        <span class="font-medium text-[#4e342e]">Ambiente León</span>
+                    <div class="flex items-center space-x-3 bg-white p-3 rounded-xl border border-orange-100/40 shadow-sm hover:shadow-md hover:border-amber-300 transition-all duration-300">
+                        <div class="bg-amber-100 p-2.5 rounded-lg text-amber-800"><i data-lucide="smile"></i></div>
+                        <span class="font-bold text-sm text-neutral-700">Precios de Estudiante</span>
                     </div>
                 </div>
             </div>
@@ -125,78 +275,91 @@
     <!-- 5. CONTACTO Y UBICACIÓN -->
     <section id="contacto" class="py-24 max-w-6xl mx-auto px-6">
         <div class="text-center mb-16">
-            <h2 class="text-4xl font-serif font-bold text-[#4e342e] mb-2">Visítanos o Escríbenos</h2>
-            <div class="w-16 h-1 bg-amber-600 mx-auto rounded-full mb-6"></div>
+            <h2 class="text-4xl font-serif font-black text-neutral-800 mb-2">Ubicación de nuestro Territorio</h2>
+            <div class="w-16 h-1.5 bg-amber-500 mx-auto rounded-full mb-6"></div>
         </div>
 
         <div class="grid md:grid-cols-2 gap-12">
             <!-- Info e Horarios -->
-            <div class="bg-white p-8 rounded-2xl shadow-sm border border-[#efebe9] flex flex-col justify-between">
+            <div class="bg-white p-8 rounded-3xl shadow-md border border-orange-100/40 flex flex-col justify-between hover:shadow-lg transition-all duration-300">
                 <div>
-                    <h3 class="text-2xl font-serif font-bold text-[#4e342e] mb-6">Policafé UPSLP</h3>
-                    <div class="space-y-4 mb-8">
-                        <p class="flex items-start text-gray-700">
-                            <i data-lucide="map-pin" class="mr-3 text-amber-700 mt-1 shrink-0"></i> 
-                            <span>C. Urbano Villalón 500, Himno Nacional 2da, 78363 San Luis Potosí, S.L.P.<br><span class="text-sm text-gray-500 font-medium">(Ubicado en: Universidad Politécnica de San Luis Potosí)</span></span>
+                    <h3 class="text-2xl font-serif font-black text-orange-800 mb-6 flex items-center gap-2">
+                        <i data-lucide="map-pins" class="text-amber-500"></i>Cafetería de la UPSLP
+                    </h3>
+                    <div class="space-y-5 mb-8">
+                        <p class="flex items-start text-neutral-600">
+                            <i data-lucide="map-pin" class="mr-3 text-orange-700 mt-1 shrink-0"></i> 
+                            <span>C. Urbano Villalón 500, Himno Nacional 2da, 78363 San Luis Potosí, S.L.P.<br><span class="text-sm font-bold text-orange-600/80">(Ubicado al interior del campus de la Universidad Politécnica de San Luis Potosí)</span></span>
                         </p>
-                        <p class="flex items-center text-gray-700"><i data-lucide="clock" class="mr-3 text-amber-700"></i> Lun - Vie: 7:00 AM - 8:00 PM / Sáb: 8:00 AM - 2:00 PM</p>
-                        <p class="flex items-center text-amber-800 font-medium">
-                            <i data-lucide="utensils" class="mr-3 text-amber-700"></i> Consumo en el lugar
+                        <p class="flex items-center text-neutral-600"><i data-lucide="clock" class="mr-3 text-orange-700"></i> Lunes a Viernes: 7:00 AM - 8:00 PM <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Sábados: 8:00 AM - 2:00 PM</p>
+                        <p class="flex items-center text-amber-900 font-extrabold bg-amber-50 px-4 py-2 rounded-lg inline-block text-sm">
+                            <i data-lucide="utensils" class="inline mr-2 text-amber-700"></i> Consumo presencial en las mesas del lugar
                         </p>
                     </div>
                 </div>
-                <!-- Mapa de Google interactivo real de la Cafetería de la UPSLP -->
-                <div class="w-full h-56 bg-neutral-200 rounded-xl overflow-hidden shadow-inner border border-gray-100">
+                <!-- Mapa de Google insertado de forma fluida -->
+                <div class="w-full h-56 bg-neutral-200 rounded-2xl overflow-hidden shadow-inner border border-orange-50 transform hover:scale-[1.01] transition-transform duration-300">
                     <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1493.323263619349!2d-100.9842329!3d22.1219325!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x842a990039e2ab6b%3A0x2053004040f74d40!2sCafeteria%20de%20la%20UPSLP!5e0!3m2!1ses-419!2smx!4v1717880000000!5m2!1ses-419!2smx" class="w-full h-full border-0" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
                 </div>
             </div>
 
-            <!-- Formulario de Mensaje -->
-            <form class="space-y-6 bg-white p-8 rounded-2xl shadow-sm border border-[#efebe9]">
+            <!-- Buzón de Comentarios Lince -->
+            <form class="space-y-6 bg-white p-8 rounded-3xl shadow-md border border-orange-100/40 hover:shadow-lg transition-all duration-300">
+                <h3 class="text-2xl font-serif font-black text-neutral-800 mb-2">Buzón Digital de Sugerencias</h3>
+                <p class="text-sm text-neutral-500 mb-4">¿Quieres sugerir un nuevo guiso para las gorditas? ¡Te leemos!</p>
                 <div>
-                    <label class="block text-sm font-semibold mb-2">Nombre Completo</label>
-                    <input type="text" class="w-full p-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-amber-600 bg-neutral-50" placeholder="Tu nombre">
+                    <label class="block text-sm font-bold mb-1.5 text-neutral-700">Nombre Completo</label>
+                    <input type="text" class="w-full p-3.5 rounded-xl border border-orange-100 focus:outline-none focus:ring-2 focus:ring-amber-500 bg-stone-50/50 transition-all" placeholder="Escribe tu nombre">
                 </div>
                 <div>
-                    <label class="block text-sm font-semibold mb-2">Correo Institucional o Matrícula</label>
-                    <input type="text" class="w-full p-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-amber-600 bg-neutral-50" placeholder="ejemplo@upslp.edu.mx">
+                    <label class="block text-sm font-bold mb-1.5 text-neutral-700">Matrícula o Correo Institucional</label>
+                    <input type="text" class="w-full p-3.5 rounded-xl border border-orange-100 focus:outline-none focus:ring-2 focus:ring-amber-500 bg-stone-50/50 transition-all" placeholder="ejemplo@upslp.edu.mx">
                 </div>
                 <div>
-                    <label class="block text-sm font-semibold mb-2">Buzón de Sugerencias / Comentarios</label>
-                    <textarea class="w-full p-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-amber-600 bg-neutral-50 h-32" placeholder="¿Qué te gustaría ver en el menú o qué comentario tienes para mejorar el servicio?"></textarea>
+                    <label class="block text-sm font-bold mb-1.5 text-neutral-700">Tu Mensaje</label>
+                    <textarea class="w-full p-3.5 rounded-xl border border-orange-100 focus:outline-none focus:ring-2 focus:ring-amber-500 bg-stone-50/50 h-28 transition-all" placeholder="Deja tus dudas, felicitaciones o quejas sobre el servicio..."></textarea>
                 </div>
-                <button type="submit" class="w-full bg-[#5d4037] text-white p-3 rounded-lg font-bold hover:bg-[#4e342e] transition">Enviar Comentario</button>
+                <button type="submit" class="w-full bg-gradient-to-r from-orange-700 to-orange-600 hover:from-orange-800 hover:to-orange-700 text-white p-4 rounded-xl font-bold transition-all duration-300 transform hover:-translate-y-0.5 shadow-md shadow-orange-100">
+                    Enviar Mensaje a Coordinación
+                </button>
             </form>
         </div>
     </section>
 
     <!-- 6. PIE DE PÁGINA -->
-    <footer class="bg-[#3e2723] text-stone-300 py-8 text-center border-t border-[#4e342e]">
-        <p>&copy; 2026 Policafé UPSLP. Todos los derechos reservados.</p>
+    <footer class="bg-neutral-900 text-stone-400 py-10 text-center border-t-4 border-orange-600">
+        <p class="font-bold text-white mb-2">Policafé UPSLP</p>
+        <p class="text-sm">&copy; 2026 Comunidad de Leones Politécnicos. Todos los derechos reservados.</p>
     </footer>
 
-    <!-- LÓGICA JAVASCRIPT (Filtro del Menú e Iconos) -->
+    <!-- LÓGICA JAVASCRIPT AVANZADA (Filtro con micro-movimiento) -->
     <script>
-        // Inicializar los iconos de Lucide
+        // Inicializar iconos de Lucide de forma automática
         lucide.createIcons();
 
-        // Función interactiva para filtrar el menú
+        // Función dinámica de filtrado con efecto de fluidez
         function filtrarMenu(categoria) {
-            const items = document.querySelectorAll('[data-categoria]');
+            const items = document.querySelectorAll('.menu-item');
             const botones = document.querySelectorAll('.cat-btn');
 
-            // Cambiar estilos de los botones de filtro
+            // Cambiar estilos de los botones de filtro activados/desactivados
             botones.forEach(btn => {
-                btn.classList.remove('bg-[#5d4037]', 'text-white', 'shadow');
-                btn.classList.add('bg-white', 'text-[#5d4037]', 'border', 'border-[#efebe9]');
+                btn.classList.remove('bg-orange-700', 'text-white', 'shadow-md', 'shadow-orange-100');
+                btn.classList.add('bg-white', 'text-orange-800', 'border', 'border-orange-100');
             });
-            event.target.classList.add('bg-[#5d4037]', 'text-white', 'shadow');
-            event.target.classList.remove('bg-white', 'text-[#5d4037]', 'border', 'border-[#efebe9]');
 
-            // Mostrar/Ocultar elementos
-            items.forEach(item => {
+            // Darle estilo de activo al botón cliqueado
+            event.target.classList.add('bg-orange-700', 'text-white', 'shadow-md', 'shadow-orange-100');
+            event.target.classList.remove('bg-white', 'text-orange-800', 'border', 'border-orange-100');
+
+            // Control de visualización y animación de las tarjetas
+            items.forEach((item, index) => {
                 if (categoria === 'todos' || item.getAttribute('data-categoria') === categoria) {
                     item.style.display = 'block';
+                    // Re-aplicar la animación para que se vea fluido al cambiar de categoría
+                    item.style.animation = 'none';
+                    item.offsetHeight; // Forzar reflow en el navegador
+                    item.style.animation = `fadeInUp 0.4s ease ${index * 0.03}s backwards`;
                 } else {
                     item.style.display = 'none';
                 }
