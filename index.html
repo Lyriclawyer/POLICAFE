@@ -215,10 +215,10 @@
                 </div>
                 
                 <div class="grid grid-cols-2 gap-2">
-                    <button onclick="procesarPedidoQR()" id="btn-generar-qr" class="bg-gradient-to-r from-orange-600 to-amber-500 text-white p-3.5 rounded-xl font-bold transition flex items-center justify-center gap-1.5 text-xs shadow-md disabled:opacity-40">
+                    <button onclick="procesarPedidoQR()" id="btn-generar-qr" class="bg-gradient-to-r from-orange-600 to-amber-500 text-white p-3.5 rounded-xl font-bold transition flex items-center justify-center gap-1.5 text-xs shadow-md">
                         <i data-lucide="qr-code" class="w-4 h-4"></i> Obtener Ticket QR
                     </button>
-                    <button onclick="enviarWhatsApp()" id="btn-whatsapp" class="bg-emerald-600 hover:bg-emerald-700 text-white p-3.5 rounded-xl font-bold transition flex items-center justify-center gap-1.5 text-xs shadow-md disabled:opacity-40">
+                    <button onclick="enviarWhatsApp()" id="btn-whatsapp" class="bg-emerald-600 hover:bg-emerald-700 text-white p-3.5 rounded-xl font-bold transition flex items-center justify-center gap-1.5 text-xs shadow-md">
                         <i data-lucide="message-circle" class="w-4 h-4"></i> Enviar a WhatsApp
                     </button>
                 </div>
@@ -231,7 +231,11 @@
         <div class="bg-white rounded-3xl p-6 max-w-sm w-full text-center shadow-2xl transform scale-95 transition-transform duration-300" id="cuerpo-modal-qr">
             <h4 class="text-xl font-serif font-black text-neutral-800 mb-1">¡Código QR Listo!</h4>
             <p class="text-xs text-orange-600 font-bold mb-4 uppercase tracking-wider">Paga directo en el mostrador</p>
-            <div id="qrcode" class="bg-white p-4 rounded-2xl inline-block shadow-inner border mb-4"></div>
+            
+            <!-- Contenedor único donde se inyecta el QR -->
+            <div class="flex justify-center my-4">
+                <div id="qrcode" class="bg-white p-3 rounded-2xl inline-block shadow-inner border"></div>
+            </div>
             
             <div class="bg-neutral-50 p-4 rounded-xl border border-dashed text-left mb-4 text-xs font-mono">
                 <div id="resumen-ticket-qr" class="text-neutral-600 space-y-1"></div>
@@ -287,7 +291,6 @@
 
         document.getElementById('nav-puntos').innerText = puntosUsuario;
 
-        // FILTRADO COMBINADO INTELIGENTE
         function filtrarCategoria(cat) {
             filtroCatActual = cat;
             actualizarEstilosBotones('filtros-categoria', 'cat-btn', event.target, 'bg-orange-700', 'text-white');
@@ -319,7 +322,6 @@
             botonActivo.classList.remove('bg-white', 'text-neutral-700', 'border');
         }
 
-        // BUSCADOR EN TIEMPO REAL
         function buscarProducto(query) {
             const q = query.toLowerCase().trim();
             const items = document.querySelectorAll('.menu-item');
@@ -329,7 +331,6 @@
             });
         }
 
-        // ACCESIBILIDAD: CONTROL POR VOZ
         function activarMicrofono() {
             const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
             if (!SpeechRecognition) {
@@ -369,19 +370,18 @@
             recognition.start();
         }
 
-        // ADMINISTRACIÓN DEL CARRITO
         function agregarAlCarrito(nombre, precio) {
             const item = carrito.find(i => i.nombre === nombre);
             if (item) { item.cantidad += 1; } 
-            else { carrito.push({ nombre, precio, factory: true, cantidad: 1 }); }
+            else { carrito.push({ nombre, precio, cantidad: 1 }); }
             actualizarInterfazCarrito();
         }
 
         function cambiarCantidad(nombre, cambio) {
-            const item = carrito.find(i => i.nombre === nombre);
+            const item = carrito.find(i => i.nombre === cambio || i.nombre === nombre);
             if (item) {
                 item.cantidad += cambio;
-                if (item.cantidad <= 0) carrito = carrito.filter(i => i.nombre !== nombre);
+                if (item.cantidad <= 0) carrito = carrito.filter(i => i.nombre !== item.nombre);
             }
             actualizarInterfazCarrito();
         }
@@ -428,7 +428,6 @@
             txtPuntosGarras.innerText = `+${Math.floor(total * 0.1)} Garras 🐾`;
         }
 
-        // WHATSAPP
         function enviarWhatsApp() {
             if (carrito.length === 0) return;
             let msg = `*NUEVO PEDIDO POLICAFÉ*\n`;
@@ -443,10 +442,13 @@
             window.open(`https://api.whatsapp.com/send?phone=521234567890&text=${encodeURIComponent(msg)}`);
         }
 
-        // DESPLIEGUE FINAL EN CÓDIGO QR FIXED
+        // FUNCIÓN DE QR ARREGLADA COMPLETAMENTE
         function procesarPedidoQR() {
             if (carrito.length === 0) return;
-            document.getElementById('qrcode').innerHTML = "";
+            
+            const containerQR = document.getElementById('qrcode');
+            containerQR.innerHTML = ""; // Limpieza total garantizada
+            
             let dataQR = "POLICAFE-ORDER\n";
             let resHTML = "", total = 0;
             const folio = Math.floor(1000 + Math.random() * 9000);
@@ -464,9 +466,14 @@
 
             document.getElementById('resumen-ticket-qr').innerHTML = resHTML;
 
-            // Renderizar QR de forma limpia
-            new QRCode(document.getElementById('qrcode'), {
-                text: dataQR, width: 160, height: 160, colorDark : "#2d1b10", colorLight : "#ffffff", correctLevel : QRCode.CorrectLevel.M
+            // Renderizado forzado sin duplicación
+            new QRCode(containerQR, {
+                text: dataQR,
+                width: 160,
+                height: 160,
+                colorDark : "#2d1b10",
+                colorLight : "#ffffff",
+                correctLevel : QRCode.CorrectLevel.M
             });
 
             puntosUsuario += Math.floor(total * 0.1);
@@ -477,7 +484,6 @@
             document.getElementById('modal-qr').classList.remove('opacity-0', 'pointer-events-none');
         }
 
-        // CONTROLADORES DE MODALES
         function abrirModalCarrito() { document.getElementById('modal-carrito').classList.remove('opacity-0', 'pointer-events-none'); document.getElementById('cuerpo-modal-carrito').classList.remove('translate-x-full'); }
         function cerrarModalCarrito() { document.getElementById('modal-carrito').classList.add('opacity-0', 'pointer-events-none'); document.getElementById('cuerpo-modal-carrito').classList.add('translate-x-full'); }
         function cerrarModalQR() { document.getElementById('modal-qr').classList.add('opacity-0', 'pointer-events-none'); carrito = []; actualizarInterfazCarrito(); }
