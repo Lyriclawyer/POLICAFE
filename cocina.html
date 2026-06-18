@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Cocina - Policafé Control</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://unpkg.com/html5-qrcode"></script>
+</head>
+<body class="bg-stone-900 text-stone-100 font-sans min-h-screen">
+
+    <header class="bg-stone-900 border-b border-stone-800 p-4 sticky top-0 z-40 shadow-md">
+        <div class="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-4">
+            <div class="flex items-center gap-3">
+                <div class="bg-orange-600 p-2 rounded-xl text-white animate-pulse">
+                    <i data-lucide="chef-hat"></i>
+                </div>
+                <div>
+                    <h1 class="text-xl font-black tracking-wider text-orange-500">POLICAFÉ • MONITOR DE COCINA</h1>
+                    <p class="text-xs text-stone-400">Panel de despacho y escaneo de comisiones León</p>
+                </div>
+            </div>
+            
+            <button onclick="alternarEscaner()" class="bg-orange-600 hover:bg-orange-700 text-white px-5 py-2.5 rounded-xl text-xs font-bold flex items-center gap-2 transition shadow-md">
+                <i data-lucide="camera"></i> <span id="btn-camara-texto">Abrir Escáner de Caja</span>
+            </button>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto p-4 sm:p-6 grid lg:grid-cols-4 gap-6">
+        
+        <div id="seccion-escaner" class="lg:col-span-1 bg-stone-800/50 border border-stone-800 p-4 rounded-2xl hidden transition-all">
+            <h3 class="text-sm font-black text-stone-300 mb-3 flex items-center gap-2">
+                <i data-lucide="scan-line" class="text-orange-500"></i> Lector QR Activo
+            </h3>
+            <div id="reader" class="w-full bg-black rounded-xl overflow-hidden border border-stone-700 shadow-inner"></div>
+            <p class="text-[11px] text-stone-400 mt-2 text-center">Apunta la cámara al teléfono del estudiante para capturar el ticket.</p>
+        </div>
+
+        <div class="lg:col-span-3 lg:col-start-2 grid md:grid-cols-3 gap-4" id="tablero-comandas">
+            
+            <div class="bg-stone-950 p-4 rounded-2xl border border-stone-800 flex flex-col h-[78vh]">
+                <div class="flex justify-between items-center mb-4 border-b border-stone-800 pb-2">
+                    <span class="text-xs font-black tracking-wider uppercase text-yellow-500 flex items-center gap-1.5">
+                        <span class="w-2 h-2 rounded-full bg-yellow-500 animate-ping"></span> Recibidos
+                    </span>
+                    <span id="contador-recibidos" class="bg-stone-800 px-2 py-0.5 rounded-md text-xs font-mono font-bold">0</span>
+                </div>
+                <div id="lista-recibidos" class="space-y-3 overflow-y-auto flex-1 pr-1"></div>
+            </div>
+
+            <div class="bg-stone-950 p-4 rounded-2xl border border-stone-800 flex flex-col h-[78vh]">
+                <div class="flex justify-between items-center mb-4 border-b border-stone-800 pb-2">
+                    <span class="text-xs font-black tracking-wider uppercase text-orange-500 flex items-center gap-1.5">
+                        <span class="w-2 h-2 rounded-full bg-orange-500"></span> En Cocina
+                    </span>
+                    <span id="contador-cocina" class="bg-stone-800 px-2 py-0.5 rounded-md text-xs font-mono font-bold">0</span>
+                </div>
+                <div id="lista-cocina" class="space-y-3 overflow-y-auto flex-1 pr-1"></div>
+            </div>
+
+            <div class="bg-stone-950 p-4 rounded-2xl border border-stone-800 flex flex-col h-[78vh]">
+                <div class="flex justify-between items-center mb-4 border-b border-stone-800 pb-2">
+                    <span class="text-xs font-black tracking-wider uppercase text-emerald-500 flex items-center gap-1.5">
+                        <span class="w-2 h-2 rounded-full bg-emerald-500"></span> Listo en Barra
+                    </span>
+                    <span id="contador-barra" class="bg-stone-800 px-2 py-0.5 rounded-md text-xs font-mono font-bold">0</span>
+                </div>
+                <div id="lista-barra" class="space-y-3 overflow-y-auto flex-1 pr-1"></div>
+            </div>
+
+        </div>
+    </main>
+
+    <audio id="audio-alerta" src="https://assets.mixkit.co/active_storage/sfx/2869/2869-84.wav" preload="auto"></audio>
+
+    <script>
+        lucide.createIcons();
+
+        let pedidos = [];
+        let html5QrcodeScanner = null;
+
+        // VISUALIZACIÓN DEL LECTOR DE CÁMARA
+        function alternarEscaner() {
+            const seccion = document.getElementById('seccion-escaner');
+            const btnTexto = document.getElementById('btn-camara-texto');
+            const tablero = document.getElementById('tablero-comandas');
+
+            if (seccion.classList.contains('hidden')) {
+                seccion.classList.remove('hidden');
+                tablero.classList.replace('lg:col-span-3', 'lg:col-span-3');
+                btnTexto.innerText = "Cerrar Escáner";
+                inicializarCamara();
+            } else {
+                seccion.classList.add('hidden');
+                btnTexto.innerText = "Abrir Escáner de Caja";
+                if(html5QrcodeScanner) html5QrcodeScanner.clear();
+            }
+        }
+
+        function inicializarCamara() {
+            html5QrcodeScanner = new Html5Qrcode("reader");
+            const config = { fps: 10, qrbox: { width: 250, height: 250 } };
+
+            // Activa la cámara trasera por defecto
+            html5QrcodeScanner.start(
+                { facingMode: "environment" }, 
+                config, 
+                onScanSuccess
+            ).catch(err => {
+                console.error("Error al arrancar la cámara: ", err);
+                alert("No se pudo acceder a la cámara. Revisa los permisos.");
+            });
+        }
+
+        // PROCESADO DEL QR CUANDO SE ESCANEA CON ÉXITO
+        function onScanSuccess(decodedText) {
+            // Validar que el QR sea emitido por nuestra app de Policafé
+            if (!decodedText.startsWith("POLICAFE-ORDER")) return;
+
+            // Evitar escanear el mismo folio dos veces seguidas por error
+            const lineas = decodedText.split('\n');
+            const lineaFolio = lineas.find(l => l.startsWith("FOLIO:"));
+            const folio = lineaFolio ? lineaFolio.split('#')[1] : Math.floor(1000 + Math.random() * 9000);
+
+            if (pedidos.find(p => p.folio === folio)) {
+                return; // Ya existe en el sistema
+            }
+
+            // Reproducir sonido de comanda nueva
+            document.getElementById('audio-alerta').play();
+
+            // Extraer hora y total del cuerpo del texto QR
+            const lineaHora = lineas.find(l => l.startsWith("HORA:"));
+            const hora = lineaHora ? lineaHora.split(': ')[1] : 'Ahora';
+            const lineaTotal = lineas.find(l => l.startsWith("TOTAL:"));
+            const total = lineaTotal ? lineaTotal.split(': ')[1] : '$0.00';
+
+            // Filtrar las líneas que contienen los productos (las que tienen una 'x')
+            const productos = lineas.filter(l => l.includes('x ')).map(l => l.trim());
+
+            // Agregar el pedido estructurado al arreglo de control
+            pedidos.push({
+                folio: folio,
+                hora: hora,
+                total: total,
+                productos: productos,
+                estado: 'recibido' // Estados posibles: recibido -> cocina -> barra
+            });
+
+            actualizarTablero();
+        }
+
+        // LÓGICA DE CONTROL DEL TABLERO KANBAN
+        function avanzarEstado(folio, nuevoEstado) {
+            const pedido = pedidos.find(p => p.folio === folio);
+            if (pedido) {
+                if (nuevoEstado === 'entregado') {
+                    // Si se despacha por completo, se elimina de la pantalla
+                    pedidos = pedidos.filter(p => p.folio !== folio);
+                } else {
+                    pedido.estado = nuevoEstado;
+                }
+                actualizarTablero();
+            }
+        }
+
+        function actualizarTablero() {
+            const listaRecibidos = document.getElementById('lista-recibidos');
+            const listaCocina = document.getElementById('lista-cocina');
+            const listaBarra = document.getElementById('lista-barra');
+
+            // Limpiar las tres columnas
+            listaRecibidos.innerHTML = "";
+            listaCocina.innerHTML = "";
+            listaBarra.innerHTML = "";
+
+            let cRecibidos = 0, cCocina = 0, cBarra = 0;
+
+            pedidos.forEach(p => {
+                let productosHTML = p.productos.map(prod => `<li>• ${prod}</li>`).join('');
+                
+                let tarjetaHTML = `
+                    <div class="bg-stone-800 border border-stone-700/60 p-4 rounded-xl shadow-sm space-y-3 transition-all hover:border-stone-600">
+                        <div class="flex justify-between items-center text-xs border-b border-stone-700 pb-2">
+                            <span class="font-mono font-black text-orange-400">#${p.folio}</span>
+                            <span class="bg-stone-900 text-stone-300 font-bold px-2 py-0.5 rounded flex items-center gap-1">
+                                <i data-lucide="clock" class="w-3 h-3 text-orange-500"></i> ${p.hora}
+                            </span>
+                        </div>
+                        <ul class="text-xs text-stone-200 font-medium space-y-1">
+                            ${productosHTML}
+                        </ul>
+                        <div class="flex justify-between items-center pt-1 border-t border-stone-700/50">
+                            <span class="text-xs font-black text-amber-500">${p.total}</span>
+                            ${obtenerBotonAccion(p.folio, p.estado)}
+                        </div>
+                    </div>
+                `;
+
+                if (p.estado === 'recibido') {
+                    listaRecibidos.innerHTML += tarjetaHTML;
+                    cRecibidos++;
+                } else if (p.estado === 'cocina') {
+                    listaCocina.innerHTML += tarjetaHTML;
+                    cCocina++;
+                } else if (p.estado === 'barra') {
+                    listaBarra.innerHTML += tarjetaHTML;
+                    cBarra++;
+                }
+            });
+
+            // Actualizar contadores numéricos de las cabeceras
+            document.getElementById('contador-recibidos').innerText = cRecibidos;
+            document.getElementById('contador-cocina').innerText = cCocina;
+            document.getElementById('contador-barra').innerText = cBarra;
+
+            lucide.createIcons();
+        }
+
+        function obtenerBotonAccion(folio, estado) {
+            if (estado === 'recibido') {
+                return `<button onclick="avanzarEstado('${folio}', 'cocina')" class="bg-yellow-600 hover:bg-yellow-700 text-white font-bold text-[10px] px-3 py-1.5 rounded-lg flex items-center gap-1 transition">Preparar <i data-lucide="chevron-right" class="w-3 h-3"></i></button>`;
+            } else if (estado === 'cocina') {
+                return `<button onclick="avanzarEstado('${folio}', 'barra')" class="bg-orange-600 hover:bg-orange-700 text-white font-bold text-[10px] px-3 py-1.5 rounded-lg flex items-center gap-1 transition">Listo <i data-lucide="chevron-right" class="w-3 h-3"></i></button>`;
+            } else if (estado === 'barra') {
+                return `<button onclick="avanzarEstado('${folio}', 'entregado')" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-[10px] px-3 py-1.5 rounded-lg flex items-center gap-1 transition"><i data-lucide="check" class="w-3 h-3"></i> Despachar</button>`;
+            }
+        }
+    </script>
+</body>
+</html>
