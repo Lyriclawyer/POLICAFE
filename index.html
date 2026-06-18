@@ -16,9 +16,6 @@
             to { opacity: 1; transform: translateY(0); }
         }
         .menu-item { animation: fadeInUp 0.4s ease backwards; }
-        /* Animación para la tómbola giratoria */
-        .girar-ruleta { animation: spin 3s cubic-bezier(0.1, 0.8, 0.1, 1) forwards; }
-        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(1440deg); } }
     </style>
 </head>
 <body class="bg-[#fdfbf7] text-[#2d1b10] font-sans selection:bg-orange-500 selection:text-white">
@@ -37,14 +34,9 @@
             </div>
 
             <div class="flex items-center gap-4">
-                <button onclick="abrirTombola()" class="bg-amber-100 hover:bg-amber-200 text-amber-900 p-2.5 rounded-full transition relative" title="Tómbola Diaria">
-                    <i data-lucide="dices" class="w-5 h-5"></i>
-                    <span class="absolute -top-1 -right-1 bg-red-500 w-2 h-2 rounded-full"></span>
-                </button>
-                
                 <button onclick="abrirModalCarrito()" class="relative bg-gradient-to-r from-orange-600 to-amber-500 text-white px-5 py-2.5 rounded-full text-sm font-bold flex items-center gap-2 hover:shadow-md transition-all">
                     <i data-lucide="shopping-cart" class="w-4 h-4"></i>
-                    <span class="hidden sm:inline">Mi Carrito</span>
+                    <span>Mi Carrito</span>
                     <span id="badge-carrito" class="bg-red-600 text-white text-xs font-black rounded-full w-5 h-5 flex items-center justify-center hidden">0</span>
                 </button>
             </div>
@@ -183,18 +175,23 @@
                     <button onclick="cerrarModalCarrito()"><i data-lucide="x" class="text-neutral-500"></i></button>
                 </div>
 
-                <!-- Logística Integrada en Tiempo Real -->
-                <div class="grid grid-cols-2 gap-2 mb-4 bg-orange-50/60 p-3 rounded-xl border border-orange-100 text-xs">
-                    <div class="flex items-center gap-2 text-orange-950 font-bold">
-                        <i data-lucide="timer" class="text-orange-600 w-4 h-4"></i>
-                        <div>
-                            <p class="text-[10px] text-neutral-500 font-normal">Espera Estimada:</p>
-                            <p id="tiempo-espera">~3 mins</p>
+                <!-- Logística Integrada y Caja de Espera Animada -->
+                <div class="grid grid-cols-2 gap-3 mb-4">
+                    <!-- Indicador de Espera Dinámico y Llamativo -->
+                    <div class="bg-gradient-to-br from-orange-600 to-amber-500 text-white p-3.5 rounded-2xl shadow-md border border-orange-400 relative overflow-hidden flex flex-col justify-between animate-pulse">
+                        <div class="absolute -right-4 -bottom-4 opacity-15">
+                            <i data-lucide="timer" class="w-16 h-16"></i>
                         </div>
+                        <div class="flex items-center gap-2 z-10">
+                            <i data-lucide="clock" class="w-4 h-4 animate-spin [animation-duration:4s]"></i>
+                            <span class="text-[10px] uppercase font-black tracking-wider opacity-90">Espera de Barra</span>
+                        </div>
+                        <p id="tiempo-espera" class="text-2xl font-black tracking-tight mt-2 z-10">0 mins</p>
                     </div>
-                    <div>
-                        <label class="text-[10px] text-neutral-500 block">¿A qué hora recoges?</label>
-                        <select id="hora-recogida" class="bg-white border rounded font-bold p-1 w-full text-neutral-800 mt-0.5 focus:outline-none">
+
+                    <div class="bg-neutral-50 p-3.5 rounded-2xl border border-neutral-200 flex flex-col justify-between">
+                        <label class="text-[10px] text-neutral-500 font-bold uppercase tracking-wider block">¿A qué hora recoges?</label>
+                        <select id="hora-recogida" class="bg-white border rounded-xl font-bold p-2 w-full text-neutral-800 text-xs focus:outline-none focus:ring-2 focus:ring-orange-500">
                             <option value="Ahora mismo">Ahora mismo</option>
                             <option value="En 15 minutos">En 15 minutos</option>
                             <option value="En el próximo receso">Próximo Receso</option>
@@ -229,27 +226,7 @@
         </div>
     </div>
 
-    <!-- 5. INTERFAZ DE LA TÓMBOLA LEÓN (GAMIFICACIÓN) -->
-    <div id="modal-tombola" class="fixed inset-0 bg-black/70 z-50 flex items-center justify-center opacity-0 pointer-events-none transition-opacity duration-300 p-4">
-        <div class="bg-white rounded-3xl p-6 max-w-sm w-full text-center shadow-2xl relative">
-            <button onclick="cerrarTombola()" class="absolute top-4 right-4 p-1 rounded-full hover:bg-neutral-100"><i data-lucide="x" class="w-5 h-5"></i></button>
-            <h4 class="text-2xl font-serif font-black text-neutral-800 mb-1">🎰 Tómbola León</h4>
-            <p class="text-xs text-neutral-500 mb-6">¡Gira una vez al día para ganar descuentos en tu Policafé!</p>
-            
-            <!-- Ruleta Visual Interactiva -->
-            <div class="w-40 h-40 bg-gradient-to-tr from-orange-500 via-amber-400 to-red-500 rounded-full mx-auto mb-6 flex items-center justify-center border-4 border-neutral-900 shadow-xl relative overflow-hidden" id="ruleta-grafica">
-                <div class="absolute w-1 h-12 bg-neutral-950 top-0 left-1/2 -translate-x-1/2 origin-bottom z-20"></div>
-                <div class="w-12 h-12 bg-white rounded-full shadow-md z-10 flex items-center justify-center font-black text-xs text-orange-800">POLI</div>
-            </div>
-
-            <button onclick="girarTombola()" id="btn-girar" class="w-full bg-orange-600 hover:bg-orange-700 text-white py-3 rounded-xl font-bold shadow-md transition">
-                ¡Probar mi Suerte!
-            </button>
-            <p id="resultado-tombola" class="mt-4 font-black text-sm text-orange-700 h-6"></p>
-        </div>
-    </div>
-
-    <!-- 6. MODAL MOSTRADOR DE TICKET QR -->
+    <!-- 5. MODAL MOSTRADOR DE TICKET QR -->
     <div id="modal-qr" class="fixed inset-0 bg-black/70 z-50 flex items-center justify-center opacity-0 pointer-events-none transition-opacity duration-300 p-4">
         <div class="bg-white rounded-3xl p-6 max-w-sm w-full text-center shadow-2xl transform scale-95 transition-transform duration-300" id="cuerpo-modal-qr">
             <h4 class="text-xl font-serif font-black text-neutral-800 mb-1">¡Código QR Listo!</h4>
@@ -263,7 +240,7 @@
         </div>
     </div>
 
-    <!-- 7. SECCIÓN NOSOTROS -->
+    <!-- 6. SECCIÓN NOSOTROS -->
     <section id="nosotros" class="bg-gradient-to-b from-[#f5f0ea] to-[#fdfbf7] py-24">
         <div class="max-w-6xl mx-auto px-6 grid md:grid-cols-2 gap-12 items-center">
             <div class="relative group">
@@ -279,7 +256,7 @@
         </div>
     </section>
 
-    <!-- 8. CONTACTO, MAPA Y PIE DE PÁGINA -->
+    <!-- 7. CONTACTO, MAPA Y PIE DE PÁGINA -->
     <section id="contacto" class="py-24 max-w-6xl mx-auto px-6 border-t border-orange-100">
         <div class="grid md:grid-cols-2 gap-12 items-center">
             <div class="bg-white p-6 rounded-3xl shadow-sm border">
@@ -301,14 +278,12 @@
 
     <!-- LÓGICA DEL CARRITO Y CÓDIGO QR -->
     <script>
-        // Inicializar iconos de Lucide
         lucide.createIcons();
 
         let carrito = [];
         let filtroCatActual = 'todos';
         let filtroNutriActual = 'todos';
-        let puntosUsuario = parseInt(localStorage.getItem('puntosLince')) || 0;
-        let descuentoAplicado = 0;
+        let puntosUsuario = parseInt(localStorage.getItem('garrasOro')) || 0;
 
         document.getElementById('nav-puntos').innerText = puntosUsuario;
 
@@ -354,7 +329,7 @@
             });
         }
 
-        // ACCESIBILIDAD: CONTROL POR VOZ DE VANGUARDIA
+        // ACCESIBILIDAD: CONTROL POR VOZ
         function activarMicrofono() {
             const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
             if (!SpeechRecognition) {
@@ -369,7 +344,7 @@
             
             recognition.onstart = () => {
                 btnMicro.classList.add('bg-red-500', 'animate-ping');
-                statusVoz.innerText = "🎙 Rose: 'Quiero agregar Tecolota'";
+                statusVoz.innerText = "🎙️ Escuchando... Di algo como: 'Quiero agregar Tecolota'";
             };
 
             recognition.onresult = (event) => {
@@ -398,7 +373,7 @@
         function agregarAlCarrito(nombre, precio) {
             const item = carrito.find(i => i.nombre === nombre);
             if (item) { item.cantidad += 1; } 
-            else { carrito.push({ nombre, precio, cantidad: 1 }); }
+            else { carrito.push({ nombre, precio, factory: true, cantidad: 1 }); }
             actualizarInterfazCarrito();
         }
 
@@ -422,6 +397,7 @@
                 txtTotal.innerText = "$0.00";
                 badge.classList.add('hidden');
                 txtPuntosGarras.innerText = "+0 Garras 🐾";
+                document.getElementById('tiempo-espera').innerText = "0 mins";
                 return;
             }
 
@@ -443,34 +419,33 @@
                         <span class="font-black text-neutral-800 ml-4 w-12 text-right">$${sub.toFixed(2)}</span>
                     </div>`;
             });
-
-            if (descuentoAplicado > 0) { total = total * ((100 - descuentoAplicado) / 100); }
             
             txtTotal.innerText = `$${total.toFixed(2)}`;
             badge.innerText = totalItems;
             badge.classList.remove('hidden');
             
-            document.getElementById('tiempo-espera').innerText = `~${totalItems * 3} mins`;
+            document.getElementById('tiempo-espera').innerText = `${totalItems * 3} mins`;
             txtPuntosGarras.innerText = `+${Math.floor(total * 0.1)} Garras 🐾`;
         }
 
-        // GENERADOR DE ENLACES EXTERNOS (WHATSAPP)
+        // WHATSAPP
         function enviarWhatsApp() {
+            if (carrito.length === 0) return;
             let msg = `*NUEVO PEDIDO POLICAFÉ*\n`;
             let total = 0;
             carrito.forEach(i => {
                 msg += `• ${i.cantidad}x ${i.nombre} ($${(i.precio*i.cantidad).toFixed(2)})\n`;
                 total += i.precio*i.cantidad;
             });
-            if(descuentoAplicado > 0) total = total * ((100 - descuentoAplicado)/100);
             msg += `\n*Hora programada:* ${document.getElementById('hora-recogida').value}`;
             msg += `\n*Total a pagar en mostrador:* $${total.toFixed(2)}`;
             
             window.open(`https://api.whatsapp.com/send?phone=521234567890&text=${encodeURIComponent(msg)}`);
         }
 
-        // DESPLIEGUE FINAL EN CÓDIGO QR
+        // DESPLIEGUE FINAL EN CÓDIGO QR FIXED
         function procesarPedidoQR() {
+            if (carrito.length === 0) return;
             document.getElementById('qrcode').innerHTML = "";
             let dataQR = "POLICAFE-ORDER\n";
             let resHTML = "", total = 0;
@@ -483,54 +458,29 @@
                 resHTML += `<div class="flex justify-between"><span>${i.cantidad}x ${i.nombre}</span><span>$${sub.toFixed(2)}</span></div>`;
             });
 
-            if(descuentoAplicado > 0) {
-                total = total * ((100 - descuentoAplicado) / 100);
-                dataQR += `DESC: ${descuentoAplicado}%\n`;
-                resHTML += `<div class="flex justify-between text-orange-600 font-bold"><span>Desc. Aplicado:</span><span>-${descuentoAplicado}%</span></div>`;
-            }
-
             dataQR += `HORA: ${document.getElementById('hora-recogida').value}\nTOTAL: $${total.toFixed(2)}\nFOLIO: #${folio}`;
             resHTML += `<div class="flex justify-between border-t pt-1 mt-2 font-black text-sm text-neutral-800"><span>Total a Pagar:</span><span>$${total.toFixed(2)}</span></div>`;
             resHTML += `<div class="mt-2 text-[10px] text-neutral-400">Hora de entrega: ${document.getElementById('hora-recogida').value} | Folio: #${folio}</div>`;
 
             document.getElementById('resumen-ticket-qr').innerHTML = resHTML;
 
+            // Renderizar QR de forma limpia
             new QRCode(document.getElementById('qrcode'), {
                 text: dataQR, width: 160, height: 160, colorDark : "#2d1b10", colorLight : "#ffffff", correctLevel : QRCode.CorrectLevel.M
             });
 
             puntosUsuario += Math.floor(total * 0.1);
-            localStorage.setItem('puntosLince', puntosUsuario);
+            localStorage.setItem('garrasOro', puntosUsuario);
             document.getElementById('nav-puntos').innerText = puntosUsuario;
 
             cerrarModalCarrito();
             document.getElementById('modal-qr').classList.remove('opacity-0', 'pointer-events-none');
         }
 
-        // GAMIFICACIÓN (TÓMBOLA DIARIA)
-        function girarTombola() {
-            const ruleta = document.getElementById('ruleta-grafica');
-            const resultado = document.getElementById('resultado-tombola');
-            
-            ruleta.classList.add('girar-ruleta');
-            document.getElementById('btn-girar').disabled = true;
-
-            setTimeout(() => {
-                const premios = [10, 15, 5, 20];
-                const premioGanado = premios[Math.floor(Math.random() * premios.length)];
-                
-                descuentoAplicado = premioGanado;
-                resultado.innerText = `🎉 ¡Felicidades! Ganaste ${premioGanado}% de descuento para tu carrito.`;
-                actualizarInterfazCarrito();
-            }, 3000);
-        }
-
         // CONTROLADORES DE MODALES
         function abrirModalCarrito() { document.getElementById('modal-carrito').classList.remove('opacity-0', 'pointer-events-none'); document.getElementById('cuerpo-modal-carrito').classList.remove('translate-x-full'); }
         function cerrarModalCarrito() { document.getElementById('modal-carrito').classList.add('opacity-0', 'pointer-events-none'); document.getElementById('cuerpo-modal-carrito').classList.add('translate-x-full'); }
-        function abrirTombola() { document.getElementById('modal-tombola').classList.remove('opacity-0', 'pointer-events-none'); }
-        function cerrarTombola() { document.getElementById('modal-tombola').classList.add('opacity-0', 'pointer-events-none'); document.getElementById('ruleta-grafica').classList.remove('girar-ruleta'); document.getElementById('btn-girar').disabled = false; document.getElementById('resultado-tombola').innerText = ""; }
-        function cerrarModalQR() { document.getElementById('modal-qr').classList.add('opacity-0', 'pointer-events-none'); carrito = []; descuentoAplicado = 0; actualizarInterfazCarrito(); }
+        function cerrarModalQR() { document.getElementById('modal-qr').classList.add('opacity-0', 'pointer-events-none'); carrito = []; actualizarInterfazCarrito(); }
     </script>
 </body>
 </html>
