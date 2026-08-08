@@ -3,303 +3,873 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Policafé Premium - El Rugido Innovador de la UPSLP</title>
-    <!-- Tailwind CSS vía CDN -->
+    <title>Policafé León - El Rugido Innovador de la UPSLP</title>
+    
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
+    
     <!-- Iconos Lucide -->
     <script src="https://unpkg.com/lucide@latest"></script>
+    
     <!-- Generador de QR -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    
+    <!-- ========================================= -->
+    <!-- 🔥 FIREBASE SDKs                          -->
+    <!-- ========================================= -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
+    
     <style>
+        /* ========================================= */
+        /* ANIMACIONES Y ESTILOS PREMIUM             */
+        /* ========================================= */
         @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(20px); }
+            from { opacity: 0; transform: translateY(30px); }
             to { opacity: 1; transform: translateY(0); }
         }
-        .menu-item { animation: fadeInUp 0.4s ease backwards; }
+        
+        @keyframes pulse-slow {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+        }
+        
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        @keyframes confetti {
+            0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(-100px) rotate(720deg); opacity: 0; }
+        }
+        
+        .menu-item {
+            animation: fadeInUp 0.5s ease backwards;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .menu-item:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+        }
+        
+        .float-animation {
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        .shimmer-bg {
+            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+            background-size: 200% 100%;
+            animation: shimmer 2s infinite;
+        }
+        
+        /* Barra de progreso de recompensas */
+        .progress-bar {
+            height: 6px;
+            background: #f3f4f6;
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .progress-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #f59e0b, #ea580c);
+            border-radius: 10px;
+            transition: width 1s ease;
+            width: 0%;
+        }
+        
+        /* Modal QR */
+        .modal-qr-content {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        /* Badge de notificación */
+        .notification-dot {
+            width: 10px;
+            height: 10px;
+            background: #ef4444;
+            border-radius: 50%;
+            display: inline-block;
+            animation: pulse-slow 1.5s ease-in-out infinite;
+        }
+        
+        /* Scrollbar personalizada */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb { background: #ea580c; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #c2410c; }
+        
+        /* Estilos para el modo oscuro del admin (opcional) */
+        .dark-mode {
+            background: #1a1a2e !important;
+            color: #e0e0e0 !important;
+        }
+        
+        .dark-mode .bg-white { background: #2d2d44 !important; }
+        .dark-mode .text-neutral-800 { color: #e0e0e0 !important; }
+        .dark-mode .text-neutral-600 { color: #b0b0b0 !important; }
     </style>
 </head>
 <body class="bg-[#fdfbf7] text-[#2d1b10] font-sans selection:bg-orange-500 selection:text-white">
 
-    <!-- 1. BARRA DE NAVEGACIÓN -->
+    <!-- ========================================= -->
+    <!-- 1. BARRA DE NAVEGACIÓN                    -->
+    <!-- ========================================= -->
     <nav class="fixed w-full bg-[#fdfbf7]/80 backdrop-blur-lg z-50 shadow-md border-b border-orange-100">
-        <div class="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
-            <a href="#" class="text-2xl font-serif font-black tracking-wider text-orange-700 flex items-center gap-2">
-                <i data-lucide="coffee" class="text-amber-500 animate-pulse"></i>POLICAFÉ <span class="text-xs bg-orange-600 text-white px-2 py-0.5 rounded-md font-mono">v2.0</span>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex justify-between items-center">
+            <!-- Logo -->
+            <a href="#" class="text-xl sm:text-2xl font-serif font-black tracking-wider text-orange-700 flex items-center gap-2">
+                <i data-lucide="coffee" class="text-amber-500 animate-pulse w-5 h-5 sm:w-6 sm:h-6"></i>
+                POLICAFÉ 
+                <span class="text-[10px] bg-orange-600 text-white px-2 py-0.5 rounded-md font-mono">v3.0</span>
             </a>
             
-            <!-- Barra de Estado de Recompensas en el Nav -->
-            <div class="hidden lg:flex items-center gap-2 bg-amber-50 px-3 py-1.5 rounded-full border border-amber-200 text-xs font-bold text-amber-950">
+            <!-- Barra de Recompensas -->
+            <div class="hidden md:flex items-center gap-3 bg-amber-50 px-4 py-1.5 rounded-full border border-amber-200 text-xs font-bold text-amber-950">
                 <i data-lucide="award" class="w-4 h-4 text-amber-600"></i>
-                <span>Tus Garras de Oro: <span id="nav-puntos" class="text-orange-700 font-black">0</span> 🐾</span>
+                <span>Garras de Oro: <span id="nav-puntos" class="text-orange-700 font-black text-sm">0</span> 🐾</span>
+                <div class="w-24">
+                    <div class="progress-bar">
+                        <div id="progress-recompensas" class="progress-bar-fill" style="width: 0%;"></div>
+                    </div>
+                </div>
+                <button onclick="verRecompensas()" class="text-[10px] bg-orange-600 text-white px-2 py-0.5 rounded-full hover:bg-orange-700 transition">
+                    Canjear
+                </button>
             </div>
 
-            <div class="flex items-center gap-4">
-                <button onclick="abrirModalCarrito()" class="relative bg-gradient-to-r from-orange-600 to-amber-500 text-white px-5 py-2.5 rounded-full text-sm font-bold flex items-center gap-2 hover:shadow-md transition-all">
+            <!-- Acciones -->
+            <div class="flex items-center gap-3">
+                <!-- Auth Section -->
+                <div id="auth-section" class="flex items-center gap-2">
+                    <a href="/login.html" id="btn-login" class="bg-orange-600 text-white px-3 sm:px-4 py-1.5 sm:py-2 rounded-xl text-xs sm:text-sm font-bold hover:bg-orange-700 transition hidden">
+                        🚪 Entrar
+                    </a>
+                    <span id="user-name" class="text-xs sm:text-sm font-bold text-orange-700 hidden truncate max-w-[100px]"></span>
+                    <button onclick="cerrarSesion()" id="btn-logout" class="text-xs text-neutral-400 hover:text-red-500 transition hidden">
+                        <i data-lucide="log-out" class="w-4 h-4"></i>
+                    </button>
+                </div>
+                
+                <!-- Carrito -->
+                <button onclick="abrirModalCarrito()" class="relative bg-gradient-to-r from-orange-600 to-amber-500 text-white px-3 sm:px-5 py-1.5 sm:py-2.5 rounded-full text-xs sm:text-sm font-bold flex items-center gap-1 sm:gap-2 hover:shadow-lg transition-all">
                     <i data-lucide="shopping-cart" class="w-4 h-4"></i>
-                    <span>Mi Carrito</span>
-                    <span id="badge-carrito" class="bg-red-600 text-white text-xs font-black rounded-full w-5 h-5 flex items-center justify-center hidden">0</span>
+                    <span class="hidden sm:inline">Carrito</span>
+                    <span id="badge-carrito" class="bg-red-600 text-white text-[10px] font-black rounded-full w-5 h-5 flex items-center justify-center hidden">0</span>
                 </button>
             </div>
         </div>
     </nav>
 
-    <!-- 2. INICIO (HERO) -->
-    <header id="inicio" class="relative h-screen flex items-center justify-center bg-cover bg-center" style="background-image: linear-gradient(rgba(45, 27, 16, 0.65), rgba(45, 27, 16, 0.65)), url('https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?q=80&w=1600');">
-        <div class="text-center text-white px-4 max-w-4xl relative z-10">
-            <span class="bg-gradient-to-r from-amber-500 to-orange-500 text-neutral-900 font-black tracking-widest uppercase text-xs px-4 py-1.5 rounded-full inline-block mb-4">
-                Ecosistema Tecnológico Inteligente
+    <!-- ========================================= -->
+    <!-- 2. HERO - EXPERIENCIA PREMIUM            -->
+    <!-- ========================================= -->
+    <header id="inicio" class="relative min-h-[90vh] flex items-center justify-center bg-cover bg-center" style="background-image: linear-gradient(rgba(45, 27, 16, 0.7), rgba(45, 27, 16, 0.7)), url('https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?q=80&w=1600');">
+        <div class="text-center text-white px-4 max-w-4xl relative z-10 pt-20">
+            <!-- Badge -->
+            <span class="bg-gradient-to-r from-amber-500 to-orange-500 text-neutral-900 font-black tracking-widest uppercase text-[10px] sm:text-xs px-4 py-1.5 rounded-full inline-block mb-4">
+                🚀 Ecosistema Tecnológico Inteligente
             </span>
-            <h1 class="text-5xl md:text-7xl font-serif font-black mb-6 leading-tight">
+            
+            <h1 class="text-4xl sm:text-5xl md:text-7xl font-serif font-black mb-6 leading-tight">
                 El Campus Inteligente <span class="text-amber-400">Come Bien</span>
             </h1>
-            <p class="text-lg md:text-xl mb-8 font-light text-stone-200 max-w-2xl mx-auto">
-                Pide por voz, programa tu receso, acumula Garras de Oro y canjea premios con tu código QR directo en barra.
+            
+            <p class="text-base sm:text-lg md:text-xl mb-8 font-light text-stone-200 max-w-2xl mx-auto">
+                Pide por voz, programa tu receso, acumula <span class="text-amber-400 font-bold">Garras de Oro</span> 
+                y canjea premios con tu código QR directo en barra.
             </p>
             
-            <!-- Buscador por Voz Súper Innovador -->
-            <div class="max-w-md mx-auto bg-white/10 backdrop-blur-md p-2 rounded-2xl border border-white/20 flex items-center gap-2 mb-6 shadow-2xl">
-                <i data-lucide="search" class="text-stone-300 ml-3 shrink-0"></i>
-                <input type="text" id="buscador-input" oninput="buscarProducto(this.value)" class="bg-transparent w-full text-white placeholder-stone-300 text-sm focus:outline-none" placeholder="Busca tu comida o di 'Asistente'...">
-                <button onclick="activarMicrofono()" id="btn-micro" class="bg-amber-500 hover:bg-amber-600 text-neutral-950 p-2.5 rounded-xl transition shrink-0" title="Pedir por Voz">
-                    <i data-lucide="mic" id="icono-micro"></i>
+            <!-- Buscador por Voz con Microfono -->
+            <div class="max-w-md mx-auto bg-white/10 backdrop-blur-md p-2 rounded-2xl border border-white/20 flex items-center gap-2 mb-4 shadow-2xl">
+                <i data-lucide="search" class="text-stone-300 ml-3 shrink-0 w-4 h-4"></i>
+                <input type="text" id="buscador-input" oninput="buscarProducto(this.value)" 
+                       class="bg-transparent w-full text-white placeholder-stone-300 text-sm focus:outline-none" 
+                       placeholder="Busca tu comida o di 'Asistente'...">
+                <button onclick="activarMicrofono()" id="btn-micro" 
+                        class="bg-amber-500 hover:bg-amber-600 text-neutral-950 p-2.5 rounded-xl transition shrink-0" 
+                        title="Pedir por Voz">
+                    <i data-lucide="mic" id="icono-micro" class="w-4 h-4"></i>
                 </button>
             </div>
-            <p id="status-voz" class="text-xs text-amber-300 font-medium h-4"></p>
+            <p id="status-voz" class="text-xs text-amber-300 font-medium h-5"></p>
+            
+            <!-- Estadísticas rápidas -->
+            <div class="flex justify-center gap-6 sm:gap-12 mt-8 text-white/80 text-xs sm:text-sm">
+                <div>
+                    <p class="text-2xl sm:text-3xl font-black text-amber-400" id="stats-pedidos">0</p>
+                    <p>Pedidos hoy</p>
+                </div>
+                <div>
+                    <p class="text-2xl sm:text-3xl font-black text-amber-400" id="stats-usuarios">0</p>
+                    <p>Usuarios activos</p>
+                </div>
+                <div>
+                    <p class="text-2xl sm:text-3xl font-black text-amber-400" id="stats-productos">0</p>
+                    <p>Productos disponibles</p>
+                </div>
+            </div>
         </div>
     </header>
 
-    <!-- 3. MENÚ E INVENTARIO -->
-    <section id="menu" class="py-24 max-w-6xl mx-auto px-6">
+    <!-- ========================================= -->
+    <!-- 3. MENÚ CON STOCK EN VIVO                -->
+    <!-- ========================================= -->
+    <section id="menu" class="py-16 sm:py-24 max-w-7xl mx-auto px-4 sm:px-6">
         <div class="text-center mb-12">
-            <h2 class="text-4xl md:text-5xl font-serif font-black text-neutral-800 mb-3">Menú León Automatizado</h2>
-            <div class="w-24 h-1.5 bg-gradient-to-r from-orange-600 to-amber-500 mx-auto rounded-full mb-6"></div>
+            <h2 class="text-3xl sm:text-4xl md:text-5xl font-serif font-black text-neutral-800 mb-3">
+                🍽️ Menú León <span class="text-orange-600">Automatizado</span>
+            </h2>
+            <div class="w-24 h-1.5 bg-gradient-to-r from-orange-600 to-amber-500 mx-auto rounded-full mb-4"></div>
+            <p id="menu-status" class="text-sm text-neutral-500">🔄 Cargando menú desde la base de datos...</p>
         </div>
 
-        <!-- Filtros Combinados: Categoría + Nutrición -->
-        <div class="flex flex-col md:flex-row gap-4 justify-between items-center border-b pb-8 mb-12">
+        <!-- Filtros + Personalización -->
+        <div class="flex flex-col lg:flex-row gap-4 justify-between items-start lg:items-center border-b pb-6 mb-8">
+            <!-- Filtros de Categoría -->
             <div class="flex flex-wrap gap-2" id="filtros-categoria">
-                <button onclick="filtrarCategoria('todos')" class="cat-btn bg-orange-700 text-white px-5 py-2.5 rounded-xl font-bold transition shadow-sm">Todos</button>
-                <button onclick="filtrarCategoria('platillos')" class="cat-btn bg-white text-orange-800 border px-5 py-2.5 rounded-xl font-bold transition">Platillos</button>
-                <button onclick="filtrarCategoria('bebidas')" class="cat-btn bg-white text-orange-800 border px-5 py-2.5 rounded-xl font-bold transition">Bebidas</button>
-                <button onclick="filtrarCategoria('snacks')" class="cat-btn bg-white text-orange-800 border px-5 py-2.5 rounded-xl font-bold transition">Snacks y Más</button>
+                <button onclick="filtrarCategoria('todos')" class="cat-btn bg-orange-700 text-white px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition shadow-sm">
+                    🏠 Todos
+                </button>
+                <button onclick="filtrarCategoria('platillos')" class="cat-btn bg-white text-orange-800 border px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition">
+                    🍛 Platillos
+                </button>
+                <button onclick="filtrarCategoria('bebidas')" class="cat-btn bg-white text-orange-800 border px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition">
+                    🥤 Bebidas
+                </button>
+                <button onclick="filtrarCategoria('snacks')" class="cat-btn bg-white text-orange-800 border px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition">
+                    🍿 Snacks
+                </button>
             </div>
             
-            <div class="flex items-center gap-2 bg-neutral-100 p-1.5 rounded-xl border">
-                <span class="text-xs font-bold text-neutral-500 px-2">Nutrición:</span>
-                <button onclick="filtrarNutricion('todos')" class="nutri-btn bg-amber-500 text-neutral-950 px-3 py-1.5 rounded-lg text-xs font-bold transition shadow-sm">Cualquiera</button>
-                <button onclick="filtrarNutricion('alta-proteina')" class="nutri-btn bg-white text-neutral-700 px-3 py-1.5 rounded-lg text-xs font-bold transition">💪 Alta Proteína</button>
-                <button onclick="filtrarNutricion('fit')" class="nutri-btn bg-white text-neutral-700 px-3 py-1.5 rounded-lg text-xs font-bold transition">🥗 Bajo en Calorías</button>
+            <!-- Filtros de Nutrición + Personalización -->
+            <div class="flex flex-wrap items-center gap-2 bg-neutral-100 p-1.5 rounded-xl border">
+                <span class="text-[10px] font-bold text-neutral-500 px-2">🥗 Nutrición:</span>
+                <button onclick="filtrarNutricion('todos')" class="nutri-btn bg-amber-500 text-neutral-950 px-3 py-1.5 rounded-lg text-[10px] sm:text-xs font-bold transition shadow-sm">
+                    Todos
+                </button>
+                <button onclick="filtrarNutricion('alta-proteina')" class="nutri-btn bg-white text-neutral-700 px-3 py-1.5 rounded-lg text-[10px] sm:text-xs font-bold transition">
+                    💪 Proteína
+                </button>
+                <button onclick="filtrarNutricion('fit')" class="nutri-btn bg-white text-neutral-700 px-3 py-1.5 rounded-lg text-[10px] sm:text-xs font-bold transition">
+                    🥗 Fit
+                </button>
+                <!-- Personalización de preferencias -->
+                <button onclick="mostrarPreferencias()" class="bg-purple-100 text-purple-700 px-3 py-1.5 rounded-lg text-[10px] sm:text-xs font-bold transition hover:bg-purple-200">
+                    ⚙️ Preferencias
+                </button>
             </div>
         </div>
 
-        <!-- Rejilla Dinámica de Productos -->
-        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6" id="contenedor-menu">
-            <div class="menu-item bg-white p-5 rounded-2xl shadow-sm border border-orange-50 hover:shadow-xl transition flex flex-col justify-between" data-cat="platillos" data-nutri="alta-proteina" data-nombre="comida corrida">
-                <div>
-                    <div class="flex justify-between items-start gap-2 mb-2">
-                        <h3 class="font-black text-lg text-neutral-800">Comida Corrida</h3>
-                        <span class="bg-orange-100 text-orange-800 font-black px-3 py-1 rounded-full text-xs shrink-0">$100.00</span>
-                    </div>
-                    <p class="text-neutral-500 text-xs mb-3">El paquete completo del día. Cambia a diario en cocina.</p>
-                    <span class="text-[10px] bg-red-50 text-red-700 font-bold px-2.5 py-1 rounded-md">💪 Alta Proteína</span>
-                </div>
-                <button onclick="agregarAlCarrito('Comida Corrida', 100.00)" class="w-full mt-4 bg-orange-50 hover:bg-orange-600 hover:text-white text-orange-700 font-bold py-2 rounded-xl transition text-xs flex items-center justify-center gap-2">
-                    <i data-lucide="plus" class="w-3.5 h-3.5"></i> Agregar
-                </button>
-            </div>
-
-            <div class="menu-item bg-white p-5 rounded-2xl shadow-sm border border-orange-50 hover:shadow-xl transition flex flex-col justify-between" data-cat="platillos" data-nutri="alta-proteina" data-nombre="tecolota torta chilaquiles">
-                <div>
-                    <div class="flex justify-between items-start gap-2 mb-2">
-                        <h3 class="font-black text-lg text-neutral-800">Tecolota (Torta Chilaquil)</h3>
-                        <span class="bg-orange-100 text-orange-800 font-black px-3 py-1 rounded-full text-xs shrink-0">$70.00</span>
-                    </div>
-                    <p class="text-neutral-500 text-xs mb-3">Torta rellena de chilaquiles crujientes con queso y crema.</p>
-                    <span class="text-[10px] bg-red-50 text-red-700 font-bold px-2.5 py-1 rounded-md">💪 Alta Proteína</span>
-                </div>
-                <button onclick="agregarAlCarrito('Tecolota', 70.00)" class="w-full mt-4 bg-orange-50 hover:bg-orange-600 hover:text-white text-orange-700 font-bold py-2 rounded-xl transition text-xs flex items-center justify-center gap-2">
-                    <i data-lucide="plus" class="w-3.5 h-3.5"></i> Agregar
-                </button>
-            </div>
-
-            <div class="menu-item bg-white p-5 rounded-2xl shadow-sm border border-orange-50 hover:shadow-xl transition flex flex-col justify-between" data-cat="platillos" data-nutri="fit" data-nombre="club sandwich integral">
-                <div>
-                    <div class="flex justify-between items-start gap-2 mb-2">
-                        <h3 class="font-black text-lg text-neutral-800">Club Sándwich Integral</h3>
-                        <span class="bg-orange-100 text-orange-800 font-black px-3 py-1 rounded-full text-xs shrink-0">$70.00</span>
-                    </div>
-                    <p class="text-neutral-500 text-xs mb-3">Pan integral, pechuga, verduras frescas y aderezo ligero.</p>
-                    <span class="text-[10px] bg-emerald-50 text-emerald-700 font-bold px-2.5 py-1 rounded-md">🥗 Bajo en Calorías</span>
-                </div>
-                <button onclick="agregarAlCarrito('Club Sándwich Integral', 70.00)" class="w-full mt-4 bg-orange-50 hover:bg-orange-600 hover:text-white text-orange-700 font-bold py-2 rounded-xl transition text-xs flex items-center justify-center gap-2">
-                    <i data-lucide="plus" class="w-3.5 h-3.5"></i> Agregar
-                </button>
-            </div>
-
-            <div class="menu-item bg-white p-5 rounded-2xl shadow-sm border border-orange-50 hover:shadow-xl transition flex flex-col justify-between" data-cat="bebidas" data-nutri="fit" data-nombre="cafe caliente">
-                <div>
-                    <div class="flex justify-between items-start gap-2 mb-2">
-                        <h3 class="font-black text-lg text-neutral-800">Café Caliente</h3>
-                        <span class="bg-amber-100 text-amber-900 font-black px-3 py-1 rounded-full text-xs shrink-0">$25.00</span>
-                    </div>
-                    <p class="text-neutral-500 text-xs mb-3">Café americano bien cargado, ideal para despertar el cerebro.</p>
-                    <span class="text-[10px] bg-emerald-50 text-emerald-700 font-bold px-2.5 py-1 rounded-md">🥗 Bajo en Calorías</span>
-                </div>
-                <button onclick="agregarAlCarrito('Café Caliente', 25.00)" class="w-full mt-4 bg-orange-50 hover:bg-orange-600 hover:text-white text-orange-700 font-bold py-2 rounded-xl transition text-xs flex items-center justify-center gap-2">
-                    <i data-lucide="plus" class="w-3.5 h-3.5"></i> Agregar
-                </button>
-            </div>
-
-            <div class="menu-item bg-white p-5 rounded-2xl shadow-sm border border-orange-50 hover:shadow-xl transition flex flex-col justify-between" data-cat="snacks" data-nutri="todos" data-nombre="nachos con guiso">
-                <div>
-                    <div class="flex justify-between items-start gap-2 mb-2">
-                        <h3 class="font-black text-lg text-neutral-800">Nachos con Guiso</h3>
-                        <span class="bg-orange-100 text-orange-800 font-black px-3 py-1 rounded-full text-xs shrink-0">$80.00</span>
-                    </div>
-                    <p class="text-neutral-500 text-xs mb-3">Totopos crujientes bañados en queso fundido de nachos y guiso.</p>
-                    <span class="text-[10px] bg-stone-100 text-stone-700 font-bold px-2.5 py-1 rounded-md">🍔 Munchies</span>
-                </div>
-                <button onclick="agregarAlCarrito('Nachos con Guiso', 80.00)" class="w-full mt-4 bg-orange-50 hover:bg-orange-600 hover:text-white text-orange-700 font-bold py-2 rounded-xl transition text-xs flex items-center justify-center gap-2">
-                    <i data-lucide="plus" class="w-3.5 h-3.5"></i> Agregar
-                </button>
-            </div>
+        <!-- Grid de Productos con Stock en Vivo -->
+        <div class="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6" id="contenedor-menu">
+            <!-- Los productos se cargan dinámicamente desde Firebase -->
+        </div>
+        
+        <!-- Cargar más (paginación) -->
+        <div class="text-center mt-8">
+            <button onclick="cargarMasProductos()" id="btn-cargar-mas" 
+                    class="bg-neutral-100 hover:bg-neutral-200 text-neutral-600 px-6 py-3 rounded-xl text-sm font-bold transition hidden">
+                Ver más productos <i data-lucide="chevron-down" class="inline w-4 h-4"></i>
+            </button>
         </div>
     </section>
 
-    <!-- 4. MODAL DEL CARRITO AVANZADO -->
+    <!-- ========================================= -->
+    <!-- 4. MODAL DEL CARRITO (MEJORADO)          -->
+    <!-- ========================================= -->
     <div id="modal-carrito" class="fixed inset-0 bg-black/60 z-50 flex justify-end opacity-0 pointer-events-none transition-opacity duration-300">
         <div class="bg-white w-full max-w-md h-full p-6 flex flex-col justify-between transform translate-x-full transition-transform duration-300" id="cuerpo-modal-carrito">
             <div class="flex flex-col h-[75vh]">
+                <!-- Header -->
                 <div class="flex justify-between items-center border-b pb-4 mb-4">
-                    <h3 class="text-xl font-black text-neutral-800 flex items-center gap-2"><i data-lucide="shopping-bag" class="text-orange-600"></i> Tu Pedido Inteligente</h3>
-                    <button onclick="cerrarModalCarrito()"><i data-lucide="x" class="text-neutral-500"></i></button>
+                    <h3 class="text-xl font-black text-neutral-800 flex items-center gap-2">
+                        <i data-lucide="shopping-bag" class="text-orange-600"></i> 
+                        Tu Pedido Inteligente
+                    </h3>
+                    <button onclick="cerrarModalCarrito()" class="hover:bg-neutral-100 p-2 rounded-full transition">
+                        <i data-lucide="x" class="text-neutral-500 w-5 h-5"></i>
+                    </button>
                 </div>
 
-                <!-- Logística Integrada y Caja de Espera Animada -->
+                <!-- Tiempo de Espera + Hora de Recogida -->
                 <div class="grid grid-cols-2 gap-3 mb-4">
-                    <!-- Indicador de Espera Dinámico y Llamativo -->
-                    <div class="bg-gradient-to-br from-orange-600 to-amber-500 text-white p-3.5 rounded-2xl shadow-md border border-orange-400 relative overflow-hidden flex flex-col justify-between animate-pulse">
+                    <!-- Tiempo estimado -->
+                    <div class="bg-gradient-to-br from-orange-600 to-amber-500 text-white p-3.5 rounded-2xl shadow-md border border-orange-400 relative overflow-hidden">
                         <div class="absolute -right-4 -bottom-4 opacity-15">
                             <i data-lucide="timer" class="w-16 h-16"></i>
                         </div>
-                        <div class="flex items-center gap-2 z-10">
+                        <div class="flex items-center gap-2 z-10 relative">
                             <i data-lucide="clock" class="w-4 h-4 animate-spin [animation-duration:4s]"></i>
-                            <span class="text-[10px] uppercase font-black tracking-wider opacity-90">Espera de Barra</span>
+                            <span class="text-[10px] uppercase font-black tracking-wider opacity-90">Tiempo estimado</span>
                         </div>
-                        <p id="tiempo-espera" class="text-2xl font-black tracking-tight mt-2 z-10">0 mins</p>
+                        <p id="tiempo-espera" class="text-2xl font-black tracking-tight mt-2 z-10 relative">0 min</p>
                     </div>
 
+                    <!-- Hora de recogida -->
                     <div class="bg-neutral-50 p-3.5 rounded-2xl border border-neutral-200 flex flex-col justify-between">
-                        <label class="text-[10px] text-neutral-500 font-bold uppercase tracking-wider block">¿A qué hora recoges?</label>
+                        <label class="text-[10px] text-neutral-500 font-bold uppercase tracking-wider block">
+                            📅 ¿Cuándo recoges?
+                        </label>
                         <select id="hora-recogida" class="bg-white border rounded-xl font-bold p-2 w-full text-neutral-800 text-xs focus:outline-none focus:ring-2 focus:ring-orange-500">
-                            <option value="Ahora mismo">Ahora mismo</option>
-                            <option value="En 15 minutos">En 15 minutos</option>
-                            <option value="En el próximo receso">Próximo Receso</option>
+                            <option value="Ahora mismo">🟢 Ahora mismo</option>
+                            <option value="En 15 minutos">🟡 En 15 min</option>
+                            <option value="En 30 minutos">🟠 En 30 min</option>
+                            <option value="En el próximo receso">🔵 Próximo Receso</option>
                         </select>
                     </div>
                 </div>
 
-                <!-- Lista de Compra -->
+                <!-- Cola Virtual (estado de pedidos anteriores) -->
+                <div class="bg-amber-50 p-3 rounded-xl border border-amber-200 mb-3 text-xs">
+                    <div class="flex justify-between items-center">
+                        <span class="font-bold text-amber-800">📋 Cola virtual</span>
+                        <span class="text-amber-600" id="cola-estado">0 pedidos antes que tú</span>
+                    </div>
+                    <div class="flex gap-1 mt-1" id="cola-visual">
+                        <!-- Indicadores de cola -->
+                    </div>
+                </div>
+
+                <!-- Lista de productos -->
                 <div id="items-carrito" class="space-y-3 overflow-y-auto flex-1 pr-1"></div>
             </div>
 
-            <!-- Totales, Recompensas y Despacho -->
+            <!-- Totales + Recompensas + Botones -->
             <div class="border-t pt-4">
-                <div class="flex justify-between items-center text-sm font-bold text-neutral-600 mb-2">
-                    <span>Ganas con esta compra:</span>
-                    <span class="text-amber-600" id="puntos-ganados">+0 Garras 🐾</span>
+                <!-- Puntos que ganas -->
+                <div class="flex justify-between items-center text-sm font-bold text-neutral-600 mb-1">
+                    <span>🐾 Ganas con esta compra:</span>
+                    <span class="text-amber-600" id="puntos-ganados">+0 Garras</span>
                 </div>
-                <div class="flex justify-between items-center text-lg font-black text-neutral-800 mb-4">
-                    <span>Total:</span>
+                
+                <!-- Barra de progreso hacia recompensa -->
+                <div class="flex items-center gap-2 mb-2">
+                    <span class="text-[10px] text-neutral-400">Próxima recompensa:</span>
+                    <div class="flex-1 progress-bar">
+                        <div id="progress-recompensa-carrito" class="progress-bar-fill" style="width: 0%;"></div>
+                    </div>
+                    <span class="text-[10px] text-neutral-400" id="texto-progreso">0/100</span>
+                </div>
+
+                <!-- Total -->
+                <div class="flex justify-between items-center text-lg font-black text-neutral-800 mb-3">
+                    <span>Total a pagar:</span>
                     <span id="total-carrito" class="text-orange-700 text-2xl">$0.00</span>
                 </div>
                 
+                <!-- Acciones -->
                 <div class="grid grid-cols-2 gap-2">
-                    <button onclick="procesarPedidoQR()" id="btn-generar-qr" class="bg-gradient-to-r from-orange-600 to-amber-500 text-white p-3.5 rounded-xl font-bold transition flex items-center justify-center gap-1.5 text-xs shadow-md">
-                        <i data-lucide="qr-code" class="w-4 h-4"></i> Obtener Ticket QR
+                    <button onclick="procesarPedidoQR()" id="btn-generar-qr" 
+                            class="bg-gradient-to-r from-orange-600 to-amber-500 text-white p-3.5 rounded-xl font-bold transition flex items-center justify-center gap-1.5 text-xs shadow-md hover:shadow-lg">
+                        <i data-lucide="qr-code" class="w-4 h-4"></i> 
+                        <span class="hidden sm:inline">Obtener</span> QR
                     </button>
-                    <button onclick="enviarWhatsApp()" id="btn-whatsapp" class="bg-emerald-600 hover:bg-emerald-700 text-white p-3.5 rounded-xl font-bold transition flex items-center justify-center gap-1.5 text-xs shadow-md">
-                        <i data-lucide="message-circle" class="w-4 h-4"></i> Enviar a WhatsApp
+                    <button onclick="enviarWhatsApp()" id="btn-whatsapp" 
+                            class="bg-emerald-600 hover:bg-emerald-700 text-white p-3.5 rounded-xl font-bold transition flex items-center justify-center gap-1.5 text-xs shadow-md">
+                        <i data-lucide="message-circle" class="w-4 h-4"></i> 
+                        <span class="hidden sm:inline">WhatsApp</span>
+                    </button>
+                </div>
+                
+                <!-- Repetir último pedido -->
+                <button onclick="repetirUltimoPedido()" id="btn-repetir" 
+                        class="w-full mt-2 bg-neutral-100 hover:bg-neutral-200 text-neutral-600 p-2 rounded-xl text-xs font-bold transition hidden">
+                    🔁 Repetir último pedido
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========================================= -->
+    <!-- 5. MODAL QR (MEJORADO)                   -->
+    <!-- ========================================= -->
+    <div id="modal-qr" class="fixed inset-0 bg-black/70 z-50 flex items-center justify-center opacity-0 pointer-events-none transition-opacity duration-300 p-4">
+        <div class="bg-white rounded-3xl p-6 max-w-sm w-full text-center shadow-2xl transform scale-95 transition-transform duration-300 modal-qr-content" id="cuerpo-modal-qr">
+            <!-- Confetti animado -->
+            <div id="confetti-container" class="absolute inset-0 pointer-events-none overflow-hidden"></div>
+            
+            <div class="relative z-10">
+                <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                    <i data-lucide="check" class="w-8 h-8 text-green-600"></i>
+                </div>
+                <h4 class="text-xl font-serif font-black text-neutral-800 mb-1">🎫 ¡Código QR Listo!</h4>
+                <p class="text-xs text-orange-600 font-bold mb-4 uppercase tracking-wider">Paga directo en el mostrador</p>
+                
+                <!-- QR -->
+                <div class="flex justify-center my-4">
+                    <div id="qrcode" class="bg-white p-3 rounded-2xl inline-block shadow-inner border"></div>
+                </div>
+                
+                <!-- Resumen del pedido -->
+                <div class="bg-neutral-50 p-4 rounded-xl border border-dashed text-left mb-4 text-xs font-mono">
+                    <div id="resumen-ticket-qr" class="text-neutral-600 space-y-1"></div>
+                </div>
+                
+                <!-- Tiempo estimado de entrega -->
+                <div class="bg-amber-50 p-2 rounded-xl border border-amber-200 mb-4 text-xs text-amber-800">
+                    ⏱️ Tu pedido estará listo en aproximadamente <span id="qr-tiempo-estimado" class="font-bold">5</span> minutos
+                </div>
+                
+                <button onclick="cerrarModalQR()" 
+                        class="w-full bg-neutral-900 text-white py-3 rounded-xl font-bold text-sm hover:bg-neutral-800 transition">
+                    ✅ Entendido, iré a recoger
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========================================= -->
+    <!-- 6. MODAL DE RECOMPENSAS                  -->
+    <!-- ========================================= -->
+    <div id="modal-recompensas" class="fixed inset-0 bg-black/60 z-50 flex items-center justify-center opacity-0 pointer-events-none transition-opacity duration-300 p-4">
+        <div class="bg-white rounded-3xl p-6 max-w-md w-full shadow-2xl transform scale-95 transition-transform duration-300">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-2xl font-black text-neutral-800">🏆 Canjear Garras</h3>
+                <button onclick="cerrarModalRecompensas()" class="hover:bg-neutral-100 p-2 rounded-full transition">
+                    <i data-lucide="x" class="w-5 h-5 text-neutral-500"></i>
+                </button>
+            </div>
+            
+            <div class="text-center mb-6">
+                <p class="text-4xl font-black text-amber-500" id="modal-puntos">0</p>
+                <p class="text-sm text-neutral-500">Garras de Oro disponibles</p>
+            </div>
+            
+            <!-- Recompensas disponibles -->
+            <div class="space-y-3">
+                <div class="flex items-center justify-between bg-amber-50 p-4 rounded-xl border border-amber-200">
+                    <div>
+                        <p class="font-bold text-neutral-800">☕ Café Americano</p>
+                        <p class="text-xs text-neutral-500">Canjea por 100 Garras</p>
+                    </div>
+                    <button onclick="canjearRecompensa('cafe', 100)" 
+                            class="bg-amber-500 text-white px-4 py-2 rounded-xl text-xs font-bold hover:bg-amber-600 transition">
+                        Canjear
+                    </button>
+                </div>
+                
+                <div class="flex items-center justify-between bg-amber-50 p-4 rounded-xl border border-amber-200">
+                    <div>
+                        <p class="font-bold text-neutral-800">🥪 Sándwich Gratis</p>
+                        <p class="text-xs text-neutral-500">Canjea por 200 Garras</p>
+                    </div>
+                    <button onclick="canjearRecompensa('sandwich', 200)" 
+                            class="bg-amber-500 text-white px-4 py-2 rounded-xl text-xs font-bold hover:bg-amber-600 transition">
+                        Canjear
+                    </button>
+                </div>
+                
+                <div class="flex items-center justify-between bg-amber-50 p-4 rounded-xl border border-amber-200">
+                    <div>
+                        <p class="font-bold text-neutral-800">🎁 Combo Especial</p>
+                        <p class="text-xs text-neutral-500">Canjea por 500 Garras</p>
+                    </div>
+                    <button onclick="canjearRecompensa('combo', 500)" 
+                            class="bg-amber-500 text-white px-4 py-2 rounded-xl text-xs font-bold hover:bg-amber-600 transition">
+                        Canjear
                     </button>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- 5. MODAL MOSTRADOR DE TICKET QR -->
-    <div id="modal-qr" class="fixed inset-0 bg-black/70 z-50 flex items-center justify-center opacity-0 pointer-events-none transition-opacity duration-300 p-4">
-        <div class="bg-white rounded-3xl p-6 max-w-sm w-full text-center shadow-2xl transform scale-95 transition-transform duration-300" id="cuerpo-modal-qr">
-            <h4 class="text-xl font-serif font-black text-neutral-800 mb-1">¡Código QR Listo!</h4>
-            <p class="text-xs text-orange-600 font-bold mb-4 uppercase tracking-wider">Paga directo en el mostrador</p>
-            
-            <!-- Contenedor único donde se inyecta el QR -->
-            <div class="flex justify-center my-4">
-                <div id="qrcode" class="bg-white p-3 rounded-2xl inline-block shadow-inner border"></div>
+    <!-- ========================================= -->
+    <!-- 7. MODAL DE PREFERENCIAS                 -->
+    <!-- ========================================= -->
+    <div id="modal-preferencias" class="fixed inset-0 bg-black/60 z-50 flex items-center justify-center opacity-0 pointer-events-none transition-opacity duration-300 p-4">
+        <div class="bg-white rounded-3xl p-6 max-w-md w-full shadow-2xl transform scale-95 transition-transform duration-300">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-2xl font-black text-neutral-800">⚙️ Tus Preferencias</h3>
+                <button onclick="cerrarModalPreferencias()" class="hover:bg-neutral-100 p-2 rounded-full transition">
+                    <i data-lucide="x" class="w-5 h-5 text-neutral-500"></i>
+                </button>
             </div>
             
-            <div class="bg-neutral-50 p-4 rounded-xl border border-dashed text-left mb-4 text-xs font-mono">
-                <div id="resumen-ticket-qr" class="text-neutral-600 space-y-1"></div>
+            <div class="space-y-4">
+                <div>
+                    <label class="text-sm font-bold text-neutral-700 block mb-1">Tipo de leche</label>
+                    <select id="pref-leche" class="w-full border rounded-xl p-3 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500">
+                        <option value="entera">🥛 Leche entera</option>
+                        <option value="deslactosada">🥛 Leche deslactosada</option>
+                        <option value="almendras">🌰 Leche de almendras</option>
+                        <option value="soya">🌱 Leche de soya</option>
+                    </select>
+                </div>
+                
+                <div>
+                    <label class="text-sm font-bold text-neutral-700 block mb-1">Nivel de azúcar</label>
+                    <select id="pref-azucar" class="w-full border rounded-xl p-3 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500">
+                        <option value="sin">🚫 Sin azúcar</option>
+                        <option value="poco">🟢 Poco</option>
+                        <option value="normal">🟡 Normal</option>
+                        <option value="mucho">🔴 Mucho</option>
+                    </select>
+                </div>
+                
+                <button onclick="guardarPreferencias()" 
+                        class="w-full bg-orange-600 text-white py-3 rounded-xl font-bold hover:bg-orange-700 transition">
+                    💾 Guardar preferencias
+                </button>
             </div>
-            <button onclick="cerrarModalQR()" class="w-full bg-neutral-900 text-white py-3 rounded-xl font-bold text-sm">Cerrar y Vaciar Carrito</button>
         </div>
     </div>
 
-    <!-- 6. SECCIÓN NOSOTROS -->
-    <section id="nosotros" class="bg-gradient-to-b from-[#f5f0ea] to-[#fdfbf7] py-24">
-        <div class="max-w-6xl mx-auto px-6 grid md:grid-cols-2 gap-12 items-center">
+    <!-- ========================================= -->
+    <!-- 8. SECCIÓN NOSOTROS                      -->
+    <!-- ========================================= -->
+    <section id="nosotros" class="bg-gradient-to-b from-[#f5f0ea] to-[#fdfbf7] py-16 sm:py-24">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 grid md:grid-cols-2 gap-12 items-center">
             <div class="relative group">
-                <img src="https://images.unsplash.com/photo-1498804103079-a6351b050096?q=80&w=600" alt="Comunidad" class="rounded-3xl shadow-xl w-full object-cover h-[400px]">
+                <img src="https://images.unsplash.com/photo-1498804103079-a6351b050096?q=80&w=600" 
+                     alt="Comunidad UPSLP" 
+                     class="rounded-3xl shadow-xl w-full object-cover h-[300px] sm:h-[400px]">
+                <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent rounded-3xl"></div>
             </div>
             <div>
-                <span class="text-orange-700 font-black tracking-widest uppercase text-xs px-3 py-1 bg-orange-100 rounded-md inline-block mb-3">Punto de Encuentro</span>
-                <h2 class="text-4xl font-serif font-black text-neutral-800 mb-6">¡Donde la comunidad de la UPSLP recarga sus garras!</h2>
-                <p class="text-neutral-600 mb-6 leading-relaxed text-lg">
-                    Evita las molestas filas en las horas pico del break escolar. Con nuestra innovación digital, diseñas tu combo, descargas tu QR y solo te enfocas en disfrutar como todo un León.
+                <span class="text-orange-700 font-black tracking-widest uppercase text-[10px] px-3 py-1 bg-orange-100 rounded-md inline-block mb-3">
+                    🏛️ Punto de Encuentro
+                </span>
+                <h2 class="text-3xl sm:text-4xl font-serif font-black text-neutral-800 mb-6">
+                    ¡Donde la comunidad de la UPSLP <span class="text-orange-600">recarga sus garras</span>!
+                </h2>
+                <p class="text-neutral-600 mb-6 leading-relaxed text-base sm:text-lg">
+                    Evita las molestas filas en las horas pico del break escolar. Con nuestra innovación digital, 
+                    diseñas tu combo, descargas tu QR y solo te enfocas en disfrutar como todo un <strong class="text-orange-700">León</strong>.
                 </p>
+                <div class="flex gap-6">
+                    <div>
+                        <p class="text-2xl sm:text-3xl font-black text-orange-600" id="stats-total-pedidos">0</p>
+                        <p class="text-xs text-neutral-500">Pedidos atendidos</p>
+                    </div>
+                    <div>
+                        <p class="text-2xl sm:text-3xl font-black text-orange-600">4.9⭐</p>
+                        <p class="text-xs text-neutral-500">Calificación promedio</p>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
 
-    <!-- 7. CONTACTO, MAPA Y PIE DE PÁGINA -->
-    <section id="contacto" class="py-24 max-w-6xl mx-auto px-6 border-t border-orange-100">
+    <!-- ========================================= -->
+    <!-- 9. CONTACTO Y MAPA                       -->
+    <!-- ========================================= -->
+    <section id="contacto" class="py-16 sm:py-24 max-w-7xl mx-auto px-4 sm:px-6 border-t border-orange-100">
         <div class="grid md:grid-cols-2 gap-12 items-center">
             <div class="bg-white p-6 rounded-3xl shadow-sm border">
-                <h3 class="text-xl font-black text-orange-800 mb-4">Ubicación de nuestro Territorio</h3>
-                <p class="text-sm text-neutral-600 mb-4">C. Urbano Villalón 500, Himno Nacional 2da, San Luis Potosí, S.L.P. (Dentro de la Universidad Politécnica)</p>
-                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1493.323263619349!2d-100.9842329!3d22.1219325!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x842a990039e2ab6b%3A0x2053004040f74d40!2sCafeteria%20de%20la%20UPSLP!5e0!3m2!1ses-419!2smx!4v1717880000000!5m2!1ses-419!2smx" class="w-full h-48 rounded-xl border-0" allowfullscreen="" loading="lazy"></iframe>
+                <h3 class="text-xl font-black text-orange-800 mb-4">📍 Ubicación</h3>
+                <p class="text-sm text-neutral-600 mb-4">
+                    C. Urbano Villalón 500, Himno Nacional 2da, <br>
+                    San Luis Potosí, S.L.P. (Dentro de la UPSLP)
+                </p>
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1493.323263619349!2d-100.9842329!3d22.1219325!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x842a990039e2ab6b%3A0x2053004040f74d40!2sCafeteria%20de%20la%20UPSLP!5e0!3m2!1ses-419!2smx!4v1717880000000!5m2!1ses-419!2smx" 
+                        class="w-full h-48 rounded-xl border-0" 
+                        allowfullscreen="" loading="lazy"></iframe>
             </div>
             <div class="text-center md:text-left">
-                <h4 class="font-serif font-black text-2xl mb-2">Horarios León:</h4>
-                <p class="text-neutral-600 text-sm">Lunes a Viernes: 7:00 AM - 8:00 PM<br>Sábados: 8:00 AM - 2:00 PM</p>
+                <h4 class="font-serif font-black text-2xl mb-3">🕐 Horarios León:</h4>
+                <p class="text-neutral-600 text-sm">
+                    Lunes a Viernes: 7:00 AM - 8:00 PM<br>
+                    Sábados: 8:00 AM - 2:00 PM
+                </p>
+                <div class="mt-6 p-4 bg-amber-50 rounded-2xl border border-amber-200">
+                    <p class="text-sm font-bold text-amber-800">📱 Descarga nuestra app</p>
+                    <p class="text-xs text-amber-600">Próximamente en Play Store y App Store</p>
+                </div>
+                <!-- Chat de soporte -->
+                <button onclick="abrirChatSoporte()" 
+                        class="mt-4 bg-blue-600 text-white px-6 py-3 rounded-xl font-bold hover:bg-blue-700 transition text-sm flex items-center gap-2 mx-auto md:mx-0">
+                    <i data-lucide="message-circle" class="w-4 h-4"></i>
+                    Chat de soporte
+                </button>
             </div>
         </div>
     </section>
 
+    <!-- ========================================= -->
+    <!-- 10. FOOTER                              -->
+    <!-- ========================================= -->
     <footer class="bg-neutral-900 text-stone-400 py-8 text-center border-t-4 border-orange-600">
-        <p class="font-bold text-white mb-1">Policafé UPSLP</p>
+        <p class="font-bold text-white mb-1">🦁 Policafé UPSLP - León</p>
         <p class="text-xs">&copy; 2026 Comunidad de Leones Politécnicos. Todos los derechos reservados.</p>
+        <div class="flex justify-center gap-6 mt-3 text-xs flex-wrap">
+            <a href="#" class="hover:text-white transition">Términos</a>
+            <a href="#" class="hover:text-white transition">Privacidad</a>
+            <a href="#" class="hover:text-white transition">Ayuda</a>
+            <a href="/admin.html" class="hover:text-white transition text-amber-500">🔐 Admin</a>
+        </div>
     </footer>
 
-    <!-- LÓGICA DEL CARRITO Y CÓDIGO QR -->
+    <!-- ========================================= -->
+    <!-- 🔥 CONFIGURACIÓN DE FIREBASE              -->
+    <!-- ========================================= -->
     <script>
-        lucide.createIcons();
+        // ============================================================
+        // 🔑 CONFIGURACIÓN DE FIREBASE - TUS DATOS REALES
+        // ============================================================
+        const firebaseConfig = {
+            apiKey: "AIzaSyBNMdhV48Y1oIEX-eZd20MOUuNPjoNQFXU",
+            authDomain: "policafe-cf364.firebaseapp.com",
+            projectId: "policafe-cf364",
+            storageBucket: "policafe-cf364.firebasestorage.app",
+            messagingSenderId: "1017727685183",
+            appId: "1:1017727685183:web:ae7ac1a48ae19bbb345e8a",
+            measurementId: "G-07QMKQV68B"
+        };
 
+        // ============================================================
+        // INICIALIZAR FIREBASE
+        // ============================================================
+        firebase.initializeApp(firebaseConfig);
+
+        const db = firebase.firestore();
+        const rtdb = firebase.database();
+        const auth = firebase.auth();
+
+        // ============================================================
+        // CONFIGURAR PERSISTENCIA OFFLINE
+        // ============================================================
+        db.settings({ cacheSizeBytes: firebase.firestore.CACHE_SIZE_UNLIMITED });
+        db.enablePersistence()
+            .then(() => console.log('🔥 Modo offline activado - ¡León funciona sin internet!'))
+            .catch(err => console.error('⚠️ Error en persistencia:', err));
+
+        console.log('🦁 Firebase configurado correctamente');
+        console.log('📁 Proyecto:', firebaseConfig.projectId);
+
+        // ============================================================
+        // CREDENCIALES DEL ADMIN (para login rápido)
+        // ============================================================
+        const ADMIN_CREDENTIALS = {
+            email: 'admin@policafe.com',
+            password: 'UPSLPCAFE'
+        };
+
+        // ============================================================
+        // FUNCIÓN PARA LOGIN RÁPIDO DEL ADMIN
+        // ============================================================
+        async function loginAdmin() {
+            try {
+                await auth.signInWithEmailAndPassword(ADMIN_CREDENTIALS.email, ADMIN_CREDENTIALS.password);
+                console.log('✅ Admin autenticado correctamente');
+                window.location.href = '/admin.html';
+            } catch (error) {
+                console.error('❌ Error al autenticar admin:', error);
+                alert('Error al autenticar admin. Verifica las credenciales en Firebase.');
+            }
+        }
+    </script>
+
+    <!-- ========================================= -->
+    <!-- 📝 LÓGICA PRINCIPAL DE LA APP            -->
+    <!-- ========================================= -->
+    <script>
+        // ============================================================
+        // VARIABLES GLOBALES
+        // ============================================================
         let carrito = [];
         let filtroCatActual = 'todos';
         let filtroNutriActual = 'todos';
         let puntosUsuario = parseInt(localStorage.getItem('garrasOro')) || 0;
+        let usuarioActual = null;
+        let menuProductos = [];
+        let ultimoPedido = null;
+        let preferencias = JSON.parse(localStorage.getItem('preferenciasLeón')) || { leche: 'entera', azucar: 'normal' };
+        let pedidosHoy = 0;
+        let usuariosActivos = 0;
+
+        // ============================================================
+        // INICIALIZAR ICONOS
+        // ============================================================
+        if (typeof lucide !== 'undefined') {
+            lucide.createIcons();
+        }
 
         document.getElementById('nav-puntos').innerText = puntosUsuario;
+        actualizarBarraProgreso(puntosUsuario);
 
+        // ============================================================
+        // AUTENTICACIÓN - ESTADO DEL USUARIO
+        // ============================================================
+        auth.onAuthStateChanged(async (user) => {
+            if (user) {
+                usuarioActual = user;
+                console.log('✅ Usuario autenticado:', user.email);
+                
+                // Mostrar UI de usuario logueado
+                document.getElementById('btn-login').classList.add('hidden');
+                document.getElementById('btn-logout').classList.remove('hidden');
+                
+                try {
+                    const doc = await db.collection('usuarios').doc(user.uid).get();
+                    if (doc.exists) {
+                        const data = doc.data();
+                        puntosUsuario = data.puntos || 0;
+                        document.getElementById('nav-puntos').innerText = puntosUsuario;
+                        document.getElementById('user-name').innerText = `👋 ${data.nombre || 'Usuario'}`;
+                        document.getElementById('user-name').classList.remove('hidden');
+                        localStorage.setItem('garrasOro', puntosUsuario);
+                        actualizarBarraProgreso(puntosUsuario);
+                        
+                        // Cargar último pedido del usuario
+                        cargarUltimoPedido(user.uid);
+                    }
+                } catch (error) {
+                    console.error('Error cargando usuario:', error);
+                }
+            } else {
+                usuarioActual = null;
+                console.log('👤 Usuario no autenticado');
+                document.getElementById('btn-login').classList.remove('hidden');
+                document.getElementById('user-name').classList.add('hidden');
+                document.getElementById('btn-logout').classList.add('hidden');
+            }
+        });
+
+        // ============================================================
+        // CERRAR SESIÓN
+        // ============================================================
+        function cerrarSesion() {
+            auth.signOut().then(() => {
+                window.location.reload();
+            });
+        }
+
+        // ============================================================
+        // CARGAR MENÚ DESDE FIRESTORE
+        // ============================================================
+        async function cargarMenuDesdeFirestore() {
+            const status = document.getElementById('menu-status');
+            status.innerText = '🔄 Cargando menú desde la base de datos...';
+            
+            try {
+                const snapshot = await db.collection('menu').get();
+                menuProductos = [];
+                snapshot.forEach(doc => {
+                    menuProductos.push({ id: doc.id, ...doc.data() });
+                });
+                renderizarMenu(menuProductos);
+                status.innerText = `✅ ${menuProductos.length} productos disponibles`;
+                document.getElementById('stats-productos').innerText = menuProductos.length;
+                console.log('📦 Menú cargado:', menuProductos.length, 'productos');
+            } catch (error) {
+                console.error('❌ Error cargando menú:', error);
+                status.innerText = '⚠️ Error al cargar el menú. Usando respaldo local.';
+                cargarMenuLocal();
+            }
+        }
+
+        function cargarMenuLocal() {
+            const backup = [
+                { id: '1', nombre: 'Comida Corrida', precio: 100, categoria: 'platillos', nutricion: 'alta-proteina', descripcion: 'El paquete completo del día', stock: 20 },
+                { id: '2', nombre: 'Tecolota', precio: 70, categoria: 'platillos', nutricion: 'alta-proteina', descripcion: 'Torta rellena de chilaquiles crujientes con queso y crema.', stock: 15 },
+                { id: '3', nombre: 'Club Sándwich Integral', precio: 70, categoria: 'platillos', nutricion: 'fit', descripcion: 'Pan integral, pechuga, verduras frescas y aderezo ligero.', stock: 12 },
+                { id: '4', nombre: 'Café Caliente', precio: 25, categoria: 'bebidas', nutricion: 'fit', descripcion: 'Café americano bien cargado, ideal para despertar el cerebro.', stock: 30 },
+                { id: '5', nombre: 'Nachos con Guiso', precio: 80, categoria: 'snacks', nutricion: 'todos', descripcion: 'Totopos crujientes bañados en queso fundido y guiso.', stock: 10 }
+            ];
+            menuProductos = backup;
+            renderizarMenu(backup);
+            document.getElementById('stats-productos').innerText = backup.length;
+        }
+
+        // ============================================================
+        // RENDERIZAR MENÚ CON STOCK EN VIVO
+        // ============================================================
+        function renderizarMenu(productos) {
+            const contenedor = document.getElementById('contenedor-menu');
+            if (!contenedor) return;
+            
+            contenedor.innerHTML = '';
+            
+            productos.forEach((producto, index) => {
+                const div = document.createElement('div');
+                div.className = 'menu-item bg-white p-4 sm:p-5 rounded-2xl shadow-sm border border-orange-50 hover:shadow-xl transition flex flex-col justify-between';
+                div.style.animationDelay = (index * 0.05) + 's';
+                div.setAttribute('data-cat', producto.categoria);
+                div.setAttribute('data-nutri', producto.nutricion);
+                div.setAttribute('data-nombre', producto.nombre);
+                div.setAttribute('data-id', producto.id);
+                
+                const nutriLabel = producto.nutricion === 'alta-proteina' ? '💪 Alta Proteína' : 
+                                  producto.nutricion === 'fit' ? '🥗 Bajo en Calorías' : '🍔 Munchies';
+                const nutriColor = producto.nutricion === 'alta-proteina' ? 'bg-red-50 text-red-700' : 
+                                   producto.nutricion === 'fit' ? 'bg-emerald-50 text-emerald-700' : 'bg-stone-100 text-stone-700';
+                
+                const stock = producto.stock || 0;
+                const stockStatus = stock <= 0 ? '❌ Agotado' : 
+                                   stock < 5 ? '⚠️ Últimas unidades' : '';
+                const stockColor = stock <= 0 ? 'bg-gray-200 text-gray-700' : 
+                                  stock < 5 ? 'bg-red-200 text-red-700' : '';
+                const disabled = stock <= 0 ? 'disabled' : '';
+                
+                const buttonClass = stock <= 0 ? 
+                    'w-full mt-4 bg-gray-200 text-gray-400 cursor-not-allowed font-bold py-2 rounded-xl transition text-xs flex items-center justify-center gap-2' :
+                    'w-full mt-4 bg-orange-50 hover:bg-orange-600 hover:text-white text-orange-700 font-bold py-2 rounded-xl transition text-xs flex items-center justify-center gap-2';
+                
+                div.innerHTML = `
+                    <div>
+                        <div class="flex justify-between items-start gap-2 mb-2">
+                            <h3 class="font-black text-sm sm:text-base text-neutral-800">${producto.nombre}</h3>
+                            <span class="bg-orange-100 text-orange-800 font-black px-2 sm:px-3 py-1 rounded-full text-[10px] sm:text-xs shrink-0">$${producto.precio}</span>
+                        </div>
+                        <p class="text-neutral-500 text-[10px] sm:text-xs mb-3">${producto.descripcion || 'Deliciosa opción'}</p>
+                        <div class="flex flex-wrap gap-1">
+                            <span class="text-[10px] ${nutriColor} font-bold px-2 py-0.5 rounded-md">${nutriLabel}</span>
+                            ${stockStatus ? `<span class="text-[10px] ${stockColor} font-bold px-2 py-0.5 rounded-md">${stockStatus}</span>` : ''}
+                            ${stock > 0 ? `<span class="text-[10px] text-neutral-400 font-bold px-2 py-0.5">📦 ${stock}</span>` : ''}
+                        </div>
+                    </div>
+                    <button onclick="agregarAlCarrito('${producto.nombre}', ${producto.precio}, '${producto.id}')" 
+                            ${disabled}
+                            class="${buttonClass}">
+                        <i data-lucide="${stock <= 0 ? 'x' : 'plus'}" class="w-3.5 h-3.5"></i> 
+                        ${stock <= 0 ? 'Agotado' : 'Agregar'}
+                    </button>
+                `;
+                contenedor.appendChild(div);
+            });
+            
+            if (typeof lucide !== 'undefined') {
+                lucide.createIcons();
+            }
+        }
+
+        // ============================================================
+        // FILTROS
+        // ============================================================
         function filtrarCategoria(cat) {
             filtroCatActual = cat;
-            actualizarEstilosBotones('filtros-categoria', 'cat-btn', event.target, 'bg-orange-700', 'text-white');
+            document.querySelectorAll('.cat-btn').forEach(btn => {
+                btn.classList.remove('bg-orange-700', 'text-white');
+                btn.classList.add('bg-white', 'text-orange-800', 'border');
+            });
+            if (event && event.target) {
+                event.target.classList.add('bg-orange-700', 'text-white');
+                event.target.classList.remove('bg-white', 'text-orange-800', 'border');
+            }
             aplicarFiltros();
         }
 
         function filtrarNutricion(nutri) {
             filtroNutriActual = nutri;
-            actualizarEstilosBotones(null, 'nutri-btn', event.target, 'bg-amber-500', 'text-neutral-950');
+            document.querySelectorAll('.nutri-btn').forEach(btn => {
+                btn.classList.remove('bg-amber-500', 'text-neutral-950');
+                btn.classList.add('bg-white', 'text-neutral-700');
+            });
+            if (event && event.target) {
+                event.target.classList.add('bg-amber-500', 'text-neutral-950');
+                event.target.classList.remove('bg-white', 'text-neutral-700');
+            }
             aplicarFiltros();
         }
 
@@ -312,76 +882,139 @@
             });
         }
 
-        function actualizarEstilosBotones(contenedorId, claseBoton, botonActivo, bgActivo, textActivo) {
-            const botones = contenedorId ? document.getElementById(contenedorId).querySelectorAll('.' + claseBoton) : document.querySelectorAll('.' + claseBoton);
-            botones.forEach(btn => {
-                btn.classList.remove(bgActivo, textActivo, 'shadow-sm');
-                btn.classList.add('bg-white', 'text-neutral-700', 'border');
-            });
-            botonActivo.classList.add(bgActivo, textActivo, 'shadow-sm');
-            botonActivo.classList.remove('bg-white', 'text-neutral-700', 'border');
-        }
-
         function buscarProducto(query) {
             const q = query.toLowerCase().trim();
             const items = document.querySelectorAll('.menu-item');
             items.forEach(item => {
                 const nombre = item.getAttribute('data-nombre');
-                item.style.display = nombre.includes(q) ? 'flex' : 'none';
+                item.style.display = nombre.toLowerCase().includes(q) ? 'flex' : 'none';
             });
         }
 
+        function cargarMasProductos() {
+            // Paginación (por ahora solo ocultamos el botón)
+            document.getElementById('btn-cargar-mas').classList.add('hidden');
+        }
+
+        // ============================================================
+        // BUSCADOR POR VOZ
+        // ============================================================
         function activarMicrofono() {
             const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
             if (!SpeechRecognition) {
-                alert("Tu navegador no soporta control por voz. Prueba con Google Chrome.");
+                alert("⚠️ Tu navegador no soporta control por voz. Prueba con Google Chrome.");
                 return;
             }
+            
             const recognition = new SpeechRecognition();
             recognition.lang = 'es-MX';
+            recognition.continuous = false;
+            recognition.interimResults = false;
             
             const btnMicro = document.getElementById('btn-micro');
             const statusVoz = document.getElementById('status-voz');
             
             recognition.onstart = () => {
-                btnMicro.classList.add('bg-red-500', 'animate-ping');
-                statusVoz.innerText = "🎙️ Escuchando... Di algo como: 'Quiero agregar Tecolota'";
+                btnMicro.classList.add('bg-red-500', 'animate-pulse');
+                statusVoz.innerText = '🎙️ Escuchando... Di algo como: "Quiero agregar Tecolota"';
             };
 
             recognition.onresult = (event) => {
                 const comando = event.results[0][0].transcript.toLowerCase();
-                statusVoz.innerText = `Escuché: "${comando}"`;
+                statusVoz.innerText = `🗣️ Escuché: "${comando}"`;
                 
-                if (comando.includes('agregar') || comando.includes('añadir')) {
-                    if (comando.includes('corrida')) { agregarAlCarrito('Comida Corrida', 100.00); }
-                    else if (comando.includes('tecolota') || comando.includes('torta')) { agregarAlCarrito('Tecolota', 70.00); }
-                    else if (comando.includes('sándwich') || comando.includes('integral')) { agregarAlCarrito('Club Sándwich Integral', 70.00); }
-                    else if (comando.includes('café') || comando.includes('caliente')) { agregarAlCarrito('Café Caliente', 25.00); }
-                    else if (comando.includes('nachos')) { agregarAlCarrito('Nachos con Guiso', 80.00); }
-                } else {
+                let encontrado = false;
+                
+                // Buscar en el menú
+                for (const p of menuProductos) {
+                    if (comando.includes(p.nombre.toLowerCase())) {
+                        agregarAlCarrito(p.nombre, p.precio, p.id);
+                        encontrado = true;
+                        statusVoz.innerText = `✅ Agregado: ${p.nombre}`;
+                        break;
+                    }
+                }
+                
+                if (!encontrado) {
+                    // Buscar por coincidencia parcial
+                    const palabras = comando.split(' ');
+                    for (const p of menuProductos) {
+                        const nombreLower = p.nombre.toLowerCase();
+                        if (palabras.some(pal => nombreLower.includes(pal) || pal.includes(nombreLower))) {
+                            agregarAlCarrito(p.nombre, p.precio, p.id);
+                            encontrado = true;
+                            statusVoz.innerText = `✅ Agregado: ${p.nombre}`;
+                            break;
+                        }
+                    }
+                }
+                
+                if (!encontrado) {
                     document.getElementById('buscador-input').value = comando;
                     buscarProducto(comando);
+                    statusVoz.innerText = `🔍 Buscando: "${comando}"`;
                 }
+                
+                setTimeout(() => {
+                    statusVoz.innerText = '';
+                }, 3000);
+            };
+
+            recognition.onerror = (event) => {
+                statusVoz.innerText = `❌ Error: ${event.error}`;
+                btnMicro.classList.remove('bg-red-500', 'animate-pulse');
             };
 
             recognition.onend = () => {
-                btnMicro.classList.remove('bg-red-500', 'animate-ping');
+                btnMicro.classList.remove('bg-red-500', 'animate-pulse');
+                setTimeout(() => {
+                    if (statusVoz.innerText !== '') {
+                        statusVoz.innerText = '';
+                    }
+                }, 3000);
             };
+            
             recognition.start();
         }
 
-        function agregarAlCarrito(nombre, precio) {
+        // ============================================================
+        // CARRITO DE COMPRAS
+        // ============================================================
+        function agregarAlCarrito(nombre, precio, id) {
+            if (!usuarioActual) {
+                alert('⚠️ Debes iniciar sesión para agregar productos al carrito.');
+                window.location.href = '/login.html';
+                return;
+            }
+            
             const item = carrito.find(i => i.nombre === nombre);
-            if (item) { item.cantidad += 1; } 
-            else { carrito.push({ nombre, precio, cantidad: 1 }); }
+            if (item) {
+                item.cantidad += 1;
+            } else {
+                carrito.push({ nombre, precio, cantidad: 1, id });
+            }
             actualizarInterfazCarrito();
+            
+            // Feedback visual
+            const btn = event?.target?.closest?.('button');
+            if (btn) {
+                btn.classList.add('bg-green-600', 'text-white');
+                btn.innerHTML = '<i data-lucide="check" class="w-3.5 h-3.5"></i> ¡Agregado!';
+                setTimeout(() => {
+                    btn.classList.remove('bg-green-600', 'text-white');
+                    btn.innerHTML = '<i data-lucide="plus" class="w-3.5 h-3.5"></i> Agregar';
+                    if (typeof lucide !== 'undefined') lucide.createIcons();
+                }, 1500);
+            }
         }
 
         function cambiarCantidad(nombre, cambio) {
-            const item = carrito.find(i => i.nombre === cambio || i.nombre === nombre);
+            const item = carrito.find(i => i.nombre === nombre);
             if (item) {
                 item.cantidad += cambio;
-                if (item.cantidad <= 0) carrito = carrito.filter(i => i.nombre !== item.nombre);
+                if (item.cantidad <= 0) {
+                    carrito = carrito.filter(i => i.nombre !== nombre);
+                }
             }
             actualizarInterfazCarrito();
         }
@@ -392,12 +1025,16 @@
             const badge = document.getElementById('badge-carrito');
             const txtPuntosGarras = document.getElementById('puntos-ganados');
             
+            if (!contenedor) return;
+            
             if (carrito.length === 0) {
-                contenedor.innerHTML = `<p class="text-center text-neutral-400 py-12">Carrito vacío.</p>`;
+                contenedor.innerHTML = `<p class="text-center text-neutral-400 py-12 text-sm">🛒 Carrito vacío.<br><span class="text-xs">Agrega productos del menú</span></p>`;
                 txtTotal.innerText = "$0.00";
-                badge.classList.add('hidden');
-                txtPuntosGarras.innerText = "+0 Garras 🐾";
-                document.getElementById('tiempo-espera').innerText = "0 mins";
+                if (badge) badge.classList.add('hidden');
+                if (txtPuntosGarras) txtPuntosGarras.innerText = "+0 Garras 🐾";
+                document.getElementById('tiempo-espera').innerText = "0 min";
+                document.getElementById('cola-estado').innerText = "0 pedidos antes que tú";
+                document.getElementById('btn-repetir').classList.add('hidden');
                 return;
             }
 
@@ -410,83 +1047,480 @@
                 totalItems += item.cantidad;
                 contenedor.innerHTML += `
                     <div class="flex justify-between items-center bg-neutral-50 p-2.5 rounded-xl border border-neutral-100 text-xs">
-                        <div class="flex-1"><h5 class="font-bold text-neutral-800">${item.nombre}</h5><p class="text-neutral-500">$${item.precio.toFixed(2)} c/u</p></div>
-                        <div class="flex items-center gap-2.5 bg-white border rounded-lg px-2 py-1">
-                            <button onclick="cambiarCantidad('${item.nombre}', -1)" class="font-bold text-neutral-400 hover:text-red-500">-</button>
-                            <span class="font-bold text-neutral-800">${item.cantidad}</span>
-                            <button onclick="cambiarCantidad('${item.nombre}', 1)" class="font-bold text-neutral-400 hover:text-orange-500">+</button>
+                        <div class="flex-1 min-w-0">
+                            <h5 class="font-bold text-neutral-800 truncate">${item.nombre}</h5>
+                            <p class="text-neutral-500">$${item.precio.toFixed(2)} c/u</p>
                         </div>
-                        <span class="font-black text-neutral-800 ml-4 w-12 text-right">$${sub.toFixed(2)}</span>
+                        <div class="flex items-center gap-2 bg-white border rounded-lg px-2 py-1 shrink-0">
+                            <button onclick="cambiarCantidad('${item.nombre}', -1)" class="font-bold text-neutral-400 hover:text-red-500 px-1">-</button>
+                            <span class="font-bold text-neutral-800 min-w-[20px] text-center">${item.cantidad}</span>
+                            <button onclick="cambiarCantidad('${item.nombre}', 1)" class="font-bold text-neutral-400 hover:text-orange-500 px-1">+</button>
+                        </div>
+                        <span class="font-black text-neutral-800 ml-3 w-12 text-right shrink-0">$${sub.toFixed(2)}</span>
                     </div>`;
             });
             
             txtTotal.innerText = `$${total.toFixed(2)}`;
-            badge.innerText = totalItems;
-            badge.classList.remove('hidden');
+            if (badge) {
+                badge.innerText = totalItems;
+                badge.classList.remove('hidden');
+            }
             
-            document.getElementById('tiempo-espera').innerText = `${totalItems * 3} mins`;
-            txtPuntosGarras.innerText = `+${Math.floor(total * 0.1)} Garras 🐾`;
+            // Tiempo estimado con fórmula inteligente
+            const tiempoBase = totalItems * 2;
+            const horaPico = (new Date().getHours() >= 12 && new Date().getHours() <= 14);
+            const tiempoFinal = horaPico ? tiempoBase * 1.5 : tiempoBase;
+            const tiempoMostrado = Math.min(Math.round(tiempoFinal), 25);
+            document.getElementById('tiempo-espera').innerText = `${tiempoMostrado} min`;
+            
+            // Cola virtual
+            const colaEstimada = Math.min(totalItems * 2, 10);
+            document.getElementById('cola-estado').innerText = `${colaEstimada} pedidos antes que tú`;
+            
+            // Puntos
+            const puntosGanados = Math.floor(total * 0.1);
+            if (txtPuntosGarras) {
+                txtPuntosGarras.innerText = `+${puntosGanados} Garras 🐾`;
+            }
+            
+            // Barra de progreso hacia recompensa
+            const progreso = Math.min((puntosUsuario % 100) / 100 * 100, 100);
+            document.getElementById('progress-recompensa-carrito').style.width = `${progreso}%`;
+            document.getElementById('texto-progreso').innerText = `${puntosUsuario % 100}/100`;
+            
+            // Mostrar botón de repetir si hay último pedido
+            if (ultimoPedido && ultimoPedido.length > 0) {
+                document.getElementById('btn-repetir').classList.remove('hidden');
+            }
+            
+            // Actualizar cola visual
+            actualizarColaVisual(colaEstimada);
         }
 
+        function actualizarColaVisual(cantidad) {
+            const container = document.getElementById('cola-visual');
+            container.innerHTML = '';
+            const max = Math.min(cantidad, 10);
+            for (let i = 0; i < max; i++) {
+                const dot = document.createElement('span');
+                dot.className = i < 3 ? 'w-3 h-3 bg-amber-400 rounded-full inline-block' : 
+                                i < 6 ? 'w-3 h-3 bg-amber-300 rounded-full inline-block' : 
+                                'w-3 h-3 bg-amber-200 rounded-full inline-block';
+                container.appendChild(dot);
+            }
+            if (cantidad > 10) {
+                const more = document.createElement('span');
+                more.className = 'text-[10px] text-neutral-400 ml-1';
+                more.innerText = `+${cantidad - 10}`;
+                container.appendChild(more);
+            }
+        }
+
+        // ============================================================
+        // ÚLTIMO PEDIDO
+        // ============================================================
+        async function cargarUltimoPedido(uid) {
+            try {
+                const snapshot = await db.collection('pedidos')
+                    .where('usuarioId', '==', uid)
+                    .orderBy('timestamp', 'desc')
+                    .limit(1)
+                    .get();
+                    
+                if (!snapshot.empty) {
+                    const doc = snapshot.docs[0];
+                    const data = doc.data();
+                    if (data.items && data.items.length > 0) {
+                        ultimoPedido = data.items;
+                        document.getElementById('btn-repetir').classList.remove('hidden');
+                    }
+                }
+            } catch (error) {
+                console.error('Error cargando último pedido:', error);
+            }
+        }
+
+        function repetirUltimoPedido() {
+            if (!ultimoPedido || ultimoPedido.length === 0) return;
+            
+            ultimoPedido.forEach(item => {
+                const producto = menuProductos.find(p => p.nombre === item.nombre);
+                if (producto && producto.stock > 0) {
+                    agregarAlCarrito(producto.nombre, producto.precio, producto.id);
+                }
+            });
+            
+            abrirModalCarrito();
+        }
+
+        // ============================================================
+        // PROCESAR PEDIDO CON FIRESTORE
+        // ============================================================
+        async function procesarPedidoQR() {
+            if (carrito.length === 0) {
+                alert('🛒 Tu carrito está vacío. Agrega productos primero.');
+                return;
+            }
+            
+            if (!usuarioActual) {
+                alert('⚠️ Debes iniciar sesión para hacer un pedido.');
+                window.location.href = '/login.html';
+                return;
+            }
+            
+            const total = carrito.reduce((acc, i) => acc + (i.precio * i.cantidad), 0);
+            const tiempoEstimado = calcularTiempoEstimado(carrito);
+            const horaRecogida = document.getElementById('hora-recogida')?.value || 'Ahora mismo';
+            
+            try {
+                const pedidoData = {
+                    items: carrito.map(item => ({
+                        nombre: item.nombre,
+                        precio: item.precio,
+                        cantidad: item.cantidad,
+                        productoId: item.id
+                    })),
+                    total: total,
+                    estado: 'pendiente',
+                    horaRecogida: horaRecogida,
+                    usuarioId: usuarioActual.uid,
+                    email: usuarioActual.email,
+                    timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+                    tiempoEstimado: tiempoEstimado,
+                    preferencias: preferencias
+                };
+                
+                const docRef = await db.collection('pedidos').add(pedidoData);
+                const pedidoId = docRef.id;
+                
+                // Actualizar puntos
+                const puntosGanados = Math.floor(total * 0.1);
+                await db.collection('usuarios').doc(usuarioActual.uid).update({
+                    puntos: firebase.firestore.FieldValue.increment(puntosGanados),
+                    pedidosRealizados: firebase.firestore.FieldValue.increment(1),
+                    ultimoPedido: pedidoId
+                });
+                
+                puntosUsuario += puntosGanados;
+                localStorage.setItem('garrasOro', puntosUsuario);
+                document.getElementById('nav-puntos').innerText = puntosUsuario;
+                actualizarBarraProgreso(puntosUsuario);
+                
+                // Actualizar inventario
+                for (const item of carrito) {
+                    if (item.id && item.id !== 'recompensa') {
+                        await db.collection('menu').doc(item.id).update({
+                            stock: firebase.firestore.FieldValue.increment(-item.cantidad)
+                        });
+                    }
+                }
+                
+                // Notificación en Realtime Database para el admin
+                await rtdb.ref('notificaciones/' + pedidoId).set({
+                    tipo: 'nuevo_pedido',
+                    mensaje: `Nuevo pedido #${pedidoId.slice(0,6)}`,
+                    timestamp: Date.now(),
+                    pedidoId: pedidoId,
+                    total: total
+                });
+                
+                // Guardar último pedido
+                ultimoPedido = carrito.map(item => ({ ...item }));
+                document.getElementById('btn-repetir').classList.remove('hidden');
+                
+                // Mostrar QR
+                generarQRConID(pedidoId, carrito, total, tiempoEstimado);
+                
+                // Limpiar carrito
+                cerrarModalCarrito();
+                mostrarQR(pedidoId, tiempoEstimado);
+                carrito = [];
+                actualizarInterfazCarrito();
+                
+                // Incrementar contador de pedidos
+                pedidosHoy++;
+                document.getElementById('stats-pedidos').innerText = pedidosHoy;
+                
+                console.log('✅ Pedido creado:', pedidoId);
+                
+            } catch (error) {
+                console.error('❌ Error al procesar pedido:', error);
+                alert('❌ Error al procesar el pedido: ' + error.message);
+            }
+        }
+
+        function calcularTiempoEstimado(items) {
+            const totalItems = items.reduce((acc, i) => acc + i.cantidad, 0);
+            const horaPico = (new Date().getHours() >= 12 && new Date().getHours() <= 14);
+            const tiempoBase = totalItems * 2;
+            const tiempoFinal = horaPico ? tiempoBase * 1.8 : tiempoBase;
+            return Math.min(Math.round(tiempoFinal), 30);
+        }
+
+        // ============================================================
+        // GENERAR QR
+        // ============================================================
+        function generarQRConID(pedidoId, items, total, tiempoEstimado) {
+            const containerQR = document.getElementById('qrcode');
+            containerQR.innerHTML = "";
+            
+            let dataQR = `POLICAFE-LEON\nID: ${pedidoId}\n`;
+            let resHTML = "";
+            
+            items.forEach(i => {
+                const sub = i.precio * i.cantidad;
+                dataQR += `${i.cantidad}x ${i.nombre} = $${sub.toFixed(2)}\n`;
+                resHTML += `<div class="flex justify-between"><span>${i.cantidad}x ${i.nombre}</span><span>$${sub.toFixed(2)}</span></div>`;
+            });
+            
+            dataQR += `TOTAL: $${total.toFixed(2)}\nFOLIO: ${pedidoId.slice(0,8)}`;
+            resHTML += `<div class="flex justify-between border-t pt-1 mt-2 font-black text-sm text-neutral-800"><span>Total:</span><span>$${total.toFixed(2)}</span></div>`;
+            resHTML += `<div class="mt-2 text-[10px] text-neutral-400">Pedido: ${pedidoId.slice(0,6)}</div>`;
+            
+            document.getElementById('resumen-ticket-qr').innerHTML = resHTML;
+            document.getElementById('qr-tiempo-estimado').innerText = tiempoEstimado || '5';
+            
+            new QRCode(containerQR, {
+                text: dataQR,
+                width: 180,
+                height: 180,
+                colorDark: "#2d1b10",
+                colorLight: "#ffffff",
+                correctLevel: QRCode.CorrectLevel.H
+            });
+        }
+
+        function mostrarQR(pedidoId, tiempoEstimado) {
+            const modal = document.getElementById('modal-qr');
+            modal.classList.remove('opacity-0', 'pointer-events-none');
+            document.getElementById('cuerpo-modal-qr').classList.remove('scale-95');
+            
+            // Confetti
+            crearConfetti();
+        }
+
+        function crearConfetti() {
+            const container = document.getElementById('confetti-container');
+            container.innerHTML = '';
+            const colors = ['#ea580c', '#f59e0b', '#10b981', '#3b82f6', '#8b5cf6', '#ef4444'];
+            for (let i = 0; i < 20; i++) {
+                const el = document.createElement('div');
+                el.className = 'absolute';
+                el.style.cssText = `
+                    width: 8px;
+                    height: 8px;
+                    background: ${colors[Math.floor(Math.random() * colors.length)]};
+                    border-radius: ${Math.random() > 0.5 ? '50%' : '2px'};
+                    left: ${Math.random() * 100}%;
+                    top: ${Math.random() * 100}%;
+                    animation: confetti ${1 + Math.random() * 2}s ease-out forwards;
+                    animation-delay: ${Math.random() * 0.5}s;
+                    opacity: 1;
+                `;
+                container.appendChild(el);
+            }
+            setTimeout(() => {
+                container.innerHTML = '';
+            }, 3000);
+        }
+
+        // ============================================================
+        // RECOMPENSAS
+        // ============================================================
+        function verRecompensas() {
+            if (!usuarioActual) {
+                alert('⚠️ Debes iniciar sesión para ver tus recompensas.');
+                window.location.href = '/login.html';
+                return;
+            }
+            document.getElementById('modal-puntos').innerText = puntosUsuario;
+            document.getElementById('modal-recompensas').classList.remove('opacity-0', 'pointer-events-none');
+        }
+
+        function cerrarModalRecompensas() {
+            document.getElementById('modal-recompensas').classList.add('opacity-0', 'pointer-events-none');
+        }
+
+        async function canjearRecompensa(tipo, costo) {
+            if (puntosUsuario < costo) {
+                alert(`❌ No tienes suficientes Garras. Necesitas ${costo} y tienes ${puntosUsuario}.`);
+                return;
+            }
+            
+            try {
+                await db.collection('usuarios').doc(usuarioActual.uid).update({
+                    puntos: firebase.firestore.FieldValue.increment(-costo)
+                });
+                
+                puntosUsuario -= costo;
+                localStorage.setItem('garrasOro', puntosUsuario);
+                document.getElementById('nav-puntos').innerText = puntosUsuario;
+                document.getElementById('modal-puntos').innerText = puntosUsuario;
+                actualizarBarraProgreso(puntosUsuario);
+                
+                const nombres = {
+                    'cafe': '☕ Café Americano',
+                    'sandwich': '🥪 Sándwich Gratis',
+                    'combo': '🎁 Combo Especial'
+                };
+                
+                alert(`🎉 ¡Has canjeado ${nombres[tipo] || tipo}! Disfruta tu recompensa.`);
+                cerrarModalRecompensas();
+                
+            } catch (error) {
+                console.error('Error al canjear:', error);
+                alert('❌ Error al canjear la recompensa.');
+            }
+        }
+
+        function actualizarBarraProgreso(puntos) {
+            const progreso = Math.min((puntos % 100) / 100 * 100, 100);
+            document.getElementById('progress-recompensas').style.width = `${progreso}%`;
+        }
+
+        // ============================================================
+        // PREFERENCIAS
+        // ============================================================
+        function mostrarPreferencias() {
+            document.getElementById('pref-leche').value = preferencias.leche || 'entera';
+            document.getElementById('pref-azucar').value = preferencias.azucar || 'normal';
+            document.getElementById('modal-preferencias').classList.remove('opacity-0', 'pointer-events-none');
+        }
+
+        function cerrarModalPreferencias() {
+            document.getElementById('modal-preferencias').classList.add('opacity-0', 'pointer-events-none');
+        }
+
+        function guardarPreferencias() {
+            preferencias.leche = document.getElementById('pref-leche').value;
+            preferencias.azucar = document.getElementById('pref-azucar').value;
+            localStorage.setItem('preferenciasLeón', JSON.stringify(preferencias));
+            alert('✅ Preferencias guardadas correctamente.');
+            cerrarModalPreferencias();
+        }
+
+        // ============================================================
+        // CHAT DE SOPORTE
+        // ============================================================
+        function abrirChatSoporte() {
+            if (!usuarioActual) {
+                alert('⚠️ Debes iniciar sesión para usar el chat de soporte.');
+                window.location.href = '/login.html';
+                return;
+            }
+            
+            const mensaje = prompt('💬 Escribe tu mensaje de soporte:');
+            if (mensaje && mensaje.trim()) {
+                db.collection('soporte').add({
+                    usuarioId: usuarioActual.uid,
+                    email: usuarioActual.email,
+                    mensaje: mensaje.trim(),
+                    timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+                    estado: 'pendiente'
+                }).then(() => {
+                    alert('✅ Tu mensaje ha sido enviado. Te responderemos pronto.');
+                }).catch(error => {
+                    alert('❌ Error al enviar el mensaje: ' + error.message);
+                });
+            }
+        }
+
+        // ============================================================
+        // WHATSAPP
+        // ============================================================
         function enviarWhatsApp() {
             if (carrito.length === 0) return;
-            let msg = `*NUEVO PEDIDO POLICAFÉ*\n`;
+            let msg = `🦁 *NUEVO PEDIDO POLICAFÉ LEÓN*\n\n`;
             let total = 0;
             carrito.forEach(i => {
                 msg += `• ${i.cantidad}x ${i.nombre} ($${(i.precio*i.cantidad).toFixed(2)})\n`;
                 total += i.precio*i.cantidad;
             });
-            msg += `\n*Hora programada:* ${document.getElementById('hora-recogida').value}`;
-            msg += `\n*Total a pagar en mostrador:* $${total.toFixed(2)}`;
+            msg += `\n📅 *Hora programada:* ${document.getElementById('hora-recogida')?.value || 'Ahora mismo'}`;
+            msg += `\n💰 *Total a pagar:* $${total.toFixed(2)}`;
+            msg += `\n\n🎫 ¡Paga con QR al llegar! 🐾`;
             
             window.open(`https://api.whatsapp.com/send?phone=521234567890&text=${encodeURIComponent(msg)}`);
         }
 
-        // FUNCIÓN DE QR ARREGLADA COMPLETAMENTE
-        function procesarPedidoQR() {
-            if (carrito.length === 0) return;
-            
-            const containerQR = document.getElementById('qrcode');
-            containerQR.innerHTML = ""; // Limpieza total garantizada
-            
-            let dataQR = "POLICAFE-ORDER\n";
-            let resHTML = "", total = 0;
-            const folio = Math.floor(1000 + Math.random() * 9000);
-
-            carrito.forEach(i => {
-                const sub = i.precio * i.cantidad;
-                total += sub;
-                dataQR += `${i.cantidad}x ${i.nombre} = $${sub.toFixed(2)}\n`;
-                resHTML += `<div class="flex justify-between"><span>${i.cantidad}x ${i.nombre}</span><span>$${sub.toFixed(2)}</span></div>`;
-            });
-
-            dataQR += `HORA: ${document.getElementById('hora-recogida').value}\nTOTAL: $${total.toFixed(2)}\nFOLIO: #${folio}`;
-            resHTML += `<div class="flex justify-between border-t pt-1 mt-2 font-black text-sm text-neutral-800"><span>Total a Pagar:</span><span>$${total.toFixed(2)}</span></div>`;
-            resHTML += `<div class="mt-2 text-[10px] text-neutral-400">Hora de entrega: ${document.getElementById('hora-recogida').value} | Folio: #${folio}</div>`;
-
-            document.getElementById('resumen-ticket-qr').innerHTML = resHTML;
-
-            // Renderizado forzado sin duplicación
-            new QRCode(containerQR, {
-                text: dataQR,
-                width: 160,
-                height: 160,
-                colorDark : "#2d1b10",
-                colorLight : "#ffffff",
-                correctLevel : QRCode.CorrectLevel.M
-            });
-
-            puntosUsuario += Math.floor(total * 0.1);
-            localStorage.setItem('garrasOro', puntosUsuario);
-            document.getElementById('nav-puntos').innerText = puntosUsuario;
-
-            cerrarModalCarrito();
-            document.getElementById('modal-qr').classList.remove('opacity-0', 'pointer-events-none');
+        // ============================================================
+        // FUNCIONES DE MODALES
+        // ============================================================
+        function abrirModalCarrito() {
+            const modal = document.getElementById('modal-carrito');
+            modal.classList.remove('opacity-0', 'pointer-events-none');
+            document.getElementById('cuerpo-modal-carrito').classList.remove('translate-x-full');
+            actualizarInterfazCarrito();
         }
 
-        function abrirModalCarrito() { document.getElementById('modal-carrito').classList.remove('opacity-0', 'pointer-events-none'); document.getElementById('cuerpo-modal-carrito').classList.remove('translate-x-full'); }
-        function cerrarModalCarrito() { document.getElementById('modal-carrito').classList.add('opacity-0', 'pointer-events-none'); document.getElementById('cuerpo-modal-carrito').classList.add('translate-x-full'); }
-        function cerrarModalQR() { document.getElementById('modal-qr').classList.add('opacity-0', 'pointer-events-none'); carrito = []; actualizarInterfazCarrito(); }
+        function cerrarModalCarrito() {
+            const modal = document.getElementById('modal-carrito');
+            modal.classList.add('opacity-0', 'pointer-events-none');
+            document.getElementById('cuerpo-modal-carrito').classList.add('translate-x-full');
+        }
+
+        function cerrarModalQR() {
+            const modal = document.getElementById('modal-qr');
+            modal.classList.add('opacity-0', 'pointer-events-none');
+            document.getElementById('cuerpo-modal-qr').classList.add('scale-95');
+        }
+
+        // ============================================================
+        // ESTADÍSTICAS EN TIEMPO REAL
+        // ============================================================
+        function escucharEstadisticas() {
+            // Contar pedidos de hoy
+            const hoy = new Date();
+            hoy.setHours(0, 0, 0, 0);
+            
+            db.collection('pedidos')
+                .where('timestamp', '>=', hoy)
+                .onSnapshot(snapshot => {
+                    pedidosHoy = snapshot.size;
+                    document.getElementById('stats-pedidos').innerText = pedidosHoy;
+                    document.getElementById('stats-total-pedidos').innerText = pedidosHoy;
+                });
+            
+            // Contar usuarios registrados
+            db.collection('usuarios').onSnapshot(snapshot => {
+                usuariosActivos = snapshot.size;
+                document.getElementById('stats-usuarios').innerText = usuariosActivos;
+            });
+        }
+
+        // ============================================================
+        // INICIALIZAR
+        // ============================================================
+        document.addEventListener('DOMContentLoaded', () => {
+            cargarMenuDesdeFirestore();
+            escucharEstadisticas();
+            if (typeof lucide !== 'undefined') {
+                lucide.createIcons();
+            }
+            
+            // Cargar preferencias
+            if (preferencias) {
+                console.log('⚙️ Preferencias cargadas:', preferencias);
+            }
+            
+            // Verificar si el admin está logueado y redirigir
+            auth.onAuthStateChanged(user => {
+                if (user && user.email === 'admin@policafe.com') {
+                    // Opcional: mostrar un badge de admin
+                }
+            });
+        });
+
+        // Recargar iconos periódicamente
+        setInterval(() => {
+            if (typeof lucide !== 'undefined') {
+                lucide.createIcons();
+            }
+        }, 3000);
+
+        console.log('🦁 Policafé León v3.0 cargado correctamente');
+        console.log('📦 Productos disponibles:', menuProductos.length);
+        console.log('👤 Usuario:', usuarioActual?.email || 'No autenticado');
     </script>
 </body>
 </html>
