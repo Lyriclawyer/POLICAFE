@@ -4,134 +4,46 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Policafé Premium - El Rugido Innovador de la UPSLP</title>
-    
-    <!-- Tailwind CSS -->
+    <!-- Tailwind CSS vía CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Iconos Lucide -->
     <script src="https://unpkg.com/lucide@latest"></script>
     <!-- Generador de QR -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-    
-    <!-- FIREBASE SDKs -->
-    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
-
     <style>
         @keyframes fadeInUp {
             from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
         }
         .menu-item { animation: fadeInUp 0.4s ease backwards; }
-        
-        @keyframes pulse-slow {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.02); }
-        }
-        
-        @keyframes confetti {
-            0% { transform: translateY(0) rotate(0deg); opacity: 1; }
-            100% { transform: translateY(-100px) rotate(720deg); opacity: 0; }
-        }
-        
-        .progress-bar {
-            height: 6px;
-            background: #f3f4f6;
-            border-radius: 10px;
-            overflow: hidden;
-        }
-        .progress-bar-fill {
-            height: 100%;
-            background: linear-gradient(90deg, #f59e0b, #ea580c);
-            border-radius: 10px;
-            transition: width 1s ease;
-            width: 0%;
-        }
-        
-        .btn-add {
-            transition: all 0.3s ease;
-            cursor: pointer;
-        }
-        .btn-add:active { transform: scale(0.95); }
-        .btn-add:disabled { opacity: 0.5; cursor: not-allowed; }
-        
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: #f1f1f1; border-radius: 10px; }
-        ::-webkit-scrollbar-thumb { background: #ea580c; border-radius: 10px; }
-        ::-webkit-scrollbar-thumb:hover { background: #c2410c; }
-        
-        .badge-nuevo { animation: pulse-slow 1s ease-in-out infinite; }
-        
-        .modal-overlay {
-            transition: opacity 0.3s ease;
-        }
-        .modal-content {
-            transition: transform 0.3s ease;
-        }
-        
-        /* Estilos para filtros */
-        .cat-btn, .nutri-btn {
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-        .cat-btn.active, .nutri-btn.active {
-            background: #ea580c !important;
-            color: white !important;
-            border-color: #ea580c !important;
-        }
     </style>
 </head>
 <body class="bg-[#fdfbf7] text-[#2d1b10] font-sans selection:bg-orange-500 selection:text-white">
 
-    <!-- ========================================================== -->
-    <!-- 1. BARRA DE NAVEGACIÓN                                     -->
-    <!-- ========================================================== -->
+    <!-- 1. BARRA DE NAVEGACIÓN -->
     <nav class="fixed w-full bg-[#fdfbf7]/80 backdrop-blur-lg z-50 shadow-md border-b border-orange-100">
         <div class="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
             <a href="#" class="text-2xl font-serif font-black tracking-wider text-orange-700 flex items-center gap-2">
-                <i data-lucide="coffee" class="text-amber-500 animate-pulse"></i>POLICAFÉ <span class="text-xs bg-orange-600 text-white px-2 py-0.5 rounded-md font-mono">v3.0</span>
+                <i data-lucide="coffee" class="text-amber-500 animate-pulse"></i>POLICAFÉ <span class="text-xs bg-orange-600 text-white px-2 py-0.5 rounded-md font-mono">v2.0</span>
             </a>
             
-            <!-- Recompensas -->
+            <!-- Barra de Estado de Recompensas en el Nav -->
             <div class="hidden lg:flex items-center gap-2 bg-amber-50 px-3 py-1.5 rounded-full border border-amber-200 text-xs font-bold text-amber-950">
                 <i data-lucide="award" class="w-4 h-4 text-amber-600"></i>
-                <span>Tus Garras: <span id="nav-puntos" class="text-orange-700 font-black">0</span> 🐾</span>
-                <div class="w-20">
-                    <div class="progress-bar">
-                        <div id="progress-recompensas" class="progress-bar-fill" style="width: 0%;"></div>
-                    </div>
-                </div>
-                <button onclick="verRecompensas()" class="text-[10px] bg-orange-600 text-white px-2 py-0.5 rounded-full hover:bg-orange-700 transition">Canjear</button>
+                <span>Tus Garras de Oro: <span id="nav-puntos" class="text-orange-700 font-black">0</span> 🐾</span>
             </div>
 
             <div class="flex items-center gap-4">
-                <div id="auth-section">
-                    <button onclick="abrirModalLogin()" id="btn-login" class="bg-orange-600 text-white px-4 py-2.5 rounded-xl text-sm font-bold hover:bg-orange-700 transition">
-                        🚪 Entrar
-                    </button>
-                    <span id="user-name" class="text-sm font-bold text-orange-700 hidden"></span>
-                    <button onclick="cerrarSesion()" id="btn-logout" class="text-sm text-neutral-400 hover:text-red-500 transition hidden ml-2">
-                        <i data-lucide="log-out" class="w-4 h-4 inline"></i> Salir
-                    </button>
-                </div>
-                
                 <button onclick="abrirModalCarrito()" class="relative bg-gradient-to-r from-orange-600 to-amber-500 text-white px-5 py-2.5 rounded-full text-sm font-bold flex items-center gap-2 hover:shadow-md transition-all">
                     <i data-lucide="shopping-cart" class="w-4 h-4"></i>
                     <span>Mi Carrito</span>
                     <span id="badge-carrito" class="bg-red-600 text-white text-xs font-black rounded-full w-5 h-5 flex items-center justify-center hidden">0</span>
                 </button>
-                
-                <button onclick="abrirModalAdmin()" id="btn-admin" class="hidden bg-purple-600 text-white px-3 py-2 rounded-xl text-xs font-bold hover:bg-purple-700 transition">
-                    🔐 Admin
-                </button>
             </div>
         </div>
     </nav>
 
-    <!-- ========================================================== -->
-    <!-- 2. HERO                                                   -->
-    <!-- ========================================================== -->
+    <!-- 2. INICIO (HERO) -->
     <header id="inicio" class="relative h-screen flex items-center justify-center bg-cover bg-center" style="background-image: linear-gradient(rgba(45, 27, 16, 0.65), rgba(45, 27, 16, 0.65)), url('https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?q=80&w=1600');">
         <div class="text-center text-white px-4 max-w-4xl relative z-10">
             <span class="bg-gradient-to-r from-amber-500 to-orange-500 text-neutral-900 font-black tracking-widest uppercase text-xs px-4 py-1.5 rounded-full inline-block mb-4">
@@ -144,6 +56,7 @@
                 Pide por voz, programa tu receso, acumula Garras de Oro y canjea premios con tu código QR directo en barra.
             </p>
             
+            <!-- Buscador por Voz Súper Innovador -->
             <div class="max-w-md mx-auto bg-white/10 backdrop-blur-md p-2 rounded-2xl border border-white/20 flex items-center gap-2 mb-6 shadow-2xl">
                 <i data-lucide="search" class="text-stone-300 ml-3 shrink-0"></i>
                 <input type="text" id="buscador-input" oninput="buscarProducto(this.value)" class="bg-transparent w-full text-white placeholder-stone-300 text-sm focus:outline-none" placeholder="Busca tu comida o di 'Asistente'...">
@@ -152,74 +65,126 @@
                 </button>
             </div>
             <p id="status-voz" class="text-xs text-amber-300 font-medium h-4"></p>
-            
-            <div class="flex justify-center gap-6 sm:gap-12 mt-8 text-white/80 text-xs sm:text-sm">
-                <div>
-                    <p class="text-2xl sm:text-3xl font-black text-amber-400" id="stats-pedidos">0</p>
-                    <p>Pedidos hoy</p>
-                </div>
-                <div>
-                    <p class="text-2xl sm:text-3xl font-black text-amber-400" id="stats-usuarios">0</p>
-                    <p>Usuarios</p>
-                </div>
-                <div>
-                    <p class="text-2xl sm:text-3xl font-black text-amber-400" id="stats-productos">0</p>
-                    <p>Productos</p>
-                </div>
-            </div>
         </div>
     </header>
 
-    <!-- ========================================================== -->
-    <!-- 3. MENÚ                                                   -->
-    <!-- ========================================================== -->
+    <!-- 3. MENÚ E INVENTARIO -->
     <section id="menu" class="py-24 max-w-6xl mx-auto px-6">
         <div class="text-center mb-12">
             <h2 class="text-4xl md:text-5xl font-serif font-black text-neutral-800 mb-3">Menú León Automatizado</h2>
             <div class="w-24 h-1.5 bg-gradient-to-r from-orange-600 to-amber-500 mx-auto rounded-full mb-6"></div>
-            <p id="menu-status" class="text-sm text-neutral-500">🔄 Cargando menú...</p>
         </div>
 
-        <!-- Filtros -->
+        <!-- Filtros Combinados: Categoría + Nutrición -->
         <div class="flex flex-col md:flex-row gap-4 justify-between items-center border-b pb-8 mb-12">
             <div class="flex flex-wrap gap-2" id="filtros-categoria">
-                <button onclick="filtrarCategoria('todos')" class="cat-btn active bg-orange-700 text-white px-5 py-2.5 rounded-xl font-bold transition shadow-sm">Todos</button>
+                <button onclick="filtrarCategoria('todos')" class="cat-btn bg-orange-700 text-white px-5 py-2.5 rounded-xl font-bold transition shadow-sm">Todos</button>
                 <button onclick="filtrarCategoria('platillos')" class="cat-btn bg-white text-orange-800 border px-5 py-2.5 rounded-xl font-bold transition">Platillos</button>
                 <button onclick="filtrarCategoria('bebidas')" class="cat-btn bg-white text-orange-800 border px-5 py-2.5 rounded-xl font-bold transition">Bebidas</button>
-                <button onclick="filtrarCategoria('snacks')" class="cat-btn bg-white text-orange-800 border px-5 py-2.5 rounded-xl font-bold transition">Snacks</button>
+                <button onclick="filtrarCategoria('snacks')" class="cat-btn bg-white text-orange-800 border px-5 py-2.5 rounded-xl font-bold transition">Snacks y Más</button>
             </div>
             
             <div class="flex items-center gap-2 bg-neutral-100 p-1.5 rounded-xl border">
                 <span class="text-xs font-bold text-neutral-500 px-2">Nutrición:</span>
-                <button onclick="filtrarNutricion('todos')" class="nutri-btn active bg-amber-500 text-neutral-950 px-3 py-1.5 rounded-lg text-xs font-bold transition shadow-sm">Cualquiera</button>
-                <button onclick="filtrarNutricion('alta-proteina')" class="nutri-btn bg-white text-neutral-700 px-3 py-1.5 rounded-lg text-xs font-bold transition">💪 Proteína</button>
-                <button onclick="filtrarNutricion('fit')" class="nutri-btn bg-white text-neutral-700 px-3 py-1.5 rounded-lg text-xs font-bold transition">🥗 Fit</button>
+                <button onclick="filtrarNutricion('todos')" class="nutri-btn bg-amber-500 text-neutral-950 px-3 py-1.5 rounded-lg text-xs font-bold transition shadow-sm">Cualquiera</button>
+                <button onclick="filtrarNutricion('alta-proteina')" class="nutri-btn bg-white text-neutral-700 px-3 py-1.5 rounded-lg text-xs font-bold transition">💪 Alta Proteína</button>
+                <button onclick="filtrarNutricion('fit')" class="nutri-btn bg-white text-neutral-700 px-3 py-1.5 rounded-lg text-xs font-bold transition">🥗 Bajo en Calorías</button>
             </div>
         </div>
 
-        <!-- Productos -->
+        <!-- Rejilla Dinámica de Productos -->
         <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6" id="contenedor-menu">
-            <!-- Cargados desde Firestore -->
+            <div class="menu-item bg-white p-5 rounded-2xl shadow-sm border border-orange-50 hover:shadow-xl transition flex flex-col justify-between" data-cat="platillos" data-nutri="alta-proteina" data-nombre="comida corrida">
+                <div>
+                    <div class="flex justify-between items-start gap-2 mb-2">
+                        <h3 class="font-black text-lg text-neutral-800">Comida Corrida</h3>
+                        <span class="bg-orange-100 text-orange-800 font-black px-3 py-1 rounded-full text-xs shrink-0">$100.00</span>
+                    </div>
+                    <p class="text-neutral-500 text-xs mb-3">El paquete completo del día. Cambia a diario en cocina.</p>
+                    <span class="text-[10px] bg-red-50 text-red-700 font-bold px-2.5 py-1 rounded-md">💪 Alta Proteína</span>
+                </div>
+                <button onclick="agregarAlCarrito('Comida Corrida', 100.00)" class="w-full mt-4 bg-orange-50 hover:bg-orange-600 hover:text-white text-orange-700 font-bold py-2 rounded-xl transition text-xs flex items-center justify-center gap-2">
+                    <i data-lucide="plus" class="w-3.5 h-3.5"></i> Agregar
+                </button>
+            </div>
+
+            <div class="menu-item bg-white p-5 rounded-2xl shadow-sm border border-orange-50 hover:shadow-xl transition flex flex-col justify-between" data-cat="platillos" data-nutri="alta-proteina" data-nombre="tecolota torta chilaquiles">
+                <div>
+                    <div class="flex justify-between items-start gap-2 mb-2">
+                        <h3 class="font-black text-lg text-neutral-800">Tecolota (Torta Chilaquil)</h3>
+                        <span class="bg-orange-100 text-orange-800 font-black px-3 py-1 rounded-full text-xs shrink-0">$70.00</span>
+                    </div>
+                    <p class="text-neutral-500 text-xs mb-3">Torta rellena de chilaquiles crujientes con queso y crema.</p>
+                    <span class="text-[10px] bg-red-50 text-red-700 font-bold px-2.5 py-1 rounded-md">💪 Alta Proteína</span>
+                </div>
+                <button onclick="agregarAlCarrito('Tecolota', 70.00)" class="w-full mt-4 bg-orange-50 hover:bg-orange-600 hover:text-white text-orange-700 font-bold py-2 rounded-xl transition text-xs flex items-center justify-center gap-2">
+                    <i data-lucide="plus" class="w-3.5 h-3.5"></i> Agregar
+                </button>
+            </div>
+
+            <div class="menu-item bg-white p-5 rounded-2xl shadow-sm border border-orange-50 hover:shadow-xl transition flex flex-col justify-between" data-cat="platillos" data-nutri="fit" data-nombre="club sandwich integral">
+                <div>
+                    <div class="flex justify-between items-start gap-2 mb-2">
+                        <h3 class="font-black text-lg text-neutral-800">Club Sándwich Integral</h3>
+                        <span class="bg-orange-100 text-orange-800 font-black px-3 py-1 rounded-full text-xs shrink-0">$70.00</span>
+                    </div>
+                    <p class="text-neutral-500 text-xs mb-3">Pan integral, pechuga, verduras frescas y aderezo ligero.</p>
+                    <span class="text-[10px] bg-emerald-50 text-emerald-700 font-bold px-2.5 py-1 rounded-md">🥗 Bajo en Calorías</span>
+                </div>
+                <button onclick="agregarAlCarrito('Club Sándwich Integral', 70.00)" class="w-full mt-4 bg-orange-50 hover:bg-orange-600 hover:text-white text-orange-700 font-bold py-2 rounded-xl transition text-xs flex items-center justify-center gap-2">
+                    <i data-lucide="plus" class="w-3.5 h-3.5"></i> Agregar
+                </button>
+            </div>
+
+            <div class="menu-item bg-white p-5 rounded-2xl shadow-sm border border-orange-50 hover:shadow-xl transition flex flex-col justify-between" data-cat="bebidas" data-nutri="fit" data-nombre="cafe caliente">
+                <div>
+                    <div class="flex justify-between items-start gap-2 mb-2">
+                        <h3 class="font-black text-lg text-neutral-800">Café Caliente</h3>
+                        <span class="bg-amber-100 text-amber-900 font-black px-3 py-1 rounded-full text-xs shrink-0">$25.00</span>
+                    </div>
+                    <p class="text-neutral-500 text-xs mb-3">Café americano bien cargado, ideal para despertar el cerebro.</p>
+                    <span class="text-[10px] bg-emerald-50 text-emerald-700 font-bold px-2.5 py-1 rounded-md">🥗 Bajo en Calorías</span>
+                </div>
+                <button onclick="agregarAlCarrito('Café Caliente', 25.00)" class="w-full mt-4 bg-orange-50 hover:bg-orange-600 hover:text-white text-orange-700 font-bold py-2 rounded-xl transition text-xs flex items-center justify-center gap-2">
+                    <i data-lucide="plus" class="w-3.5 h-3.5"></i> Agregar
+                </button>
+            </div>
+
+            <div class="menu-item bg-white p-5 rounded-2xl shadow-sm border border-orange-50 hover:shadow-xl transition flex flex-col justify-between" data-cat="snacks" data-nutri="todos" data-nombre="nachos con guiso">
+                <div>
+                    <div class="flex justify-between items-start gap-2 mb-2">
+                        <h3 class="font-black text-lg text-neutral-800">Nachos con Guiso</h3>
+                        <span class="bg-orange-100 text-orange-800 font-black px-3 py-1 rounded-full text-xs shrink-0">$80.00</span>
+                    </div>
+                    <p class="text-neutral-500 text-xs mb-3">Totopos crujientes bañados en queso fundido de nachos y guiso.</p>
+                    <span class="text-[10px] bg-stone-100 text-stone-700 font-bold px-2.5 py-1 rounded-md">🍔 Munchies</span>
+                </div>
+                <button onclick="agregarAlCarrito('Nachos con Guiso', 80.00)" class="w-full mt-4 bg-orange-50 hover:bg-orange-600 hover:text-white text-orange-700 font-bold py-2 rounded-xl transition text-xs flex items-center justify-center gap-2">
+                    <i data-lucide="plus" class="w-3.5 h-3.5"></i> Agregar
+                </button>
+            </div>
         </div>
     </section>
 
-    <!-- ========================================================== -->
-    <!-- 4. MODAL CARRITO                                           -->
-    <!-- ========================================================== -->
+    <!-- 4. MODAL DEL CARRITO AVANZADO -->
     <div id="modal-carrito" class="fixed inset-0 bg-black/60 z-50 flex justify-end opacity-0 pointer-events-none transition-opacity duration-300">
         <div class="bg-white w-full max-w-md h-full p-6 flex flex-col justify-between transform translate-x-full transition-transform duration-300" id="cuerpo-modal-carrito">
             <div class="flex flex-col h-[75vh]">
                 <div class="flex justify-between items-center border-b pb-4 mb-4">
-                    <h3 class="text-xl font-black text-neutral-800 flex items-center gap-2"><i data-lucide="shopping-bag" class="text-orange-600"></i> Tu Pedido</h3>
-                    <button onclick="cerrarModalCarrito()"><i data-lucide="x" class="text-neutral-500 hover:text-red-500"></i></button>
+                    <h3 class="text-xl font-black text-neutral-800 flex items-center gap-2"><i data-lucide="shopping-bag" class="text-orange-600"></i> Tu Pedido Inteligente</h3>
+                    <button onclick="cerrarModalCarrito()"><i data-lucide="x" class="text-neutral-500"></i></button>
                 </div>
 
+                <!-- Logística Integrada y Caja de Espera Animada -->
                 <div class="grid grid-cols-2 gap-3 mb-4">
-                    <div class="bg-gradient-to-br from-orange-600 to-amber-500 text-white p-3.5 rounded-2xl shadow-md border border-orange-400 relative overflow-hidden flex flex-col justify-between">
-                        <div class="absolute -right-4 -bottom-4 opacity-15"><i data-lucide="timer" class="w-16 h-16"></i></div>
+                    <!-- Indicador de Espera Dinámico y Llamativo -->
+                    <div class="bg-gradient-to-br from-orange-600 to-amber-500 text-white p-3.5 rounded-2xl shadow-md border border-orange-400 relative overflow-hidden flex flex-col justify-between animate-pulse">
+                        <div class="absolute -right-4 -bottom-4 opacity-15">
+                            <i data-lucide="timer" class="w-16 h-16"></i>
+                        </div>
                         <div class="flex items-center gap-2 z-10">
                             <i data-lucide="clock" class="w-4 h-4 animate-spin [animation-duration:4s]"></i>
-                            <span class="text-[10px] uppercase font-black tracking-wider opacity-90">Espera</span>
+                            <span class="text-[10px] uppercase font-black tracking-wider opacity-90">Espera de Barra</span>
                         </div>
                         <p id="tiempo-espera" class="text-2xl font-black tracking-tight mt-2 z-10">0 mins</p>
                     </div>
@@ -234,9 +199,11 @@
                     </div>
                 </div>
 
+                <!-- Lista de Compra -->
                 <div id="items-carrito" class="space-y-3 overflow-y-auto flex-1 pr-1"></div>
             </div>
 
+            <!-- Totales, Recompensas y Despacho -->
             <div class="border-t pt-4">
                 <div class="flex justify-between items-center text-sm font-bold text-neutral-600 mb-2">
                     <span>Ganas con esta compra:</span>
@@ -248,164 +215,36 @@
                 </div>
                 
                 <div class="grid grid-cols-2 gap-2">
-                    <button onclick="procesarPedidoQR()" class="bg-gradient-to-r from-orange-600 to-amber-500 text-white p-3.5 rounded-xl font-bold transition flex items-center justify-center gap-1.5 text-xs shadow-md hover:shadow-lg">
-                        <i data-lucide="qr-code" class="w-4 h-4"></i> Ticket QR
+                    <button onclick="procesarPedidoQR()" id="btn-generar-qr" class="bg-gradient-to-r from-orange-600 to-amber-500 text-white p-3.5 rounded-xl font-bold transition flex items-center justify-center gap-1.5 text-xs shadow-md">
+                        <i data-lucide="qr-code" class="w-4 h-4"></i> Obtener Ticket QR
                     </button>
-                    <button onclick="enviarWhatsApp()" class="bg-emerald-600 hover:bg-emerald-700 text-white p-3.5 rounded-xl font-bold transition flex items-center justify-center gap-1.5 text-xs shadow-md">
-                        <i data-lucide="message-circle" class="w-4 h-4"></i> WhatsApp
+                    <button onclick="enviarWhatsApp()" id="btn-whatsapp" class="bg-emerald-600 hover:bg-emerald-700 text-white p-3.5 rounded-xl font-bold transition flex items-center justify-center gap-1.5 text-xs shadow-md">
+                        <i data-lucide="message-circle" class="w-4 h-4"></i> Enviar a WhatsApp
                     </button>
                 </div>
-                <button onclick="repetirUltimoPedido()" id="btn-repetir" class="w-full mt-2 bg-neutral-100 hover:bg-neutral-200 text-neutral-600 p-2 rounded-xl text-xs font-bold transition hidden">🔁 Repetir último pedido</button>
             </div>
         </div>
     </div>
 
-    <!-- ========================================================== -->
-    <!-- 5. MODAL QR                                                -->
-    <!-- ========================================================== -->
+    <!-- 5. MODAL MOSTRADOR DE TICKET QR -->
     <div id="modal-qr" class="fixed inset-0 bg-black/70 z-50 flex items-center justify-center opacity-0 pointer-events-none transition-opacity duration-300 p-4">
         <div class="bg-white rounded-3xl p-6 max-w-sm w-full text-center shadow-2xl transform scale-95 transition-transform duration-300" id="cuerpo-modal-qr">
-            <div id="confetti-container" class="absolute inset-0 pointer-events-none overflow-hidden"></div>
-            <div class="relative z-10">
-                <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-3">
-                    <i data-lucide="check" class="w-8 h-8 text-green-600"></i>
-                </div>
-                <h4 class="text-xl font-serif font-black text-neutral-800 mb-1">🎫 ¡Código QR Listo!</h4>
-                <p class="text-xs text-orange-600 font-bold mb-4 uppercase tracking-wider">Paga directo en el mostrador</p>
-                <div class="flex justify-center my-4"><div id="qrcode" class="bg-white p-3 rounded-2xl inline-block shadow-inner border"></div></div>
-                <div class="bg-neutral-50 p-4 rounded-xl border border-dashed text-left mb-4 text-xs font-mono"><div id="resumen-ticket-qr" class="text-neutral-600 space-y-1"></div></div>
-                <div class="bg-amber-50 p-2 rounded-xl border border-amber-200 mb-4 text-xs text-amber-800">⏱️ Listo en <span id="qr-tiempo-estimado" class="font-bold">5</span> minutos</div>
-                <button onclick="cerrarModalQR()" class="w-full bg-neutral-900 text-white py-3 rounded-xl font-bold text-sm hover:bg-neutral-800 transition">✅ Entendido, iré a recoger</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- ========================================================== -->
-    <!-- 6. MODAL LOGIN                                             -->
-    <!-- ========================================================== -->
-    <div id="modal-login" class="fixed inset-0 bg-black/60 z-50 flex items-center justify-center opacity-0 pointer-events-none transition-opacity duration-300 p-4">
-        <div class="bg-white rounded-3xl p-6 max-w-md w-full shadow-2xl transform scale-95 transition-transform duration-300">
-            <div class="flex justify-between items-center mb-4">
-                <h3 class="text-2xl font-black text-neutral-800">🦁 Acceso</h3>
-                <button onclick="cerrarModalLogin()" class="hover:bg-neutral-100 p-2 rounded-full transition">
-                    <i data-lucide="x" class="w-5 h-5 text-neutral-500"></i>
-                </button>
-            </div>
-
-            <div class="flex bg-neutral-100 rounded-xl p-1 mb-4">
-                <button onclick="mostrarLogin()" id="tab-login" class="flex-1 py-2 rounded-lg font-bold text-sm transition-all bg-orange-600 text-white">Iniciar</button>
-                <button onclick="mostrarRegistro()" id="tab-register" class="flex-1 py-2 rounded-lg font-bold text-sm transition-all text-neutral-600">Registrarse</button>
-            </div>
-
-            <!-- Login -->
-            <div id="form-login">
-                <div class="space-y-3">
-                    <input type="email" id="login-email" class="w-full p-3 border rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-orange-500" placeholder="📧 Correo">
-                    <input type="password" id="login-password" class="w-full p-3 border rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-orange-500" placeholder="🔒 Contraseña">
-                    <button onclick="iniciarSesion()" class="w-full bg-orange-600 text-white py-3 rounded-xl font-bold hover:bg-orange-700 transition">🚀 Entrar</button>
-                    <div class="p-3 bg-amber-50 rounded-xl border border-amber-200 text-xs text-amber-700 text-center">
-                        <p class="font-bold">🔑 Admin:</p>
-                        <p class="font-mono">admin@policafe.com / UPSLPCAFE</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Registro -->
-            <div id="form-register" style="display: none;">
-                <div class="space-y-3">
-                    <input type="text" id="reg-matricula" class="w-full p-3 border rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-orange-500" placeholder="📋 Matrícula (6 dígitos)" maxlength="6">
-                    <input type="text" id="reg-nombre" class="w-full p-3 border rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-orange-500" placeholder="👤 Nombre completo">
-                    <input type="email" id="reg-email" class="w-full p-3 border rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-orange-500" placeholder="📧 Correo">
-                    <input type="password" id="reg-password" class="w-full p-3 border rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-orange-500" placeholder="🔒 Contraseña (mín 6)">
-                    <button onclick="registrarUsuario()" class="w-full bg-orange-600 text-white py-3 rounded-xl font-bold hover:bg-orange-700 transition">🎉 Crear Cuenta</button>
-                </div>
-            </div>
-
-            <div id="mensaje-login" class="mt-3 text-center text-sm font-bold hidden"></div>
-        </div>
-    </div>
-
-    <!-- ========================================================== -->
-    <!-- 7. MODAL RECOMPENSAS                                       -->
-    <!-- ========================================================== -->
-    <div id="modal-recompensas" class="fixed inset-0 bg-black/60 z-50 flex items-center justify-center opacity-0 pointer-events-none transition-opacity duration-300 p-4">
-        <div class="bg-white rounded-3xl p-6 max-w-md w-full shadow-2xl transform scale-95 transition-transform duration-300">
-            <div class="flex justify-between items-center mb-4">
-                <h3 class="text-2xl font-black text-neutral-800">🏆 Canjear Garras</h3>
-                <button onclick="cerrarModalRecompensas()" class="hover:bg-neutral-100 p-2 rounded-full transition">
-                    <i data-lucide="x" class="w-5 h-5 text-neutral-500"></i>
-                </button>
-            </div>
-            <div class="text-center mb-6">
-                <p class="text-4xl font-black text-amber-500" id="modal-puntos">0</p>
-                <p class="text-sm text-neutral-500">Garras disponibles</p>
-            </div>
-            <div class="space-y-3">
-                <div class="flex items-center justify-between bg-amber-50 p-4 rounded-xl border border-amber-200">
-                    <div><p class="font-bold text-neutral-800">☕ Café</p><p class="text-xs text-neutral-500">100 Garras</p></div>
-                    <button onclick="canjearRecompensa('cafe', 100)" class="bg-amber-500 text-white px-4 py-2 rounded-xl text-xs font-bold hover:bg-amber-600 transition">Canjear</button>
-                </div>
-                <div class="flex items-center justify-between bg-amber-50 p-4 rounded-xl border border-amber-200">
-                    <div><p class="font-bold text-neutral-800">🥪 Sándwich</p><p class="text-xs text-neutral-500">200 Garras</p></div>
-                    <button onclick="canjearRecompensa('sandwich', 200)" class="bg-amber-500 text-white px-4 py-2 rounded-xl text-xs font-bold hover:bg-amber-600 transition">Canjear</button>
-                </div>
-                <div class="flex items-center justify-between bg-amber-50 p-4 rounded-xl border border-amber-200">
-                    <div><p class="font-bold text-neutral-800">🎁 Combo</p><p class="text-xs text-neutral-500">500 Garras</p></div>
-                    <button onclick="canjearRecompensa('combo', 500)" class="bg-amber-500 text-white px-4 py-2 rounded-xl text-xs font-bold hover:bg-amber-600 transition">Canjear</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- ========================================================== -->
-    <!-- 8. MODAL ADMIN                                             -->
-    <!-- ========================================================== -->
-    <div id="modal-admin" class="fixed inset-0 bg-black/60 z-50 flex items-center justify-center opacity-0 pointer-events-none transition-opacity duration-300 p-4">
-        <div class="bg-white rounded-3xl p-6 max-w-4xl w-full max-h-[90vh] overflow-y-auto shadow-2xl transform scale-95 transition-transform duration-300">
-            <div class="flex justify-between items-center mb-4">
-                <h3 class="text-2xl font-black text-neutral-800">🦁 Panel de Control</h3>
-                <button onclick="cerrarModalAdmin()" class="hover:bg-neutral-100 p-2 rounded-full transition">
-                    <i data-lucide="x" class="w-5 h-5 text-neutral-500"></i>
-                </button>
+            <h4 class="text-xl font-serif font-black text-neutral-800 mb-1">¡Código QR Listo!</h4>
+            <p class="text-xs text-orange-600 font-bold mb-4 uppercase tracking-wider">Paga directo en el mostrador</p>
+            
+            <!-- Contenedor único donde se inyecta el QR -->
+            <div class="flex justify-center my-4">
+                <div id="qrcode" class="bg-white p-3 rounded-2xl inline-block shadow-inner border"></div>
             </div>
             
-            <!-- Métricas -->
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-4">
-                <div class="bg-neutral-50 p-3 rounded-xl text-center">
-                    <p class="text-xs text-neutral-500 font-bold">📋 Activos</p>
-                    <p class="text-2xl font-black text-orange-600" id="admin-activos">0</p>
-                </div>
-                <div class="bg-neutral-50 p-3 rounded-xl text-center">
-                    <p class="text-xs text-neutral-500 font-bold">💰 Ingresos</p>
-                    <p class="text-2xl font-black text-green-600" id="admin-ingresos">$0</p>
-                </div>
-                <div class="bg-neutral-50 p-3 rounded-xl text-center">
-                    <p class="text-xs text-neutral-500 font-bold">🎯 Ticket</p>
-                    <p class="text-2xl font-black text-blue-600" id="admin-promedio">$0</p>
-                </div>
-                <div class="bg-neutral-50 p-3 rounded-xl text-center">
-                    <p class="text-xs text-neutral-500 font-bold">🏆 Top</p>
-                    <p class="text-sm font-black text-purple-600 truncate" id="admin-top">Sin datos</p>
-                </div>
+            <div class="bg-neutral-50 p-4 rounded-xl border border-dashed text-left mb-4 text-xs font-mono">
+                <div id="resumen-ticket-qr" class="text-neutral-600 space-y-1"></div>
             </div>
-            
-            <!-- Filtros -->
-            <div class="flex flex-wrap gap-2 mb-4">
-                <button onclick="filtrarAdmin('todos')" class="admin-filtro bg-orange-600 text-white px-3 py-1.5 rounded-lg text-xs font-bold">Todos</button>
-                <button onclick="filtrarAdmin('pendiente')" class="admin-filtro bg-amber-500 text-white px-3 py-1.5 rounded-lg text-xs font-bold">⏳ Pendientes</button>
-                <button onclick="filtrarAdmin('en-preparacion')" class="admin-filtro bg-blue-500 text-white px-3 py-1.5 rounded-lg text-xs font-bold">👨‍🍳 Prep.</button>
-                <button onclick="filtrarAdmin('listo')" class="admin-filtro bg-green-500 text-white px-3 py-1.5 rounded-lg text-xs font-bold">✅ Listos</button>
-                <button onclick="filtrarAdmin('entregado')" class="admin-filtro bg-gray-500 text-white px-3 py-1.5 rounded-lg text-xs font-bold">📦 Entregados</button>
-            </div>
-            
-            <!-- Lista de pedidos -->
-            <div id="admin-pedidos" class="space-y-2 max-h-96 overflow-y-auto"></div>
+            <button onclick="cerrarModalQR()" class="w-full bg-neutral-900 text-white py-3 rounded-xl font-bold text-sm">Cerrar y Vaciar Carrito</button>
         </div>
     </div>
 
-    <!-- ========================================================== -->
-    <!-- 9. NOSOTROS                                                -->
-    <!-- ========================================================== -->
+    <!-- 6. SECCIÓN NOSOTROS -->
     <section id="nosotros" class="bg-gradient-to-b from-[#f5f0ea] to-[#fdfbf7] py-24">
         <div class="max-w-6xl mx-auto px-6 grid md:grid-cols-2 gap-12 items-center">
             <div class="relative group">
@@ -421,14 +260,12 @@
         </div>
     </section>
 
-    <!-- ========================================================== -->
-    <!-- 10. CONTACTO                                               -->
-    <!-- ========================================================== -->
+    <!-- 7. CONTACTO, MAPA Y PIE DE PÁGINA -->
     <section id="contacto" class="py-24 max-w-6xl mx-auto px-6 border-t border-orange-100">
         <div class="grid md:grid-cols-2 gap-12 items-center">
             <div class="bg-white p-6 rounded-3xl shadow-sm border">
-                <h3 class="text-xl font-black text-orange-800 mb-4">Ubicación</h3>
-                <p class="text-sm text-neutral-600 mb-4">C. Urbano Villalón 500, Himno Nacional 2da, San Luis Potosí, S.L.P. (Dentro de la UPSLP)</p>
+                <h3 class="text-xl font-black text-orange-800 mb-4">Ubicación de nuestro Territorio</h3>
+                <p class="text-sm text-neutral-600 mb-4">C. Urbano Villalón 500, Himno Nacional 2da, San Luis Potosí, S.L.P. (Dentro de la Universidad Politécnica)</p>
                 <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1493.323263619349!2d-100.9842329!3d22.1219325!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x842a990039e2ab6b%3A0x2053004040f74d40!2sCafeteria%20de%20la%20UPSLP!5e0!3m2!1ses-419!2smx!4v1717880000000!5m2!1ses-419!2smx" class="w-full h-48 rounded-xl border-0" allowfullscreen="" loading="lazy"></iframe>
             </div>
             <div class="text-center md:text-left">
@@ -438,481 +275,113 @@
         </div>
     </section>
 
-    <!-- ========================================================== -->
-    <!-- 11. FOOTER                                                -->
-    <!-- ========================================================== -->
     <footer class="bg-neutral-900 text-stone-400 py-8 text-center border-t-4 border-orange-600">
-        <p class="font-bold text-white mb-1">Policafé UPSLP - León</p>
+        <p class="font-bold text-white mb-1">Policafé UPSLP</p>
         <p class="text-xs">&copy; 2026 Comunidad de Leones Politécnicos. Todos los derechos reservados.</p>
     </footer>
 
-    <!-- ========================================================== -->
-    <!-- 12. JAVASCRIPT COMPLETO                                    -->
-    <!-- ========================================================== -->
+    <!-- LÓGICA DEL CARRITO Y CÓDIGO QR -->
     <script>
-        // ============================================================
-        // 🔥 FIREBASE CONFIG
-        // ============================================================
-        const firebaseConfig = {
-            apiKey: "AIzaSyBNMdhV48Y1oIEX-eZd20MOUuNPjoNQFXU",
-            authDomain: "policafe-cf364.firebaseapp.com",
-            projectId: "policafe-cf364",
-            storageBucket: "policafe-cf364.firebasestorage.app",
-            messagingSenderId: "1017727685183",
-            appId: "1:1017727685183:web:ae7ac1a48ae19bbb345e8a",
-            measurementId: "G-07QMKQV68B"
-        };
+        lucide.createIcons();
 
-        firebase.initializeApp(firebaseConfig);
-        const db = firebase.firestore();
-        const rtdb = firebase.database();
-        const auth = firebase.auth();
-
-        db.settings({ cacheSizeBytes: firebase.firestore.CACHE_SIZE_UNLIMITED });
-        db.enablePersistence().then(() => console.log('🔥 Modo offline activado')).catch(err => console.error('⚠️ Error:', err));
-
-        // ============================================================
-        // 📦 VARIABLES
-        // ============================================================
         let carrito = [];
         let filtroCatActual = 'todos';
         let filtroNutriActual = 'todos';
         let puntosUsuario = parseInt(localStorage.getItem('garrasOro')) || 0;
-        let usuarioActual = null;
-        let menuProductos = [];
-        let ultimoPedido = null;
-        let pedidosAdmin = [];
-        let filtroAdminActual = 'todos';
-        let ingresosAdmin = 0;
 
-        // ============================================================
-        // 🎨 INICIALIZAR
-        // ============================================================
-        if (typeof lucide !== 'undefined') lucide.createIcons();
         document.getElementById('nav-puntos').innerText = puntosUsuario;
-        actualizarBarraProgreso(puntosUsuario);
 
-        // ============================================================
-        // 🔐 AUTENTICACIÓN
-        // ============================================================
-        auth.onAuthStateChanged(async (user) => {
-            if (user) {
-                usuarioActual = user;
-                document.getElementById('btn-login').style.display = 'none';
-                document.getElementById('btn-logout').classList.remove('hidden');
-                try {
-                    const doc = await db.collection('usuarios').doc(user.uid).get();
-                    if (doc.exists) {
-                        const data = doc.data();
-                        puntosUsuario = data.puntos || 0;
-                        document.getElementById('nav-puntos').innerText = puntosUsuario;
-                        document.getElementById('user-name').innerText = '👋 ' + (data.nombre || 'Usuario');
-                        document.getElementById('user-name').classList.remove('hidden');
-                        localStorage.setItem('garrasOro', puntosUsuario);
-                        actualizarBarraProgreso(puntosUsuario);
-                        if (data.rol === 'admin' || user.email === 'admin@policafe.com') {
-                            document.getElementById('btn-admin').classList.remove('hidden');
-                        }
-                        cargarUltimoPedido(user.uid);
-                    }
-                } catch (error) { console.error('Error:', error); }
-            } else {
-                usuarioActual = null;
-                document.getElementById('btn-login').style.display = 'block';
-                document.getElementById('user-name').classList.add('hidden');
-                document.getElementById('btn-logout').classList.add('hidden');
-                document.getElementById('btn-admin').classList.add('hidden');
-            }
-        });
-
-        function cerrarSesion() {
-            auth.signOut().then(() => window.location.reload());
+        function filtrarCategoria(cat) {
+            filtroCatActual = cat;
+            actualizarEstilosBotones('filtros-categoria', 'cat-btn', event.target, 'bg-orange-700', 'text-white');
+            aplicarFiltros();
         }
 
-        // ============================================================
-        // 🪟 MODAL LOGIN
-        // ============================================================
-        function abrirModalLogin() {
-            document.getElementById('modal-login').classList.remove('opacity-0', 'pointer-events-none');
+        function filtrarNutricion(nutri) {
+            filtroNutriActual = nutri;
+            actualizarEstilosBotones(null, 'nutri-btn', event.target, 'bg-amber-500', 'text-neutral-950');
+            aplicarFiltros();
         }
 
-        function cerrarModalLogin() {
-            document.getElementById('modal-login').classList.add('opacity-0', 'pointer-events-none');
-        }
-
-        function mostrarLogin() {
-            document.getElementById('form-login').style.display = 'block';
-            document.getElementById('form-register').style.display = 'none';
-            document.getElementById('tab-login').className = 'flex-1 py-2 rounded-lg font-bold text-sm transition-all bg-orange-600 text-white';
-            document.getElementById('tab-register').className = 'flex-1 py-2 rounded-lg font-bold text-sm transition-all text-neutral-600';
-        }
-
-        function mostrarRegistro() {
-            document.getElementById('form-login').style.display = 'none';
-            document.getElementById('form-register').style.display = 'block';
-            document.getElementById('tab-register').className = 'flex-1 py-2 rounded-lg font-bold text-sm transition-all bg-orange-600 text-white';
-            document.getElementById('tab-login').className = 'flex-1 py-2 rounded-lg font-bold text-sm transition-all text-neutral-600';
-        }
-
-        function mostrarMensajeLogin(texto, color) {
-            const el = document.getElementById('mensaje-login');
-            el.textContent = texto;
-            el.className = 'mt-3 text-center text-sm font-bold ' + color + ' block';
-            setTimeout(() => el.className = 'mt-3 text-center text-sm font-bold hidden', 5000);
-        }
-
-        // ============================================================
-        // ✅ INICIAR SESIÓN
-        // ============================================================
-        async function iniciarSesion() {
-            const email = document.getElementById('login-email').value.trim();
-            const password = document.getElementById('login-password').value;
-            if (!email || !password) { mostrarMensajeLogin('⚠️ Completa todos los campos', 'text-red-600'); return; }
-            try {
-                await auth.signInWithEmailAndPassword(email, password);
-                mostrarMensajeLogin('✅ ¡Bienvenido!', 'text-green-600');
-                setTimeout(() => cerrarModalLogin(), 1000);
-            } catch (error) {
-                mostrarMensajeLogin('❌ ' + error.message, 'text-red-600');
-            }
-        }
-
-        // ============================================================
-        // ✅ REGISTRAR USUARIO
-        // ============================================================
-        async function registrarUsuario() {
-            const matricula = document.getElementById('reg-matricula').value.trim();
-            const nombre = document.getElementById('reg-nombre').value.trim();
-            const email = document.getElementById('reg-email').value.trim();
-            const password = document.getElementById('reg-password').value;
-
-            if (!/^\d{6}$/.test(matricula)) {
-                mostrarMensajeLogin('⚠️ Matrícula de 6 dígitos', 'text-red-600');
-                return;
-            }
-            if (!nombre || !email || !password) {
-                mostrarMensajeLogin('⚠️ Completa todos los campos', 'text-red-600');
-                return;
-            }
-            if (password.length < 6) {
-                mostrarMensajeLogin('⚠️ Contraseña mín 6 caracteres', 'text-red-600');
-                return;
-            }
-
-            try {
-                const userCredential = await auth.createUserWithEmailAndPassword(email, password);
-                const uid = userCredential.user.uid;
-                await db.collection('usuarios').doc(uid).set({
-                    nombre: nombre,
-                    email: email,
-                    matricula: matricula,
-                    puntos: 0,
-                    pedidosRealizados: 0,
-                    rol: 'usuario',
-                    fechaRegistro: firebase.firestore.FieldValue.serverTimestamp()
-                });
-                mostrarMensajeLogin('✅ ¡Cuenta creada!', 'text-green-600');
-                setTimeout(() => cerrarModalLogin(), 1000);
-            } catch (error) {
-                mostrarMensajeLogin('❌ ' + error.message, 'text-red-600');
-            }
-        }
-
-        // ============================================================
-        // 🪟 MODAL RECOMPENSAS
-        // ============================================================
-        function verRecompensas() {
-            if (!usuarioActual) { alert('⚠️ Inicia sesión para ver tus recompensas.'); return; }
-            document.getElementById('modal-puntos').innerText = puntosUsuario;
-            document.getElementById('modal-recompensas').classList.remove('opacity-0', 'pointer-events-none');
-        }
-
-        function cerrarModalRecompensas() {
-            document.getElementById('modal-recompensas').classList.add('opacity-0', 'pointer-events-none');
-        }
-
-        async function canjearRecompensa(tipo, costo) {
-            if (puntosUsuario < costo) { alert('❌ Necesitas ' + costo + ' Garras.'); return; }
-            try {
-                await db.collection('usuarios').doc(usuarioActual.uid).update({
-                    puntos: firebase.firestore.FieldValue.increment(-costo)
-                });
-                puntosUsuario -= costo;
-                localStorage.setItem('garrasOro', puntosUsuario);
-                document.getElementById('nav-puntos').innerText = puntosUsuario;
-                document.getElementById('modal-puntos').innerText = puntosUsuario;
-                actualizarBarraProgreso(puntosUsuario);
-                const nombres = { 'cafe': '☕ Café', 'sandwich': '🥪 Sándwich', 'combo': '🎁 Combo' };
-                alert('🎉 ¡Canjeaste ' + (nombres[tipo] || tipo) + '!');
-                cerrarModalRecompensas();
-            } catch (error) { alert('❌ Error: ' + error.message); }
-        }
-
-        function actualizarBarraProgreso(puntos) {
-            document.getElementById('progress-recompensas').style.width = Math.min((puntos % 100) / 100 * 100, 100) + '%';
-        }
-
-        // ============================================================
-        // 🪟 MODAL ADMIN
-        // ============================================================
-        function abrirModalAdmin() {
-            if (!usuarioActual) {
-                alert('⚠️ Inicia sesión primero.');
-                abrirModalLogin();
-                return;
-            }
-            document.getElementById('modal-admin').classList.remove('opacity-0', 'pointer-events-none');
-            cargarPedidosAdmin();
-        }
-
-        function cerrarModalAdmin() {
-            document.getElementById('modal-admin').classList.add('opacity-0', 'pointer-events-none');
-        }
-
-        function filtrarAdmin(estado) {
-            filtroAdminActual = estado;
-            document.querySelectorAll('.admin-filtro').forEach(btn => {
-                btn.className = 'admin-filtro bg-neutral-200 text-neutral-700 px-3 py-1.5 rounded-lg text-xs font-bold';
-            });
-            if (event && event.target) {
-                event.target.className = 'admin-filtro bg-orange-600 text-white px-3 py-1.5 rounded-lg text-xs font-bold';
-            }
-            renderizarPedidosAdmin();
-        }
-
-        function cargarPedidosAdmin() {
-            db.collection('pedidos').orderBy('timestamp', 'desc').onSnapshot((snapshot) => {
-                pedidosAdmin = [];
-                ingresosAdmin = 0;
-                let totalPedidos = 0;
-                snapshot.forEach(doc => {
-                    const pedido = { id: doc.id, ...doc.data() };
-                    pedidosAdmin.push(pedido);
-                    if (pedido.estado === 'entregado') {
-                        ingresosAdmin += pedido.total || 0;
-                        totalPedidos++;
-                    }
-                });
-                actualizarMetricasAdmin(totalPedidos);
-                renderizarPedidosAdmin();
-                
-                // Sonido para nuevo pedido
-                const ultimo = pedidosAdmin[0];
-                if (ultimo && ultimo.estado === 'pendiente' && !ultimo._visto) {
-                    try {
-                        const audio = new Audio('https://assets.mixkit.co/sfx/preview/mixkit-alarm-548.mp3');
-                        audio.volume = 0.2;
-                        audio.play();
-                        db.collection('pedidos').doc(ultimo.id).update({ _visto: true }).catch(() => {});
-                    } catch (e) {}
-                }
+        function aplicarFiltros() {
+            const items = document.querySelectorAll('.menu-item');
+            items.forEach(item => {
+                const matchCat = (filtroCatActual === 'todos' || item.getAttribute('data-cat') === filtroCatActual);
+                const matchNutri = (filtroNutriActual === 'todos' || item.getAttribute('data-nutri') === filtroNutriActual);
+                item.style.display = (matchCat && matchNutri) ? 'flex' : 'none';
             });
         }
 
-        function actualizarMetricasAdmin(totalPedidos) {
-            const activos = pedidosAdmin.filter(p => p.estado !== 'entregado').length;
-            document.getElementById('admin-activos').textContent = activos;
-            document.getElementById('admin-ingresos').textContent = '$' + ingresosAdmin.toFixed(2);
-            
-            const promedio = totalPedidos > 0 ? ingresosAdmin / totalPedidos : 0;
-            document.getElementById('admin-promedio').textContent = '$' + promedio.toFixed(2);
-            
-            const contador = {};
-            pedidosAdmin.forEach(p => {
-                p.items?.forEach(i => {
-                    contador[i.nombre] = (contador[i.nombre] || 0) + i.cantidad;
-                });
-            });
-            const top = Object.entries(contador).sort((a, b) => b[1] - a[1])[0];
-            document.getElementById('admin-top').textContent = top ? `${top[0]} (${top[1]})` : 'Sin datos';
-        }
-
-        function renderizarPedidosAdmin() {
-            const contenedor = document.getElementById('admin-pedidos');
-            contenedor.innerHTML = '';
-            
-            const filtrados = filtroAdminActual === 'todos' ? pedidosAdmin : pedidosAdmin.filter(p => p.estado === filtroAdminActual);
-            
-            if (filtrados.length === 0) {
-                contenedor.innerHTML = '<p class="text-center text-neutral-400 py-8">No hay pedidos</p>';
-                return;
-            }
-            
-            filtrados.forEach(pedido => {
-                const ts = pedido.timestamp?.toDate() || new Date();
-                const hora = ts.toLocaleTimeString('es-MX', { hour: '2-digit', minute: '2-digit' });
-                
-                const div = document.createElement('div');
-                const estadoColors = {
-                    'pendiente': 'border-amber-500 bg-amber-50',
-                    'en-preparacion': 'border-blue-500 bg-blue-50',
-                    'listo': 'border-green-500 bg-green-50',
-                    'entregado': 'border-gray-500 bg-gray-50'
-                };
-                div.className = 'p-3 rounded-xl border-l-4 ' + (estadoColors[pedido.estado] || 'border-gray-300 bg-neutral-50');
-                
-                let botones = '';
-                if (pedido.estado === 'pendiente') {
-                    botones = `<button onclick="cambiarEstadoAdmin('${pedido.id}','en-preparacion')" class="bg-blue-500 text-white px-3 py-1 rounded-lg text-xs font-bold hover:bg-blue-600">Preparar</button>`;
-                } else if (pedido.estado === 'en-preparacion') {
-                    botones = `<button onclick="cambiarEstadoAdmin('${pedido.id}','listo')" class="bg-green-500 text-white px-3 py-1 rounded-lg text-xs font-bold hover:bg-green-600">Listo</button>`;
-                } else if (pedido.estado === 'listo') {
-                    botones = `<button onclick="cambiarEstadoAdmin('${pedido.id}','entregado')" class="bg-gray-500 text-white px-3 py-1 rounded-lg text-xs font-bold hover:bg-gray-600">Entregar</button>`;
-                }
-                
-                div.innerHTML = `
-                    <div class="flex justify-between items-start">
-                        <div>
-                            <span class="font-bold text-sm">#${pedido.id.slice(0,6)}</span>
-                            <span class="text-xs ml-2 px-2 py-0.5 rounded-full ${pedido.estado === 'pendiente' ? 'bg-amber-200 text-amber-800' : pedido.estado === 'entregado' ? 'bg-gray-200 text-gray-600' : 'bg-blue-200 text-blue-800'}">${pedido.estado}</span>
-                            ${pedido.estado === 'pendiente' ? '<span class="badge-nuevo text-[10px] bg-red-500 text-white px-2 py-0.5 rounded-full ml-1">NUEVO</span>' : ''}
-                        </div>
-                        <span class="text-xs text-neutral-400">${hora}</span>
-                    </div>
-                    <div class="text-sm text-neutral-600 my-1">${pedido.items?.map(i => `${i.cantidad}x ${i.nombre}`).join(', ') || ''}</div>
-                    <div class="flex justify-between items-center">
-                        <span class="font-black text-orange-600">$${(pedido.total || 0).toFixed(2)}</span>
-                        <div class="flex gap-2">${botones}</div>
-                    </div>
-                `;
-                contenedor.appendChild(div);
-            });
-        }
-
-        async function cambiarEstadoAdmin(id, nuevoEstado) {
-            try {
-                await db.collection('pedidos').doc(id).update({
-                    estado: nuevoEstado,
-                    ultimaActualizacion: firebase.firestore.FieldValue.serverTimestamp()
-                });
-            } catch (error) { alert('Error: ' + error.message); }
-        }
-
-        // ============================================================
-        // 📋 CARGAR MENÚ
-        // ============================================================
-        async function cargarMenu() {
-            const status = document.getElementById('menu-status');
-            status.innerText = '🔄 Cargando menú...';
-            try {
-                const snapshot = await db.collection('menu').get();
-                menuProductos = [];
-                snapshot.forEach(doc => { menuProductos.push({ id: doc.id, ...doc.data() }); });
-                renderizarMenu(menuProductos);
-                status.innerText = '✅ ' + menuProductos.length + ' productos';
-                document.getElementById('stats-productos').innerText = menuProductos.length;
-            } catch (error) {
-                console.error('Error:', error);
-                status.innerText = '⚠️ Usando menú local';
-                cargarMenuLocal();
-            }
-        }
-
-        function cargarMenuLocal() {
-            const backup = [
-                { id: '1', nombre: 'Comida Corrida', precio: 100, categoria: 'platillos', nutricion: 'alta-proteina', descripcion: 'El paquete completo del día', stock: 20 },
-                { id: '2', nombre: 'Tecolota', precio: 70, categoria: 'platillos', nutricion: 'alta-proteina', descripcion: 'Torta rellena de chilaquiles crujientes', stock: 15 },
-                { id: '3', nombre: 'Club Sándwich Integral', precio: 70, categoria: 'platillos', nutricion: 'fit', descripcion: 'Pan integral con verduras frescas', stock: 12 },
-                { id: '4', nombre: 'Café Caliente', precio: 25, categoria: 'bebidas', nutricion: 'fit', descripcion: 'Café americano bien cargado', stock: 30 },
-                { id: '5', nombre: 'Nachos con Guiso', precio: 80, categoria: 'snacks', nutricion: 'todos', descripcion: 'Totopos crujientes con queso y guiso', stock: 10 }
-            ];
-            menuProductos = backup;
-            renderizarMenu(backup);
-            document.getElementById('stats-productos').innerText = backup.length;
-        }
-
-        // ============================================================
-        // 🖥️ RENDERIZAR MENÚ
-        // ============================================================
-        function renderizarMenu(productos) {
-            const contenedor = document.getElementById('contenedor-menu');
-            if (!contenedor) return;
-            contenedor.innerHTML = '';
-
-            productos.forEach((producto, index) => {
-                const div = document.createElement('div');
-                div.className = 'menu-item bg-white p-5 rounded-2xl shadow-sm border border-orange-50 hover:shadow-xl transition flex flex-col justify-between';
-                div.style.animationDelay = (index * 0.04) + 's';
-                div.setAttribute('data-cat', producto.categoria || '');
-                div.setAttribute('data-nutri', producto.nutricion || '');
-                div.setAttribute('data-nombre', producto.nombre || '');
-                div.setAttribute('data-id', producto.id || '');
-
-                const stock = producto.stock || 0;
-                const nutriLabel = producto.nutricion === 'alta-proteina' ? '💪 Alta Proteína' :
-                    producto.nutricion === 'fit' ? '🥗 Bajo en Calorías' : '🍔 Munchies';
-                const nutriColor = producto.nutricion === 'alta-proteina' ? 'bg-red-50 text-red-700' :
-                    producto.nutricion === 'fit' ? 'bg-emerald-50 text-emerald-700' : 'bg-stone-100 text-stone-700';
-
-                const stockStatus = stock <= 0 ? '❌ Agotado' : stock < 5 ? '⚠️ Últimas unidades' : '';
-                const stockColor = stock <= 0 ? 'bg-gray-200 text-gray-700' : stock < 5 ? 'bg-red-200 text-red-700' : '';
-
-                div.innerHTML = `
-                    <div>
-                        <div class="flex justify-between items-start gap-2 mb-2">
-                            <h3 class="font-black text-lg text-neutral-800">${producto.nombre || 'Producto'}</h3>
-                            <span class="bg-orange-100 text-orange-800 font-black px-3 py-1 rounded-full text-xs shrink-0">$${producto.precio || 0}</span>
-                        </div>
-                        <p class="text-neutral-500 text-xs mb-3">${producto.descripcion || 'Deliciosa opción'}</p>
-                        <span class="text-[10px] ${nutriColor} font-bold px-2.5 py-1 rounded-md">${nutriLabel}</span>
-                        ${stockStatus ? `<span class="text-[10px] ml-1 ${stockColor} font-bold px-2.5 py-1 rounded-md">${stockStatus}</span>` : ''}
-                        ${stock > 0 ? `<span class="text-[10px] text-neutral-400 font-bold px-2.5 py-1">📦 ${stock}</span>` : ''}
-                    </div>
-                    <button onclick="agregarAlCarrito('${producto.nombre || ''}', ${producto.precio || 0}, '${producto.id || ''}')" 
-                            ${stock <= 0 ? 'disabled' : ''}
-                            class="btn-add w-full mt-4 ${stock <= 0 ? 'bg-gray-200 text-gray-400 cursor-not-allowed' : 'bg-orange-50 hover:bg-orange-600 hover:text-white text-orange-700'} font-bold py-2 rounded-xl transition text-xs flex items-center justify-center gap-2">
-                        <i data-lucide="${stock <= 0 ? 'x' : 'plus'}" class="w-3.5 h-3.5"></i> 
-                        ${stock <= 0 ? 'Agotado' : 'Agregar'}
-                    </button>
-                `;
-                contenedor.appendChild(div);
-            });
-
-            if (typeof lucide !== 'undefined') lucide.createIcons();
-        }
-
-        // ============================================================
-        // 🛒 AGREGAR AL CARRITO
-        // ============================================================
-        function agregarAlCarrito(nombre, precio, id) {
-            if (!nombre || !id) { console.error('Datos incompletos'); return; }
-            if (!usuarioActual) {
-                alert('⚠️ Inicia sesión para agregar productos.');
-                abrirModalLogin();
-                return;
-            }
-
-            const producto = menuProductos.find(p => p.id === id);
-            if (producto && producto.stock <= 0) { alert('❌ Producto agotado.'); return; }
-
-            const item = carrito.find(i => i.nombre === nombre);
-            if (item) { item.cantidad += 1; } else { carrito.push({ nombre, precio, cantidad: 1, id }); }
-
-            actualizarInterfazCarrito();
-
-            // Feedback visual en el botón
-            const botones = document.querySelectorAll('.btn-add');
+        function actualizarEstilosBotones(contenedorId, claseBoton, botonActivo, bgActivo, textActivo) {
+            const botones = contenedorId ? document.getElementById(contenedorId).querySelectorAll('.' + claseBoton) : document.querySelectorAll('.' + claseBoton);
             botones.forEach(btn => {
-                if (btn.closest('.menu-item')?.getAttribute('data-nombre') === nombre) {
-                    btn.classList.add('bg-green-600', 'text-white');
-                    btn.innerHTML = '<i data-lucide="check" class="w-3.5 h-3.5"></i> ¡Listo!';
-                    setTimeout(() => {
-                        btn.classList.remove('bg-green-600', 'text-white');
-                        btn.innerHTML = '<i data-lucide="plus" class="w-3.5 h-3.5"></i> Agregar';
-                        if (typeof lucide !== 'undefined') lucide.createIcons();
-                    }, 1500);
-                }
+                btn.classList.remove(bgActivo, textActivo, 'shadow-sm');
+                btn.classList.add('bg-white', 'text-neutral-700', 'border');
+            });
+            botonActivo.classList.add(bgActivo, textActivo, 'shadow-sm');
+            botonActivo.classList.remove('bg-white', 'text-neutral-700', 'border');
+        }
+
+        function buscarProducto(query) {
+            const q = query.toLowerCase().trim();
+            const items = document.querySelectorAll('.menu-item');
+            items.forEach(item => {
+                const nombre = item.getAttribute('data-nombre');
+                item.style.display = nombre.includes(q) ? 'flex' : 'none';
             });
         }
 
-        // ============================================================
-        // 🛒 ACTUALIZAR CARRITO
-        // ============================================================
-        function cambiarCantidad(nombre, cambio) {
+        function activarMicrofono() {
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            if (!SpeechRecognition) {
+                alert("Tu navegador no soporta control por voz. Prueba con Google Chrome.");
+                return;
+            }
+            const recognition = new SpeechRecognition();
+            recognition.lang = 'es-MX';
+            
+            const btnMicro = document.getElementById('btn-micro');
+            const statusVoz = document.getElementById('status-voz');
+            
+            recognition.onstart = () => {
+                btnMicro.classList.add('bg-red-500', 'animate-ping');
+                statusVoz.innerText = "🎙️ Escuchando... Di algo como: 'Quiero agregar Tecolota'";
+            };
+
+            recognition.onresult = (event) => {
+                const comando = event.results[0][0].transcript.toLowerCase();
+                statusVoz.innerText = `Escuché: "${comando}"`;
+                
+                if (comando.includes('agregar') || comando.includes('añadir')) {
+                    if (comando.includes('corrida')) { agregarAlCarrito('Comida Corrida', 100.00); }
+                    else if (comando.includes('tecolota') || comando.includes('torta')) { agregarAlCarrito('Tecolota', 70.00); }
+                    else if (comando.includes('sándwich') || comando.includes('integral')) { agregarAlCarrito('Club Sándwich Integral', 70.00); }
+                    else if (comando.includes('café') || comando.includes('caliente')) { agregarAlCarrito('Café Caliente', 25.00); }
+                    else if (comando.includes('nachos')) { agregarAlCarrito('Nachos con Guiso', 80.00); }
+                } else {
+                    document.getElementById('buscador-input').value = comando;
+                    buscarProducto(comando);
+                }
+            };
+
+            recognition.onend = () => {
+                btnMicro.classList.remove('bg-red-500', 'animate-ping');
+            };
+            recognition.start();
+        }
+
+        function agregarAlCarrito(nombre, precio) {
             const item = carrito.find(i => i.nombre === nombre);
+            if (item) { item.cantidad += 1; } 
+            else { carrito.push({ nombre, precio, cantidad: 1 }); }
+            actualizarInterfazCarrito();
+        }
+
+        function cambiarCantidad(nombre, cambio) {
+            const item = carrito.find(i => i.nombre === cambio || i.nombre === nombre);
             if (item) {
                 item.cantidad += cambio;
-                if (item.cantidad <= 0) carrito = carrito.filter(i => i.nombre !== nombre);
+                if (item.cantidad <= 0) carrito = carrito.filter(i => i.nombre !== item.nombre);
             }
             actualizarInterfazCarrito();
         }
@@ -921,21 +390,20 @@
             const contenedor = document.getElementById('items-carrito');
             const txtTotal = document.getElementById('total-carrito');
             const badge = document.getElementById('badge-carrito');
-            const txtPuntos = document.getElementById('puntos-ganados');
-            if (!contenedor) return;
-
+            const txtPuntosGarras = document.getElementById('puntos-ganados');
+            
             if (carrito.length === 0) {
-                contenedor.innerHTML = '<p class="text-center text-neutral-400 py-12">Carrito vacío.</p>';
+                contenedor.innerHTML = `<p class="text-center text-neutral-400 py-12">Carrito vacío.</p>`;
                 txtTotal.innerText = "$0.00";
                 badge.classList.add('hidden');
-                txtPuntos.innerText = "+0 Garras 🐾";
+                txtPuntosGarras.innerText = "+0 Garras 🐾";
                 document.getElementById('tiempo-espera').innerText = "0 mins";
-                document.getElementById('btn-repetir').classList.add('hidden');
                 return;
             }
 
             let total = 0, totalItems = 0;
             contenedor.innerHTML = "";
+            
             carrito.forEach(item => {
                 const sub = item.precio * item.cantidad;
                 total += sub;
@@ -951,309 +419,74 @@
                         <span class="font-black text-neutral-800 ml-4 w-12 text-right">$${sub.toFixed(2)}</span>
                     </div>`;
             });
-
+            
             txtTotal.innerText = `$${total.toFixed(2)}`;
             badge.innerText = totalItems;
             badge.classList.remove('hidden');
-
-            const tiempo = Math.min(totalItems * 3, 25);
-            document.getElementById('tiempo-espera').innerText = `${tiempo} mins`;
-            txtPuntos.innerText = `+${Math.floor(total * 0.1)} Garras 🐾`;
-
-            if (ultimoPedido && ultimoPedido.length > 0) {
-                document.getElementById('btn-repetir').classList.remove('hidden');
-            }
+            
+            document.getElementById('tiempo-espera').innerText = `${totalItems * 3} mins`;
+            txtPuntosGarras.innerText = `+${Math.floor(total * 0.1)} Garras 🐾`;
         }
 
-        // ============================================================
-        // 🔁 ÚLTIMO PEDIDO
-        // ============================================================
-        async function cargarUltimoPedido(uid) {
-            try {
-                const snapshot = await db.collection('pedidos').where('usuarioId', '==', uid).orderBy('timestamp', 'desc').limit(1).get();
-                if (!snapshot.empty) {
-                    const data = snapshot.docs[0].data();
-                    if (data.items && data.items.length > 0) {
-                        ultimoPedido = data.items;
-                        document.getElementById('btn-repetir').classList.remove('hidden');
-                    }
-                }
-            } catch (error) { console.error('Error:', error); }
-        }
-
-        function repetirUltimoPedido() {
-            if (!ultimoPedido || ultimoPedido.length === 0) return;
-            ultimoPedido.forEach(item => {
-                const producto = menuProductos.find(p => p.nombre === item.nombre);
-                if (producto && producto.stock > 0) {
-                    agregarAlCarrito(producto.nombre, producto.precio, producto.id);
-                }
-            });
-            abrirModalCarrito();
-        }
-
-        // ============================================================
-        // 🎯 FILTROS - CORREGIDOS
-        // ============================================================
-        function filtrarCategoria(cat) {
-            filtroCatActual = cat;
-            // Actualizar estilos de botones de categoría
-            document.querySelectorAll('.cat-btn').forEach(btn => {
-                btn.classList.remove('bg-orange-700', 'text-white', 'active');
-                btn.classList.add('bg-white', 'text-orange-800', 'border');
-            });
-            if (event && event.target) {
-                event.target.classList.add('bg-orange-700', 'text-white', 'active');
-                event.target.classList.remove('bg-white', 'text-orange-800', 'border');
-            }
-            aplicarFiltros();
-        }
-
-        function filtrarNutricion(nutri) {
-            filtroNutriActual = nutri;
-            // Actualizar estilos de botones de nutrición
-            document.querySelectorAll('.nutri-btn').forEach(btn => {
-                btn.classList.remove('bg-amber-500', 'text-neutral-950', 'active');
-                btn.classList.add('bg-white', 'text-neutral-700');
-            });
-            if (event && event.target) {
-                event.target.classList.add('bg-amber-500', 'text-neutral-950', 'active');
-                event.target.classList.remove('bg-white', 'text-neutral-700');
-            }
-            aplicarFiltros();
-        }
-
-        function aplicarFiltros() {
-            const items = document.querySelectorAll('.menu-item');
-            items.forEach(item => {
-                const dataCat = item.getAttribute('data-cat') || '';
-                const dataNutri = item.getAttribute('data-nutri') || '';
-                const matchCat = (filtroCatActual === 'todos' || dataCat === filtroCatActual);
-                const matchNutri = (filtroNutriActual === 'todos' || dataNutri === filtroNutriActual);
-                item.style.display = (matchCat && matchNutri) ? 'flex' : 'none';
-            });
-        }
-
-        function buscarProducto(query) {
-            const q = query.toLowerCase().trim();
-            const items = document.querySelectorAll('.menu-item');
-            items.forEach(item => {
-                const nombre = item.getAttribute('data-nombre') || '';
-                item.style.display = nombre.toLowerCase().includes(q) ? 'flex' : 'none';
-            });
-        }
-
-        // ============================================================
-        // 🎤 MICRÓFONO
-        // ============================================================
-        function activarMicrofono() {
-            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-            if (!SpeechRecognition) { alert("⚠️ Tu navegador no soporta voz."); return; }
-            const recognition = new SpeechRecognition();
-            recognition.lang = 'es-MX';
-            const btnMicro = document.getElementById('btn-micro');
-            const status = document.getElementById('status-voz');
-
-            recognition.onstart = () => {
-                btnMicro.classList.add('bg-red-500', 'animate-ping');
-                status.innerText = "🎙️ Escuchando...";
-            };
-            recognition.onresult = (event) => {
-                const comando = event.results[0][0].transcript.toLowerCase();
-                status.innerText = `🗣️ "${comando}"`;
-                let encontrado = false;
-                for (const p of menuProductos) {
-                    if (comando.includes(p.nombre.toLowerCase())) {
-                        agregarAlCarrito(p.nombre, p.precio, p.id);
-                        encontrado = true;
-                        status.innerText = '✅ Agregado: ' + p.nombre;
-                        break;
-                    }
-                }
-                if (!encontrado) {
-                    document.getElementById('buscador-input').value = comando;
-                    buscarProducto(comando);
-                    status.innerText = '🔍 Buscando: "' + comando + '"';
-                }
-                setTimeout(() => status.innerText = '', 3000);
-            };
-            recognition.onend = () => {
-                btnMicro.classList.remove('bg-red-500', 'animate-ping');
-            };
-            recognition.start();
-        }
-
-        // ============================================================
-        // ✅ PROCESAR PEDIDO
-        // ============================================================
-        async function procesarPedidoQR() {
-            if (carrito.length === 0) { alert('🛒 Carrito vacío.'); return; }
-            if (!usuarioActual) { alert('⚠️ Inicia sesión.'); abrirModalLogin(); return; }
-
-            const total = carrito.reduce((acc, i) => acc + (i.precio * i.cantidad), 0);
-            const tiempo = carrito.reduce((acc, i) => acc + i.cantidad, 0) * 2.5;
-            const hora = document.getElementById('hora-recogida')?.value || 'Ahora mismo';
-
-            try {
-                const pedidoData = {
-                    items: carrito.map(i => ({ nombre: i.nombre, precio: i.precio, cantidad: i.cantidad, productoId: i.id })),
-                    total: total,
-                    estado: 'pendiente',
-                    horaRecogida: hora,
-                    usuarioId: usuarioActual.uid,
-                    email: usuarioActual.email,
-                    timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-                    tiempoEstimado: Math.min(Math.round(tiempo), 25)
-                };
-
-                const docRef = await db.collection('pedidos').add(pedidoData);
-                const pedidoId = docRef.id;
-
-                const puntos = Math.floor(total * 0.1);
-                await db.collection('usuarios').doc(usuarioActual.uid).update({
-                    puntos: firebase.firestore.FieldValue.increment(puntos),
-                    pedidosRealizados: firebase.firestore.FieldValue.increment(1)
-                });
-
-                puntosUsuario += puntos;
-                localStorage.setItem('garrasOro', puntosUsuario);
-                document.getElementById('nav-puntos').innerText = puntosUsuario;
-                actualizarBarraProgreso(puntosUsuario);
-
-                for (const item of carrito) {
-                    if (item.id && item.id !== 'recompensa') {
-                        await db.collection('menu').doc(item.id).update({
-                            stock: firebase.firestore.FieldValue.increment(-item.cantidad)
-                        });
-                    }
-                }
-
-                await rtdb.ref('notificaciones/' + pedidoId).set({
-                    tipo: 'nuevo_pedido',
-                    mensaje: 'Pedido #' + pedidoId.slice(0, 6),
-                    timestamp: Date.now(),
-                    pedidoId: pedidoId
-                });
-
-                ultimoPedido = carrito.map(i => ({ ...i }));
-                document.getElementById('btn-repetir').classList.remove('hidden');
-
-                generarQR(pedidoId, carrito, total, tiempo);
-                cerrarModalCarrito();
-                mostrarQR();
-                carrito = [];
-                actualizarInterfazCarrito();
-
-            } catch (error) {
-                console.error('Error:', error);
-                alert('❌ Error: ' + error.message);
-            }
-        }
-
-        // ============================================================
-        // 📱 QR
-        // ============================================================
-        function generarQR(pedidoId, items, total, tiempo) {
-            const container = document.getElementById('qrcode');
-            container.innerHTML = "";
-            let data = `POLICAFE-ORDER\nID: ${pedidoId}\n`;
-            let res = "";
-            items.forEach(i => {
-                const sub = i.precio * i.cantidad;
-                data += `${i.cantidad}x ${i.nombre} = $${sub.toFixed(2)}\n`;
-                res += `<div class="flex justify-between"><span>${i.cantidad}x ${i.nombre}</span><span>$${sub.toFixed(2)}</span></div>`;
-            });
-            data += `TOTAL: $${total.toFixed(2)}\nFOLIO: ${pedidoId.slice(0,8)}`;
-            res += `<div class="flex justify-between border-t pt-1 mt-2 font-black"><span>Total:</span><span>$${total.toFixed(2)}</span></div>`;
-            document.getElementById('resumen-ticket-qr').innerHTML = res;
-            document.getElementById('qr-tiempo-estimado').innerText = Math.min(Math.round(tiempo || 5), 25);
-            new QRCode(container, { text: data, width: 160, height: 160, colorDark: "#2d1b10", colorLight: "#ffffff", correctLevel: QRCode.CorrectLevel.M });
-        }
-
-        function mostrarQR() {
-            document.getElementById('modal-qr').classList.remove('opacity-0', 'pointer-events-none');
-            // Confetti
-            const container = document.getElementById('confetti-container');
-            container.innerHTML = '';
-            const colors = ['#ea580c', '#f59e0b', '#10b981', '#3b82f6', '#8b5cf6'];
-            for (let i = 0; i < 20; i++) {
-                const el = document.createElement('div');
-                el.style.cssText = `
-                    position:absolute; width:8px; height:8px; 
-                    background:${colors[Math.floor(Math.random()*colors.length)]}; 
-                    border-radius:${Math.random()>0.5?'50%':'2px'}; 
-                    left:${Math.random()*100}%; top:${Math.random()*100}%; 
-                    animation:confetti ${1+Math.random()*2}s ease-out forwards; 
-                    animation-delay:${Math.random()*0.5}s;
-                `;
-                container.appendChild(el);
-            }
-            setTimeout(() => container.innerHTML = '', 3000);
-        }
-
-        function cerrarModalQR() {
-            document.getElementById('modal-qr').classList.add('opacity-0', 'pointer-events-none');
-            carrito = [];
-            actualizarInterfazCarrito();
-        }
-
-        // ============================================================
-        // 💬 WHATSAPP
-        // ============================================================
         function enviarWhatsApp() {
             if (carrito.length === 0) return;
-            let msg = '*NUEVO PEDIDO POLICAFÉ*\n';
+            let msg = `*NUEVO PEDIDO POLICAFÉ*\n`;
             let total = 0;
             carrito.forEach(i => {
                 msg += `• ${i.cantidad}x ${i.nombre} ($${(i.precio*i.cantidad).toFixed(2)})\n`;
                 total += i.precio*i.cantidad;
             });
             msg += `\n*Hora programada:* ${document.getElementById('hora-recogida').value}`;
-            msg += `\n*Total a pagar:* $${total.toFixed(2)}`;
+            msg += `\n*Total a pagar en mostrador:* $${total.toFixed(2)}`;
+            
             window.open(`https://api.whatsapp.com/send?phone=521234567890&text=${encodeURIComponent(msg)}`);
         }
 
-        // ============================================================
-        // 🪟 MODALES CARRITO
-        // ============================================================
-        function abrirModalCarrito() {
-            document.getElementById('modal-carrito').classList.remove('opacity-0', 'pointer-events-none');
-            document.getElementById('cuerpo-modal-carrito').classList.remove('translate-x-full');
-        }
+        // FUNCIÓN DE QR ARREGLADA COMPLETAMENTE
+        function procesarPedidoQR() {
+            if (carrito.length === 0) return;
+            
+            const containerQR = document.getElementById('qrcode');
+            containerQR.innerHTML = ""; // Limpieza total garantizada
+            
+            let dataQR = "POLICAFE-ORDER\n";
+            let resHTML = "", total = 0;
+            const folio = Math.floor(1000 + Math.random() * 9000);
 
-        function cerrarModalCarrito() {
-            document.getElementById('modal-carrito').classList.add('opacity-0', 'pointer-events-none');
-            document.getElementById('cuerpo-modal-carrito').classList.add('translate-x-full');
-        }
-
-        // ============================================================
-        // 📊 ESTADÍSTICAS
-        // ============================================================
-        function escucharEstadisticas() {
-            const hoy = new Date();
-            hoy.setHours(0, 0, 0, 0);
-            db.collection('pedidos').where('timestamp', '>=', hoy).onSnapshot(s => {
-                document.getElementById('stats-pedidos').innerText = s.size;
+            carrito.forEach(i => {
+                const sub = i.precio * i.cantidad;
+                total += sub;
+                dataQR += `${i.cantidad}x ${i.nombre} = $${sub.toFixed(2)}\n`;
+                resHTML += `<div class="flex justify-between"><span>${i.cantidad}x ${i.nombre}</span><span>$${sub.toFixed(2)}</span></div>`;
             });
-            db.collection('usuarios').onSnapshot(s => {
-                document.getElementById('stats-usuarios').innerText = s.size;
+
+            dataQR += `HORA: ${document.getElementById('hora-recogida').value}\nTOTAL: $${total.toFixed(2)}\nFOLIO: #${folio}`;
+            resHTML += `<div class="flex justify-between border-t pt-1 mt-2 font-black text-sm text-neutral-800"><span>Total a Pagar:</span><span>$${total.toFixed(2)}</span></div>`;
+            resHTML += `<div class="mt-2 text-[10px] text-neutral-400">Hora de entrega: ${document.getElementById('hora-recogida').value} | Folio: #${folio}</div>`;
+
+            document.getElementById('resumen-ticket-qr').innerHTML = resHTML;
+
+            // Renderizado forzado sin duplicación
+            new QRCode(containerQR, {
+                text: dataQR,
+                width: 160,
+                height: 160,
+                colorDark : "#2d1b10",
+                colorLight : "#ffffff",
+                correctLevel : QRCode.CorrectLevel.M
             });
+
+            puntosUsuario += Math.floor(total * 0.1);
+            localStorage.setItem('garrasOro', puntosUsuario);
+            document.getElementById('nav-puntos').innerText = puntosUsuario;
+
+            cerrarModalCarrito();
+            document.getElementById('modal-qr').classList.remove('opacity-0', 'pointer-events-none');
         }
 
-        // ============================================================
-        // 🚀 INICIALIZAR
-        // ============================================================
-        document.addEventListener('DOMContentLoaded', () => {
-            cargarMenu();
-            escucharEstadisticas();
-            if (typeof lucide !== 'undefined') lucide.createIcons();
-        });
-
-        setInterval(() => {
-            if (typeof lucide !== 'undefined') lucide.createIcons();
-        }, 3000);
-
-        console.log('🦁 Policafé León v3.0 - ¡Todas las funcionalidades funcionando!');
+        function abrirModalCarrito() { document.getElementById('modal-carrito').classList.remove('opacity-0', 'pointer-events-none'); document.getElementById('cuerpo-modal-carrito').classList.remove('translate-x-full'); }
+        function cerrarModalCarrito() { document.getElementById('modal-carrito').classList.add('opacity-0', 'pointer-events-none'); document.getElementById('cuerpo-modal-carrito').classList.add('translate-x-full'); }
+        function cerrarModalQR() { document.getElementById('modal-qr').classList.add('opacity-0', 'pointer-events-none'); carrito = []; actualizarInterfazCarrito(); }
     </script>
 </body>
 </html>
