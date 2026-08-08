@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Policafé Premium - El Rugido Innovador de la UPSLP</title>
     
-    <!-- Tailwind CSS vía CDN -->
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Iconos Lucide -->
     <script src="https://unpkg.com/lucide@latest"></script>
@@ -49,6 +49,20 @@
             width: 0%;
         }
         
+        .btn-add {
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        .btn-add:active { transform: scale(0.95); }
+        .btn-add:disabled { opacity: 0.5; cursor: not-allowed; }
+        
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb { background: #ea580c; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #c2410c; }
+        
+        .badge-nuevo { animation: pulse-slow 1s ease-in-out infinite; }
+        
         .modal-overlay {
             transition: opacity 0.3s ease;
         }
@@ -56,13 +70,16 @@
             transition: transform 0.3s ease;
         }
         
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: #f1f1f1; border-radius: 10px; }
-        ::-webkit-scrollbar-thumb { background: #ea580c; border-radius: 10px; }
-        ::-webkit-scrollbar-thumb:hover { background: #c2410c; }
-        
-        .btn-add:active { transform: scale(0.95); }
-        .badge-nuevo { animation: pulse-slow 1s ease-in-out infinite; }
+        /* Estilos para filtros */
+        .cat-btn, .nutri-btn {
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .cat-btn.active, .nutri-btn.active {
+            background: #ea580c !important;
+            color: white !important;
+            border-color: #ea580c !important;
+        }
     </style>
 </head>
 <body class="bg-[#fdfbf7] text-[#2d1b10] font-sans selection:bg-orange-500 selection:text-white">
@@ -76,10 +93,10 @@
                 <i data-lucide="coffee" class="text-amber-500 animate-pulse"></i>POLICAFÉ <span class="text-xs bg-orange-600 text-white px-2 py-0.5 rounded-md font-mono">v3.0</span>
             </a>
             
-            <!-- Barra de Estado de Recompensas -->
+            <!-- Recompensas -->
             <div class="hidden lg:flex items-center gap-2 bg-amber-50 px-3 py-1.5 rounded-full border border-amber-200 text-xs font-bold text-amber-950">
                 <i data-lucide="award" class="w-4 h-4 text-amber-600"></i>
-                <span>Tus Garras de Oro: <span id="nav-puntos" class="text-orange-700 font-black">0</span> 🐾</span>
+                <span>Tus Garras: <span id="nav-puntos" class="text-orange-700 font-black">0</span> 🐾</span>
                 <div class="w-20">
                     <div class="progress-bar">
                         <div id="progress-recompensas" class="progress-bar-fill" style="width: 0%;"></div>
@@ -89,7 +106,6 @@
             </div>
 
             <div class="flex items-center gap-4">
-                <!-- Botón de Login/Usuario -->
                 <div id="auth-section">
                     <button onclick="abrirModalLogin()" id="btn-login" class="bg-orange-600 text-white px-4 py-2.5 rounded-xl text-sm font-bold hover:bg-orange-700 transition">
                         🚪 Entrar
@@ -106,7 +122,6 @@
                     <span id="badge-carrito" class="bg-red-600 text-white text-xs font-black rounded-full w-5 h-5 flex items-center justify-center hidden">0</span>
                 </button>
                 
-                <!-- Botón Admin (solo visible para admin) -->
                 <button onclick="abrirModalAdmin()" id="btn-admin" class="hidden bg-purple-600 text-white px-3 py-2 rounded-xl text-xs font-bold hover:bg-purple-700 transition">
                     🔐 Admin
                 </button>
@@ -115,7 +130,7 @@
     </nav>
 
     <!-- ========================================================== -->
-    <!-- 2. INICIO (HERO)                                           -->
+    <!-- 2. HERO                                                   -->
     <!-- ========================================================== -->
     <header id="inicio" class="relative h-screen flex items-center justify-center bg-cover bg-center" style="background-image: linear-gradient(rgba(45, 27, 16, 0.65), rgba(45, 27, 16, 0.65)), url('https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?q=80&w=1600');">
         <div class="text-center text-white px-4 max-w-4xl relative z-10">
@@ -129,7 +144,6 @@
                 Pide por voz, programa tu receso, acumula Garras de Oro y canjea premios con tu código QR directo en barra.
             </p>
             
-            <!-- Buscador por Voz -->
             <div class="max-w-md mx-auto bg-white/10 backdrop-blur-md p-2 rounded-2xl border border-white/20 flex items-center gap-2 mb-6 shadow-2xl">
                 <i data-lucide="search" class="text-stone-300 ml-3 shrink-0"></i>
                 <input type="text" id="buscador-input" oninput="buscarProducto(this.value)" class="bg-transparent w-full text-white placeholder-stone-300 text-sm focus:outline-none" placeholder="Busca tu comida o di 'Asistente'...">
@@ -139,7 +153,6 @@
             </div>
             <p id="status-voz" class="text-xs text-amber-300 font-medium h-4"></p>
             
-            <!-- Estadísticas -->
             <div class="flex justify-center gap-6 sm:gap-12 mt-8 text-white/80 text-xs sm:text-sm">
                 <div>
                     <p class="text-2xl sm:text-3xl font-black text-amber-400" id="stats-pedidos">0</p>
@@ -158,7 +171,7 @@
     </header>
 
     <!-- ========================================================== -->
-    <!-- 3. MENÚ E INVENTARIO                                       -->
+    <!-- 3. MENÚ                                                   -->
     <!-- ========================================================== -->
     <section id="menu" class="py-24 max-w-6xl mx-auto px-6">
         <div class="text-center mb-12">
@@ -170,7 +183,7 @@
         <!-- Filtros -->
         <div class="flex flex-col md:flex-row gap-4 justify-between items-center border-b pb-8 mb-12">
             <div class="flex flex-wrap gap-2" id="filtros-categoria">
-                <button onclick="filtrarCategoria('todos')" class="cat-btn bg-orange-700 text-white px-5 py-2.5 rounded-xl font-bold transition shadow-sm">Todos</button>
+                <button onclick="filtrarCategoria('todos')" class="cat-btn active bg-orange-700 text-white px-5 py-2.5 rounded-xl font-bold transition shadow-sm">Todos</button>
                 <button onclick="filtrarCategoria('platillos')" class="cat-btn bg-white text-orange-800 border px-5 py-2.5 rounded-xl font-bold transition">Platillos</button>
                 <button onclick="filtrarCategoria('bebidas')" class="cat-btn bg-white text-orange-800 border px-5 py-2.5 rounded-xl font-bold transition">Bebidas</button>
                 <button onclick="filtrarCategoria('snacks')" class="cat-btn bg-white text-orange-800 border px-5 py-2.5 rounded-xl font-bold transition">Snacks</button>
@@ -178,20 +191,20 @@
             
             <div class="flex items-center gap-2 bg-neutral-100 p-1.5 rounded-xl border">
                 <span class="text-xs font-bold text-neutral-500 px-2">Nutrición:</span>
-                <button onclick="filtrarNutricion('todos')" class="nutri-btn bg-amber-500 text-neutral-950 px-3 py-1.5 rounded-lg text-xs font-bold transition shadow-sm">Cualquiera</button>
+                <button onclick="filtrarNutricion('todos')" class="nutri-btn active bg-amber-500 text-neutral-950 px-3 py-1.5 rounded-lg text-xs font-bold transition shadow-sm">Cualquiera</button>
                 <button onclick="filtrarNutricion('alta-proteina')" class="nutri-btn bg-white text-neutral-700 px-3 py-1.5 rounded-lg text-xs font-bold transition">💪 Proteína</button>
                 <button onclick="filtrarNutricion('fit')" class="nutri-btn bg-white text-neutral-700 px-3 py-1.5 rounded-lg text-xs font-bold transition">🥗 Fit</button>
             </div>
         </div>
 
-        <!-- Rejilla de Productos -->
+        <!-- Productos -->
         <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6" id="contenedor-menu">
-            <!-- Productos cargados desde Firestore -->
+            <!-- Cargados desde Firestore -->
         </div>
     </section>
 
     <!-- ========================================================== -->
-    <!-- 4. MODAL DEL CARRITO                                       -->
+    <!-- 4. MODAL CARRITO                                           -->
     <!-- ========================================================== -->
     <div id="modal-carrito" class="fixed inset-0 bg-black/60 z-50 flex justify-end opacity-0 pointer-events-none transition-opacity duration-300">
         <div class="bg-white w-full max-w-md h-full p-6 flex flex-col justify-between transform translate-x-full transition-transform duration-300" id="cuerpo-modal-carrito">
@@ -268,7 +281,7 @@
     </div>
 
     <!-- ========================================================== -->
-    <!-- 6. MODAL LOGIN / REGISTRO                                  -->
+    <!-- 6. MODAL LOGIN                                             -->
     <!-- ========================================================== -->
     <div id="modal-login" class="fixed inset-0 bg-black/60 z-50 flex items-center justify-center opacity-0 pointer-events-none transition-opacity duration-300 p-4">
         <div class="bg-white rounded-3xl p-6 max-w-md w-full shadow-2xl transform scale-95 transition-transform duration-300">
@@ -345,7 +358,7 @@
     </div>
 
     <!-- ========================================================== -->
-    <!-- 8. MODAL ADMIN (PANEL DE CONTROL)                          -->
+    <!-- 8. MODAL ADMIN                                             -->
     <!-- ========================================================== -->
     <div id="modal-admin" class="fixed inset-0 bg-black/60 z-50 flex items-center justify-center opacity-0 pointer-events-none transition-opacity duration-300 p-4">
         <div class="bg-white rounded-3xl p-6 max-w-4xl w-full max-h-[90vh] overflow-y-auto shadow-2xl transform scale-95 transition-transform duration-300">
@@ -391,7 +404,7 @@
     </div>
 
     <!-- ========================================================== -->
-    <!-- 9. SECCIÓN NOSOTROS                                        -->
+    <!-- 9. NOSOTROS                                                -->
     <!-- ========================================================== -->
     <section id="nosotros" class="bg-gradient-to-b from-[#f5f0ea] to-[#fdfbf7] py-24">
         <div class="max-w-6xl mx-auto px-6 grid md:grid-cols-2 gap-12 items-center">
@@ -409,7 +422,7 @@
     </section>
 
     <!-- ========================================================== -->
-    <!-- 10. CONTACTO Y MAPA                                        -->
+    <!-- 10. CONTACTO                                               -->
     <!-- ========================================================== -->
     <section id="contacto" class="py-24 max-w-6xl mx-auto px-6 border-t border-orange-100">
         <div class="grid md:grid-cols-2 gap-12 items-center">
@@ -438,7 +451,7 @@
     <!-- ========================================================== -->
     <script>
         // ============================================================
-        // 🔥 CONFIGURACIÓN DE FIREBASE
+        // 🔥 FIREBASE CONFIG
         // ============================================================
         const firebaseConfig = {
             apiKey: "AIzaSyBNMdhV48Y1oIEX-eZd20MOUuNPjoNQFXU",
@@ -459,7 +472,7 @@
         db.enablePersistence().then(() => console.log('🔥 Modo offline activado')).catch(err => console.error('⚠️ Error:', err));
 
         // ============================================================
-        // 📦 VARIABLES GLOBALES
+        // 📦 VARIABLES
         // ============================================================
         let carrito = [];
         let filtroCatActual = 'todos';
@@ -473,9 +486,9 @@
         let ingresosAdmin = 0;
 
         // ============================================================
-        // 🎨 INICIALIZAR ICONOS
+        // 🎨 INICIALIZAR
         // ============================================================
-        lucide.createIcons();
+        if (typeof lucide !== 'undefined') lucide.createIcons();
         document.getElementById('nav-puntos').innerText = puntosUsuario;
         actualizarBarraProgreso(puntosUsuario);
 
@@ -487,7 +500,6 @@
                 usuarioActual = user;
                 document.getElementById('btn-login').style.display = 'none';
                 document.getElementById('btn-logout').classList.remove('hidden');
-                
                 try {
                     const doc = await db.collection('usuarios').doc(user.uid).get();
                     if (doc.exists) {
@@ -498,12 +510,9 @@
                         document.getElementById('user-name').classList.remove('hidden');
                         localStorage.setItem('garrasOro', puntosUsuario);
                         actualizarBarraProgreso(puntosUsuario);
-                        
-                        // Mostrar botón admin si es admin
                         if (data.rol === 'admin' || user.email === 'admin@policafe.com') {
                             document.getElementById('btn-admin').classList.remove('hidden');
                         }
-                        
                         cargarUltimoPedido(user.uid);
                     }
                 } catch (error) { console.error('Error:', error); }
@@ -552,6 +561,9 @@
             setTimeout(() => el.className = 'mt-3 text-center text-sm font-bold hidden', 5000);
         }
 
+        // ============================================================
+        // ✅ INICIAR SESIÓN
+        // ============================================================
         async function iniciarSesion() {
             const email = document.getElementById('login-email').value.trim();
             const password = document.getElementById('login-password').value;
@@ -565,6 +577,9 @@
             }
         }
 
+        // ============================================================
+        // ✅ REGISTRAR USUARIO
+        // ============================================================
         async function registrarUsuario() {
             const matricula = document.getElementById('reg-matricula').value.trim();
             const nombre = document.getElementById('reg-nombre').value.trim();
@@ -641,6 +656,11 @@
         // 🪟 MODAL ADMIN
         // ============================================================
         function abrirModalAdmin() {
+            if (!usuarioActual) {
+                alert('⚠️ Inicia sesión primero.');
+                abrirModalLogin();
+                return;
+            }
             document.getElementById('modal-admin').classList.remove('opacity-0', 'pointer-events-none');
             cargarPedidosAdmin();
         }
@@ -664,25 +684,37 @@
             db.collection('pedidos').orderBy('timestamp', 'desc').onSnapshot((snapshot) => {
                 pedidosAdmin = [];
                 ingresosAdmin = 0;
+                let totalPedidos = 0;
                 snapshot.forEach(doc => {
                     const pedido = { id: doc.id, ...doc.data() };
                     pedidosAdmin.push(pedido);
                     if (pedido.estado === 'entregado') {
                         ingresosAdmin += pedido.total || 0;
+                        totalPedidos++;
                     }
                 });
-                actualizarMetricasAdmin();
+                actualizarMetricasAdmin(totalPedidos);
                 renderizarPedidosAdmin();
+                
+                // Sonido para nuevo pedido
+                const ultimo = pedidosAdmin[0];
+                if (ultimo && ultimo.estado === 'pendiente' && !ultimo._visto) {
+                    try {
+                        const audio = new Audio('https://assets.mixkit.co/sfx/preview/mixkit-alarm-548.mp3');
+                        audio.volume = 0.2;
+                        audio.play();
+                        db.collection('pedidos').doc(ultimo.id).update({ _visto: true }).catch(() => {});
+                    } catch (e) {}
+                }
             });
         }
 
-        function actualizarMetricasAdmin() {
+        function actualizarMetricasAdmin(totalPedidos) {
             const activos = pedidosAdmin.filter(p => p.estado !== 'entregado').length;
             document.getElementById('admin-activos').textContent = activos;
             document.getElementById('admin-ingresos').textContent = '$' + ingresosAdmin.toFixed(2);
             
-            const entregados = pedidosAdmin.filter(p => p.estado === 'entregado').length;
-            const promedio = entregados > 0 ? ingresosAdmin / entregados : 0;
+            const promedio = totalPedidos > 0 ? ingresosAdmin / totalPedidos : 0;
             document.getElementById('admin-promedio').textContent = '$' + promedio.toFixed(2);
             
             const contador = {};
@@ -711,10 +743,13 @@
                 const hora = ts.toLocaleTimeString('es-MX', { hour: '2-digit', minute: '2-digit' });
                 
                 const div = document.createElement('div');
-                div.className = 'bg-neutral-50 p-3 rounded-xl border-l-4 ' + 
-                    (pedido.estado === 'pendiente' ? 'border-amber-500' : 
-                     pedido.estado === 'en-preparacion' ? 'border-blue-500' :
-                     pedido.estado === 'listo' ? 'border-green-500' : 'border-gray-500');
+                const estadoColors = {
+                    'pendiente': 'border-amber-500 bg-amber-50',
+                    'en-preparacion': 'border-blue-500 bg-blue-50',
+                    'listo': 'border-green-500 bg-green-50',
+                    'entregado': 'border-gray-500 bg-gray-50'
+                };
+                div.className = 'p-3 rounded-xl border-l-4 ' + (estadoColors[pedido.estado] || 'border-gray-300 bg-neutral-50');
                 
                 let botones = '';
                 if (pedido.estado === 'pendiente') {
@@ -729,7 +764,7 @@
                     <div class="flex justify-between items-start">
                         <div>
                             <span class="font-bold text-sm">#${pedido.id.slice(0,6)}</span>
-                            <span class="text-xs ml-2 px-2 py-0.5 rounded-full ${pedido.estado === 'pendiente' ? 'bg-amber-100 text-amber-700' : pedido.estado === 'entregado' ? 'bg-gray-100 text-gray-600' : 'bg-blue-100 text-blue-700'}">${pedido.estado}</span>
+                            <span class="text-xs ml-2 px-2 py-0.5 rounded-full ${pedido.estado === 'pendiente' ? 'bg-amber-200 text-amber-800' : pedido.estado === 'entregado' ? 'bg-gray-200 text-gray-600' : 'bg-blue-200 text-blue-800'}">${pedido.estado}</span>
                             ${pedido.estado === 'pendiente' ? '<span class="badge-nuevo text-[10px] bg-red-500 text-white px-2 py-0.5 rounded-full ml-1">NUEVO</span>' : ''}
                         </div>
                         <span class="text-xs text-neutral-400">${hora}</span>
@@ -833,11 +868,11 @@
                 contenedor.appendChild(div);
             });
 
-            lucide.createIcons();
+            if (typeof lucide !== 'undefined') lucide.createIcons();
         }
 
         // ============================================================
-        // 🛒 CARRITO
+        // 🛒 AGREGAR AL CARRITO
         // ============================================================
         function agregarAlCarrito(nombre, precio, id) {
             if (!nombre || !id) { console.error('Datos incompletos'); return; }
@@ -855,7 +890,7 @@
 
             actualizarInterfazCarrito();
 
-            // Feedback visual
+            // Feedback visual en el botón
             const botones = document.querySelectorAll('.btn-add');
             botones.forEach(btn => {
                 if (btn.closest('.menu-item')?.getAttribute('data-nombre') === nombre) {
@@ -864,12 +899,15 @@
                     setTimeout(() => {
                         btn.classList.remove('bg-green-600', 'text-white');
                         btn.innerHTML = '<i data-lucide="plus" class="w-3.5 h-3.5"></i> Agregar';
-                        lucide.createIcons();
+                        if (typeof lucide !== 'undefined') lucide.createIcons();
                     }, 1500);
                 }
             });
         }
 
+        // ============================================================
+        // 🛒 ACTUALIZAR CARRITO
+        // ============================================================
         function cambiarCantidad(nombre, cambio) {
             const item = carrito.find(i => i.nombre === nombre);
             if (item) {
@@ -955,16 +993,17 @@
         }
 
         // ============================================================
-        // 🎯 FILTROS
+        // 🎯 FILTROS - CORREGIDOS
         // ============================================================
         function filtrarCategoria(cat) {
             filtroCatActual = cat;
+            // Actualizar estilos de botones de categoría
             document.querySelectorAll('.cat-btn').forEach(btn => {
-                btn.classList.remove('bg-orange-700', 'text-white');
+                btn.classList.remove('bg-orange-700', 'text-white', 'active');
                 btn.classList.add('bg-white', 'text-orange-800', 'border');
             });
             if (event && event.target) {
-                event.target.classList.add('bg-orange-700', 'text-white');
+                event.target.classList.add('bg-orange-700', 'text-white', 'active');
                 event.target.classList.remove('bg-white', 'text-orange-800', 'border');
             }
             aplicarFiltros();
@@ -972,28 +1011,33 @@
 
         function filtrarNutricion(nutri) {
             filtroNutriActual = nutri;
+            // Actualizar estilos de botones de nutrición
             document.querySelectorAll('.nutri-btn').forEach(btn => {
-                btn.classList.remove('bg-amber-500', 'text-neutral-950');
+                btn.classList.remove('bg-amber-500', 'text-neutral-950', 'active');
                 btn.classList.add('bg-white', 'text-neutral-700');
             });
             if (event && event.target) {
-                event.target.classList.add('bg-amber-500', 'text-neutral-950');
+                event.target.classList.add('bg-amber-500', 'text-neutral-950', 'active');
                 event.target.classList.remove('bg-white', 'text-neutral-700');
             }
             aplicarFiltros();
         }
 
         function aplicarFiltros() {
-            document.querySelectorAll('.menu-item').forEach(item => {
-                const matchCat = (filtroCatActual === 'todos' || item.getAttribute('data-cat') === filtroCatActual);
-                const matchNutri = (filtroNutriActual === 'todos' || item.getAttribute('data-nutri') === filtroNutriActual);
+            const items = document.querySelectorAll('.menu-item');
+            items.forEach(item => {
+                const dataCat = item.getAttribute('data-cat') || '';
+                const dataNutri = item.getAttribute('data-nutri') || '';
+                const matchCat = (filtroCatActual === 'todos' || dataCat === filtroCatActual);
+                const matchNutri = (filtroNutriActual === 'todos' || dataNutri === filtroNutriActual);
                 item.style.display = (matchCat && matchNutri) ? 'flex' : 'none';
             });
         }
 
         function buscarProducto(query) {
             const q = query.toLowerCase().trim();
-            document.querySelectorAll('.menu-item').forEach(item => {
+            const items = document.querySelectorAll('.menu-item');
+            items.forEach(item => {
                 const nombre = item.getAttribute('data-nombre') || '';
                 item.style.display = nombre.toLowerCase().includes(q) ? 'flex' : 'none';
             });
@@ -1202,14 +1246,14 @@
         document.addEventListener('DOMContentLoaded', () => {
             cargarMenu();
             escucharEstadisticas();
-            lucide.createIcons();
+            if (typeof lucide !== 'undefined') lucide.createIcons();
         });
 
-        setInterval(() => lucide.createIcons(), 3000);
+        setInterval(() => {
+            if (typeof lucide !== 'undefined') lucide.createIcons();
+        }, 3000);
 
-        console.log('🦁 Policafé León v3.0 - Todas las funcionalidades en una sola página');
-        console.log('📦 Productos cargados:', menuProductos.length);
-        console.log('👤 Usuario:', usuarioActual?.email || 'No autenticado');
+        console.log('🦁 Policafé León v3.0 - ¡Todas las funcionalidades funcionando!');
     </script>
 </body>
 </html>
