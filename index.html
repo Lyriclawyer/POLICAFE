@@ -24,7 +24,7 @@
     <nav class="fixed w-full bg-[#fdfbf7]/80 backdrop-blur-lg z-50 shadow-md border-b border-orange-100">
         <div class="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
             <a href="#" class="text-2xl font-serif font-black tracking-wider text-orange-700 flex items-center gap-2">
-                <i data-lucide="coffee" class="text-amber-500 animate-pulse"></i>POLICAFÉ <span class="text-xs bg-orange-600 text-white px-2 py-0.5 rounded-md font-mono">v2.0</span>
+                <i data-lucide="coffee" class="text-amber-500 animate-pulse"></i>POLICAFÉ <span class="text-xs bg-orange-600 text-white px-2 py-0.5 rounded-md font-mono">v3.0 Cloud</span>
             </a>
             
             <!-- Barra de Estado de Recompensas en el Nav -->
@@ -33,7 +33,13 @@
                 <span>Tus Garras de Oro: <span id="nav-puntos" class="text-orange-700 font-black">0</span> 🐾</span>
             </div>
 
-            <div class="flex items-center gap-4">
+            <div class="flex items-center gap-3">
+                <!-- Botón de Acceso a Administrador -->
+                <button onclick="toggleAdminView()" id="btn-admin-nav" class="bg-neutral-800 hover:bg-neutral-900 text-white p-2.5 rounded-full text-xs font-bold flex items-center gap-1.5 transition" title="Panel Administrador">
+                    <i data-lucide="shield-check" class="w-4 h-4 text-amber-400"></i>
+                </button>
+
+                <!-- Botón Carrito -->
                 <button onclick="abrirModalCarrito()" class="relative bg-gradient-to-r from-orange-600 to-amber-500 text-white px-5 py-2.5 rounded-full text-sm font-bold flex items-center gap-2 hover:shadow-md transition-all">
                     <i data-lucide="shopping-cart" class="w-4 h-4"></i>
                     <span>Mi Carrito</span>
@@ -56,7 +62,7 @@
                 Pide por voz, programa tu receso, acumula Garras de Oro y canjea premios con tu código QR directo en barra.
             </p>
             
-            <!-- Buscador por Voz Súper Innovador -->
+            <!-- Buscador por Voz -->
             <div class="max-w-md mx-auto bg-white/10 backdrop-blur-md p-2 rounded-2xl border border-white/20 flex items-center gap-2 mb-6 shadow-2xl">
                 <i data-lucide="search" class="text-stone-300 ml-3 shrink-0"></i>
                 <input type="text" id="buscador-input" oninput="buscarProducto(this.value)" class="bg-transparent w-full text-white placeholder-stone-300 text-sm focus:outline-none" placeholder="Busca tu comida o di 'Asistente'...">
@@ -75,7 +81,7 @@
             <div class="w-24 h-1.5 bg-gradient-to-r from-orange-600 to-amber-500 mx-auto rounded-full mb-6"></div>
         </div>
 
-        <!-- Filtros Combinados: Categoría + Nutrición -->
+        <!-- Filtros Combinados -->
         <div class="flex flex-col md:flex-row gap-4 justify-between items-center border-b pb-8 mb-12">
             <div class="flex flex-wrap gap-2" id="filtros-categoria">
                 <button onclick="filtrarCategoria('todos')" class="cat-btn bg-orange-700 text-white px-5 py-2.5 rounded-xl font-bold transition shadow-sm">Todos</button>
@@ -175,9 +181,8 @@
                     <button onclick="cerrarModalCarrito()"><i data-lucide="x" class="text-neutral-500"></i></button>
                 </div>
 
-                <!-- Logística Integrada y Caja de Espera Animada -->
+                <!-- Logística Integrada -->
                 <div class="grid grid-cols-2 gap-3 mb-4">
-                    <!-- Indicador de Espera Dinámico y Llamativo -->
                     <div class="bg-gradient-to-br from-orange-600 to-amber-500 text-white p-3.5 rounded-2xl shadow-md border border-orange-400 relative overflow-hidden flex flex-col justify-between animate-pulse">
                         <div class="absolute -right-4 -bottom-4 opacity-15">
                             <i data-lucide="timer" class="w-16 h-16"></i>
@@ -232,7 +237,6 @@
             <h4 class="text-xl font-serif font-black text-neutral-800 mb-1">¡Código QR Listo!</h4>
             <p class="text-xs text-orange-600 font-bold mb-4 uppercase tracking-wider">Paga directo en el mostrador</p>
             
-            <!-- Contenedor único donde se inyecta el QR -->
             <div class="flex justify-center my-4">
                 <div id="qrcode" class="bg-white p-3 rounded-2xl inline-block shadow-inner border"></div>
             </div>
@@ -244,7 +248,122 @@
         </div>
     </div>
 
-    <!-- 6. SECCIÓN NOSOTROS -->
+    <!-- 6. MODAL LOGIN ADMINISTRADOR (FIREBASE AUTH) -->
+    <div id="modal-admin-login" class="fixed inset-0 bg-black/70 z-50 flex items-center justify-center opacity-0 pointer-events-none transition-opacity duration-300 p-4">
+        <div class="bg-white rounded-3xl p-6 max-w-sm w-full shadow-2xl relative">
+            <button onclick="cerrarAdminLogin()" class="absolute top-4 right-4 text-neutral-400 hover:text-neutral-600"><i data-lucide="x" class="w-5 h-5"></i></button>
+            <div class="text-center mb-6">
+                <div class="bg-orange-100 p-3 rounded-full w-12 h-12 flex items-center justify-center mx-auto mb-2 text-orange-700">
+                    <i data-lucide="shield-check" class="w-6 h-6"></i>
+                </div>
+                <h3 class="text-xl font-serif font-black text-neutral-800">Panel de Administración</h3>
+                <p class="text-xs text-neutral-500">Inicia sesión con Firebase para ver métricas y finanzas</p>
+            </div>
+            <form id="form-login-admin" onsubmit="event.preventDefault(); loginAdmin();" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-bold text-neutral-700 mb-1">Correo Electrónico</label>
+                    <input type="email" id="admin-email" required class="w-full p-3 rounded-xl border border-neutral-200 text-xs focus:ring-2 focus:ring-orange-500 focus:outline-none" placeholder="admin@upslp.edu.mx">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-neutral-700 mb-1">Contraseña</label>
+                    <input type="password" id="admin-password" required class="w-full p-3 rounded-xl border border-neutral-200 text-xs focus:ring-2 focus:ring-orange-500 focus:outline-none" placeholder="••••••••">
+                </div>
+                <p id="admin-login-error" class="text-xs text-red-600 font-bold hidden text-center"></p>
+                <button type="submit" id="btn-submit-login" class="w-full bg-neutral-900 hover:bg-neutral-800 text-white p-3.5 rounded-xl font-bold text-xs transition">
+                    Iniciar Sesión
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- 7. SECCIÓN PANEL DE ADMINISTRACIÓN / DASHBOARD FINANCIERO (OCULTO POR DEFECTO) -->
+    <section id="seccion-dashboard-admin" class="py-24 max-w-6xl mx-auto px-6 border-t border-orange-100 hidden">
+        <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
+            <div>
+                <div class="flex items-center gap-2">
+                    <span class="bg-emerald-100 text-emerald-800 text-[10px] font-black px-2.5 py-1 rounded-full uppercase tracking-wider">Firebase Cloud Sync</span>
+                    <span id="user-display" class="text-xs font-bold text-neutral-500"></span>
+                </div>
+                <h2 class="text-3xl font-serif font-black text-neutral-800 mt-1">Métricas y Finanzas Policafé</h2>
+            </div>
+            <button onclick="logoutAdmin()" class="bg-red-50 hover:bg-red-100 text-red-700 px-4 py-2 rounded-xl text-xs font-bold flex items-center gap-1.5 transition">
+                <i data-lucide="log-out" class="w-4 h-4"></i> Cerrar Sesión
+            </button>
+        </div>
+
+        <!-- TARJETAS DE MÉTRICAS FINANCIERAS -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            <div class="bg-white p-6 rounded-3xl border border-orange-100 shadow-sm flex items-center justify-between">
+                <div>
+                    <p class="text-xs font-bold text-neutral-400 uppercase tracking-wider">Ingresos Totales</p>
+                    <h3 id="stat-ingresos" class="text-3xl font-black text-emerald-600 mt-1">$0.00</h3>
+                </div>
+                <div class="bg-emerald-50 p-3 rounded-2xl text-emerald-600"><i data-lucide="trending-up" class="w-6 h-6"></i></div>
+            </div>
+            <div class="bg-white p-6 rounded-3xl border border-orange-100 shadow-sm flex items-center justify-between">
+                <div>
+                    <p class="text-xs font-bold text-neutral-400 uppercase tracking-wider">Egresos / Gastos</p>
+                    <h3 id="stat-egresos" class="text-3xl font-black text-red-600 mt-1">$0.00</h3>
+                </div>
+                <div class="bg-red-50 p-3 rounded-2xl text-red-600"><i data-lucide="trending-down" class="w-6 h-6"></i></div>
+            </div>
+            <div class="bg-white p-6 rounded-3xl border border-orange-100 shadow-sm flex items-center justify-between">
+                <div>
+                    <p class="text-xs font-bold text-neutral-400 uppercase tracking-wider">Balance Neto</p>
+                    <h3 id="stat-balance" class="text-3xl font-black text-orange-600 mt-1">$0.00</h3>
+                </div>
+                <div class="bg-orange-50 p-3 rounded-2xl text-orange-600"><i data-lucide="dollar-sign" class="w-6 h-6"></i></div>
+            </div>
+        </div>
+
+        <div class="grid md:grid-cols-3 gap-8">
+            <!-- FORMULARIO REGISTRO DE EGRESOS -->
+            <div class="bg-white p-6 rounded-3xl border border-orange-100 shadow-sm md:col-span-1 h-fit">
+                <h3 class="text-lg font-black text-neutral-800 mb-4 flex items-center gap-2">
+                    <i data-lucide="minus-circle" class="text-red-500"></i> Registrar Egreso / Gasto
+                </h3>
+                <form onsubmit="event.preventDefault(); registrarEgreso();" class="space-y-4">
+                    <div>
+                        <label class="block text-xs font-bold text-neutral-700 mb-1">Concepto / Insumo</label>
+                        <input type="text" id="egreso-concepto" required class="w-full p-3 rounded-xl border border-neutral-200 text-xs focus:ring-2 focus:ring-orange-500 focus:outline-none" placeholder="Ej: Compra de Leche / Grano">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-neutral-700 mb-1">Monto ($)</label>
+                        <input type="number" step="0.01" id="egreso-monto" required class="w-full p-3 rounded-xl border border-neutral-200 text-xs focus:ring-2 focus:ring-orange-500 focus:outline-none" placeholder="0.00">
+                    </div>
+                    <button type="submit" class="w-full bg-red-600 hover:bg-red-700 text-white p-3 rounded-xl font-bold text-xs transition">
+                        Guardar Egreso
+                    </button>
+                </form>
+            </div>
+
+            <!-- TABLA HISTORIAL DE MOVIMIENTOS -->
+            <div class="bg-white p-6 rounded-3xl border border-orange-100 shadow-sm md:col-span-2">
+                <h3 class="text-lg font-black text-neutral-800 mb-4 flex items-center gap-2">
+                    <i data-lucide="list" class="text-orange-600"></i> Historial de Ventas y Egresos
+                </h3>
+                <div class="overflow-x-auto max-h-80">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="border-b text-xs font-bold text-neutral-400">
+                                <th class="pb-3">Tipo</th>
+                                <th class="pb-3">Concepto</th>
+                                <th class="pb-3">Monto</th>
+                                <th class="pb-3">Fecha</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tabla-movimientos" class="text-xs divide-y">
+                            <tr>
+                                <td colspan="4" class="py-4 text-center text-neutral-400">Cargando registros...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 8. SECCIÓN NOSOTROS -->
     <section id="nosotros" class="bg-gradient-to-b from-[#f5f0ea] to-[#fdfbf7] py-24">
         <div class="max-w-6xl mx-auto px-6 grid md:grid-cols-2 gap-12 items-center">
             <div class="relative group">
@@ -260,7 +379,7 @@
         </div>
     </section>
 
-    <!-- 7. CONTACTO, MAPA Y PIE DE PÁGINA -->
+    <!-- 9. CONTACTO, MAPA Y PIE DE PÁGINA -->
     <section id="contacto" class="py-24 max-w-6xl mx-auto px-6 border-t border-orange-100">
         <div class="grid md:grid-cols-2 gap-12 items-center">
             <div class="bg-white p-6 rounded-3xl shadow-sm border">
@@ -280,7 +399,136 @@
         <p class="text-xs">&copy; 2026 Comunidad de Leones Politécnicos. Todos los derechos reservados.</p>
     </footer>
 
-    <!-- LÓGICA DEL CARRITO Y CÓDIGO QR -->
+    <!-- LÓGICA FRONTEND Y SCRIPT DE INTEGRACIÓN DE FIREBASE (MÓDULO ES6) -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        // Configuración de Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyBNMdhV48Y1oIEX-eZd20MOUuNPjoNQFXU",
+            authDomain: "policafe-cf364.firebaseapp.com",
+            projectId: "policafe-cf364",
+            storageBucket: "policafe-cf364.firebasestorage.app",
+            messagingSenderId: "1017727685183",
+            appId: "1:1017727685183:web:ae7ac1a48ae19bbb345e8a",
+            measurementId: "G-07QMKQV68B"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        let usuarioActual = null;
+
+        // Monitorear estado de sesión
+        onAuthStateChanged(auth, (user) => {
+            usuarioActual = user;
+            const seccionAdmin = document.getElementById('seccion-dashboard-admin');
+            const userDisplay = document.getElementById('user-display');
+            
+            if (user) {
+                seccionAdmin.classList.remove('hidden');
+                userDisplay.innerText = user.email;
+                cargarMovimientosFirebase();
+            } else {
+                seccionAdmin.classList.add('hidden');
+            }
+        });
+
+        // Login de Admin
+        window.loginAdmin = async function() {
+            const email = document.getElementById('admin-email').value;
+            const pass = document.getElementById('admin-password').value;
+            const errElem = document.getElementById('admin-login-error');
+            errElem.classList.add('hidden');
+
+            try {
+                await signInWithEmailAndPassword(auth, email, pass);
+                cerrarAdminLogin();
+            } catch (error) {
+                errElem.innerText = "Error: Credenciales incorrectas o usuario no registrado en Firebase.";
+                errElem.classList.remove('hidden');
+            }
+        };
+
+        window.logoutAdmin = function() {
+            signOut(auth);
+        };
+
+        // Guardar pedido en Firestore
+        window.guardarPedidoFirebase = async function(total, folio, listaProductos) {
+            try {
+                await addDoc(collection(db, "movimientos"), {
+                    tipo: "ingreso",
+                    concepto: `Pedido #${folio} (${listaProductos})`,
+                    monto: parseFloat(total),
+                    fecha: serverTimestamp()
+                });
+            } catch (e) {
+                console.error("Error al registrar en Firebase: ", e);
+            }
+        };
+
+        // Guardar egreso en Firestore
+        window.registrarEgreso = async function() {
+            const concepto = document.getElementById('egreso-concepto').value;
+            const monto = parseFloat(document.getElementById('egreso-monto').value);
+
+            if (!concepto || isNaN(monto)) return;
+
+            try {
+                await addDoc(collection(db, "movimientos"), {
+                    tipo: "egreso",
+                    concepto: concepto,
+                    monto: monto,
+                    fecha: serverTimestamp()
+                });
+                document.getElementById('egreso-concepto').value = "";
+                document.getElementById('egreso-monto').value = "";
+            } catch (e) {
+                console.error("Error al registrar egreso: ", e);
+            }
+        };
+
+        // Escuchar datos en tiempo real desde Firestore
+        function cargarMovimientosFirebase() {
+            const q = query(collection(db, "movimientos"), orderBy("fecha", "desc"));
+            onSnapshot(q, (snapshot) => {
+                let ingresos = 0;
+                let egresos = 0;
+                const tabla = document.getElementById('tabla-movimientos');
+                tabla.innerHTML = "";
+
+                snapshot.forEach((doc) => {
+                    const data = doc.data();
+                    const monto = data.monto || 0;
+                    
+                    if (data.tipo === 'ingreso') ingresos += monto;
+                    if (data.tipo === 'egreso') egresos += monto;
+
+                    const f = data.fecha ? new Date(data.fecha.seconds * 1000).toLocaleString() : 'Reciente';
+                    const badgeClass = data.tipo === 'ingreso' ? 'bg-emerald-100 text-emerald-800' : 'bg-red-100 text-red-800';
+
+                    tabla.innerHTML += `
+                        <tr class="hover:bg-neutral-50">
+                            <td class="py-2.5"><span class="px-2 py-0.5 rounded-full text-[10px] font-bold ${badgeClass}">${data.tipo.toUpperCase()}</span></td>
+                            <td class="py-2.5 font-medium text-neutral-800">${data.concepto}</td>
+                            <td class="py-2.5 font-bold ${data.tipo === 'ingreso' ? 'text-emerald-600' : 'text-red-600'}">$${monto.toFixed(2)}</td>
+                            <td class="py-2.5 text-neutral-400 text-[10px]">${f}</td>
+                        </tr>
+                    `;
+                });
+
+                document.getElementById('stat-ingresos').innerText = `$${ingresos.toFixed(2)}`;
+                document.getElementById('stat-egresos').innerText = `$${egresos.toFixed(2)}`;
+                document.getElementById('stat-balance').innerText = `$${(ingresos - egresos).toFixed(2)}`;
+            });
+        }
+    </script>
+
+    <!-- LÓGICA CARRITO Y NAVEGACIÓN CLIENTE -->
     <script>
         lucide.createIcons();
 
@@ -442,15 +690,15 @@
             window.open(`https://api.whatsapp.com/send?phone=521234567890&text=${encodeURIComponent(msg)}`);
         }
 
-        // FUNCIÓN DE QR ARREGLADA COMPLETAMENTE
         function procesarPedidoQR() {
             if (carrito.length === 0) return;
             
             const containerQR = document.getElementById('qrcode');
-            containerQR.innerHTML = ""; // Limpieza total garantizada
+            containerQR.innerHTML = "";
             
             let dataQR = "POLICAFE-ORDER\n";
             let resHTML = "", total = 0;
+            let resumenNombres = [];
             const folio = Math.floor(1000 + Math.random() * 9000);
 
             carrito.forEach(i => {
@@ -458,6 +706,7 @@
                 total += sub;
                 dataQR += `${i.cantidad}x ${i.nombre} = $${sub.toFixed(2)}\n`;
                 resHTML += `<div class="flex justify-between"><span>${i.cantidad}x ${i.nombre}</span><span>$${sub.toFixed(2)}</span></div>`;
+                resumenNombres.push(`${i.cantidad}x ${i.nombre}`);
             });
 
             dataQR += `HORA: ${document.getElementById('hora-recogida').value}\nTOTAL: $${total.toFixed(2)}\nFOLIO: #${folio}`;
@@ -466,7 +715,6 @@
 
             document.getElementById('resumen-ticket-qr').innerHTML = resHTML;
 
-            // Renderizado forzado sin duplicación
             new QRCode(containerQR, {
                 text: dataQR,
                 width: 160,
@@ -476,12 +724,31 @@
                 correctLevel : QRCode.CorrectLevel.M
             });
 
+            // Guardar automáticamente en Firebase Firestore
+            if (window.guardarPedidoFirebase) {
+                window.guardarPedidoFirebase(total, folio, resumenNombres.join(', '));
+            }
+
             puntosUsuario += Math.floor(total * 0.1);
             localStorage.setItem('garrasOro', puntosUsuario);
             document.getElementById('nav-puntos').innerText = puntosUsuario;
 
             cerrarModalCarrito();
             document.getElementById('modal-qr').classList.remove('opacity-0', 'pointer-events-none');
+        }
+
+        function toggleAdminView() {
+            const seccion = document.getElementById('seccion-dashboard-admin');
+            if (seccion.classList.contains('hidden')) {
+                // Abrir modal de login si no hay sesión
+                document.getElementById('modal-admin-login').classList.remove('opacity-0', 'pointer-events-none');
+            } else {
+                seccion.scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+
+        function cerrarAdminLogin() {
+            document.getElementById('modal-admin-login').classList.add('opacity-0', 'pointer-events-none');
         }
 
         function abrirModalCarrito() { document.getElementById('modal-carrito').classList.remove('opacity-0', 'pointer-events-none'); document.getElementById('cuerpo-modal-carrito').classList.remove('translate-x-full'); }
