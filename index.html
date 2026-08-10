@@ -20,26 +20,23 @@
 </head>
 <body class="bg-[#fdfbf7] text-[#2d1b10] font-sans selection:bg-orange-500 selection:text-white">
 
-    <!-- 1. BARRA DE NAVEGACIÓN -->
-    <nav class="fixed w-full bg-[#fdfbf7]/80 backdrop-blur-lg z-50 shadow-md border-b border-orange-100">
+    <!-- 1. BARRA DE NAVEGACIÓN PÚBLICA -->
+    <nav id="public-nav" class="fixed w-full bg-[#fdfbf7]/80 backdrop-blur-lg z-50 shadow-md border-b border-orange-100 transition-all">
         <div class="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
             <a href="#" class="text-2xl font-serif font-black tracking-wider text-orange-700 flex items-center gap-2">
-                <i data-lucide="coffee" class="text-amber-500 animate-pulse"></i>POLICAFÉ <span class="text-xs bg-orange-600 text-white px-2 py-0.5 rounded-md font-mono">v3.0 Cloud</span>
+                <i data-lucide="coffee" class="text-amber-500 animate-pulse"></i>POLICAFÉ <span class="text-xs bg-orange-600 text-white px-2 py-0.5 rounded-md font-mono">v3.5 Cloud</span>
             </a>
             
-            <!-- Barra de Estado de Recompensas en el Nav -->
             <div class="hidden lg:flex items-center gap-2 bg-amber-50 px-3 py-1.5 rounded-full border border-amber-200 text-xs font-bold text-amber-950">
                 <i data-lucide="award" class="w-4 h-4 text-amber-600"></i>
                 <span>Tus Garras de Oro: <span id="nav-puntos" class="text-orange-700 font-black">0</span> 🐾</span>
             </div>
 
             <div class="flex items-center gap-3">
-                <!-- Botón de Acceso a Administrador -->
                 <button onclick="toggleAdminView()" id="btn-admin-nav" class="bg-neutral-800 hover:bg-neutral-900 text-white p-2.5 rounded-full text-xs font-bold flex items-center gap-1.5 transition" title="Panel Administrador">
                     <i data-lucide="shield-check" class="w-4 h-4 text-amber-400"></i>
                 </button>
 
-                <!-- Botón Carrito -->
                 <button onclick="abrirModalCarrito()" class="relative bg-gradient-to-r from-orange-600 to-amber-500 text-white px-5 py-2.5 rounded-full text-sm font-bold flex items-center gap-2 hover:shadow-md transition-all">
                     <i data-lucide="shopping-cart" class="w-4 h-4"></i>
                     <span>Mi Carrito</span>
@@ -50,7 +47,7 @@
     </nav>
 
     <!-- 2. INICIO (HERO) -->
-    <header id="inicio" class="relative h-screen flex items-center justify-center bg-cover bg-center" style="background-image: linear-gradient(rgba(45, 27, 16, 0.65), rgba(45, 27, 16, 0.65)), url('https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?q=80&w=1600');">
+    <header id="inicio" class="public-section relative h-screen flex items-center justify-center bg-cover bg-center" style="background-image: linear-gradient(rgba(45, 27, 16, 0.65), rgba(45, 27, 16, 0.65)), url('https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?q=80&w=1600');">
         <div class="text-center text-white px-4 max-w-4xl relative z-10">
             <span class="bg-gradient-to-r from-amber-500 to-orange-500 text-neutral-900 font-black tracking-widest uppercase text-xs px-4 py-1.5 rounded-full inline-block mb-4">
                 Ecosistema Tecnológico Inteligente
@@ -62,7 +59,6 @@
                 Pide por voz, programa tu receso, acumula Garras de Oro y canjea premios con tu código QR directo en barra.
             </p>
             
-            <!-- Buscador por Voz -->
             <div class="max-w-md mx-auto bg-white/10 backdrop-blur-md p-2 rounded-2xl border border-white/20 flex items-center gap-2 mb-6 shadow-2xl">
                 <i data-lucide="search" class="text-stone-300 ml-3 shrink-0"></i>
                 <input type="text" id="buscador-input" oninput="buscarProducto(this.value)" class="bg-transparent w-full text-white placeholder-stone-300 text-sm focus:outline-none" placeholder="Busca tu comida o di 'Asistente'...">
@@ -75,13 +71,12 @@
     </header>
 
     <!-- 3. MENÚ E INVENTARIO -->
-    <section id="menu" class="py-24 max-w-6xl mx-auto px-6">
+    <section id="menu" class="public-section py-24 max-w-6xl mx-auto px-6">
         <div class="text-center mb-12">
             <h2 class="text-4xl md:text-5xl font-serif font-black text-neutral-800 mb-3">Menú León Automatizado</h2>
             <div class="w-24 h-1.5 bg-gradient-to-r from-orange-600 to-amber-500 mx-auto rounded-full mb-6"></div>
         </div>
 
-        <!-- Filtros Combinados -->
         <div class="flex flex-col md:flex-row gap-4 justify-between items-center border-b pb-8 mb-12">
             <div class="flex flex-wrap gap-2" id="filtros-categoria">
                 <button onclick="filtrarCategoria('todos')" class="cat-btn bg-orange-700 text-white px-5 py-2.5 rounded-xl font-bold transition shadow-sm">Todos</button>
@@ -98,7 +93,6 @@
             </div>
         </div>
 
-        <!-- Rejilla Dinámica de Productos -->
         <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6" id="contenedor-menu">
             <div class="menu-item bg-white p-5 rounded-2xl shadow-sm border border-orange-50 hover:shadow-xl transition flex flex-col justify-between" data-cat="platillos" data-nutri="alta-proteina" data-nombre="comida corrida">
                 <div>
@@ -181,7 +175,6 @@
                     <button onclick="cerrarModalCarrito()"><i data-lucide="x" class="text-neutral-500"></i></button>
                 </div>
 
-                <!-- Logística Integrada -->
                 <div class="grid grid-cols-2 gap-3 mb-4">
                     <div class="bg-gradient-to-br from-orange-600 to-amber-500 text-white p-3.5 rounded-2xl shadow-md border border-orange-400 relative overflow-hidden flex flex-col justify-between animate-pulse">
                         <div class="absolute -right-4 -bottom-4 opacity-15">
@@ -204,11 +197,9 @@
                     </div>
                 </div>
 
-                <!-- Lista de Compra -->
                 <div id="items-carrito" class="space-y-3 overflow-y-auto flex-1 pr-1"></div>
             </div>
 
-            <!-- Totales, Recompensas y Despacho -->
             <div class="border-t pt-4">
                 <div class="flex justify-between items-center text-sm font-bold text-neutral-600 mb-2">
                     <span>Ganas con esta compra:</span>
@@ -248,7 +239,7 @@
         </div>
     </div>
 
-    <!-- 6. MODAL LOGIN ADMINISTRADOR (FIREBASE AUTH) -->
+    <!-- 6. MODAL LOGIN ADMINISTRADOR -->
     <div id="modal-admin-login" class="fixed inset-0 bg-black/70 z-50 flex items-center justify-center opacity-0 pointer-events-none transition-opacity duration-300 p-4">
         <div class="bg-white rounded-3xl p-6 max-w-sm w-full shadow-2xl relative">
             <button onclick="cerrarAdminLogin()" class="absolute top-4 right-4 text-neutral-400 hover:text-neutral-600"><i data-lucide="x" class="w-5 h-5"></i></button>
@@ -257,7 +248,7 @@
                     <i data-lucide="shield-check" class="w-6 h-6"></i>
                 </div>
                 <h3 class="text-xl font-serif font-black text-neutral-800">Panel de Administración</h3>
-                <p class="text-xs text-neutral-500">Inicia sesión con Firebase para ver métricas y finanzas</p>
+                <p class="text-xs text-neutral-500">Inicia sesión para ver métricas, finanzas e inventario</p>
             </div>
             <form id="form-login-admin" onsubmit="event.preventDefault(); loginAdmin();" class="space-y-4">
                 <div>
@@ -276,18 +267,18 @@
         </div>
     </div>
 
-    <!-- 7. SECCIÓN PANEL DE ADMINISTRACIÓN / DASHBOARD FINANCIERO (OCULTO POR DEFECTO) -->
-    <section id="seccion-dashboard-admin" class="py-24 max-w-6xl mx-auto px-6 border-t border-orange-100 hidden">
-        <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
+    <!-- 7. SECCIÓN PANEL DE ADMINISTRACIÓN / DASHBOARD FINANCIERO E INVENTARIO (OCULTO POR DEFECTO) -->
+    <section id="seccion-dashboard-admin" class="py-12 max-w-6xl mx-auto px-6 hidden min-h-screen">
+        <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4 bg-white p-6 rounded-3xl shadow-sm border border-orange-100">
             <div>
                 <div class="flex items-center gap-2">
-                    <span class="bg-emerald-100 text-emerald-800 text-[10px] font-black px-2.5 py-1 rounded-full uppercase tracking-wider">Firebase Cloud Sync</span>
+                    <span class="bg-emerald-100 text-emerald-800 text-[10px] font-black px-2.5 py-1 rounded-full uppercase tracking-wider">Modo Administrador Activo</span>
                     <span id="user-display" class="text-xs font-bold text-neutral-500"></span>
                 </div>
-                <h2 class="text-3xl font-serif font-black text-neutral-800 mt-1">Métricas y Finanzas Policafé</h2>
+                <h2 class="text-3xl font-serif font-black text-neutral-800 mt-1">Panel de Control Policafé</h2>
             </div>
-            <button onclick="logoutAdmin()" class="bg-red-50 hover:bg-red-100 text-red-700 px-4 py-2 rounded-xl text-xs font-bold flex items-center gap-1.5 transition">
-                <i data-lucide="log-out" class="w-4 h-4"></i> Cerrar Sesión
+            <button onclick="logoutAdmin()" class="bg-red-50 hover:bg-red-100 text-red-700 px-4 py-2.5 rounded-xl text-xs font-bold flex items-center gap-1.5 transition">
+                <i data-lucide="log-out" class="w-4 h-4"></i> Cerrar Sesión y Salir
             </button>
         </div>
 
@@ -316,7 +307,7 @@
             </div>
         </div>
 
-        <div class="grid md:grid-cols-3 gap-8">
+        <div class="grid md:grid-cols-3 gap-8 mb-8">
             <!-- FORMULARIO REGISTRO DE EGRESOS -->
             <div class="bg-white p-6 rounded-3xl border border-orange-100 shadow-sm md:col-span-1 h-fit">
                 <h3 class="text-lg font-black text-neutral-800 mb-4 flex items-center gap-2">
@@ -361,10 +352,59 @@
                 </div>
             </div>
         </div>
+
+        <!-- SECCIÓN DE INVENTARIO EN EL PANEL ADMIN -->
+        <div class="grid md:grid-cols-3 gap-8">
+            <div class="bg-white p-6 rounded-3xl border border-orange-100 shadow-sm md:col-span-1 h-fit">
+                <h3 class="text-lg font-black text-neutral-800 mb-4 flex items-center gap-2">
+                    <i data-lucide="package-plus" class="text-orange-600"></i> Agregar / Actualizar Inventario
+                </h3>
+                <form onsubmit="event.preventDefault(); guardarInventario();" class="space-y-4">
+                    <div>
+                        <label class="block text-xs font-bold text-neutral-700 mb-1">Nombre del Producto</label>
+                        <input type="text" id="inv-nombre" required class="w-full p-3 rounded-xl border border-neutral-200 text-xs focus:ring-2 focus:ring-orange-500 focus:outline-none" placeholder="Ej: Latas de Café">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-neutral-700 mb-1">Stock / Cantidad</label>
+                        <input type="number" id="inv-stock" required class="w-full p-3 rounded-xl border border-neutral-200 text-xs focus:ring-2 focus:ring-orange-500 focus:outline-none" placeholder="0">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-neutral-700 mb-1">Precio Unitario ($)</label>
+                        <input type="number" step="0.01" id="inv-precio" required class="w-full p-3 rounded-xl border border-neutral-200 text-xs focus:ring-2 focus:ring-orange-500 focus:outline-none" placeholder="0.00">
+                    </div>
+                    <button type="submit" class="w-full bg-orange-600 hover:bg-orange-700 text-white p-3 rounded-xl font-bold text-xs transition">
+                        Guardar en Inventario
+                    </button>
+                </form>
+            </div>
+
+            <div class="bg-white p-6 rounded-3xl border border-orange-100 shadow-sm md:col-span-2">
+                <h3 class="text-lg font-black text-neutral-800 mb-4 flex items-center gap-2">
+                    <i data-lucide="boxes" class="text-orange-600"></i> Control de Stock Actual
+                </h3>
+                <div class="overflow-x-auto max-h-80">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="border-b text-xs font-bold text-neutral-400">
+                                <th class="pb-3">Producto</th>
+                                <th class="pb-3">Stock Disponibles</th>
+                                <th class="pb-3">Precio</th>
+                                <th class="pb-3 text-right">Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tabla-inventario" class="text-xs divide-y">
+                            <tr>
+                                <td colspan="4" class="py-4 text-center text-neutral-400">Cargando inventario...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
     </section>
 
     <!-- 8. SECCIÓN NOSOTROS -->
-    <section id="nosotros" class="bg-gradient-to-b from-[#f5f0ea] to-[#fdfbf7] py-24">
+    <section id="nosotros" class="public-section bg-gradient-to-b from-[#f5f0ea] to-[#fdfbf7] py-24">
         <div class="max-w-6xl mx-auto px-6 grid md:grid-cols-2 gap-12 items-center">
             <div class="relative group">
                 <img src="https://images.unsplash.com/photo-1498804103079-a6351b050096?q=80&w=600" alt="Comunidad" class="rounded-3xl shadow-xl w-full object-cover h-[400px]">
@@ -380,7 +420,7 @@
     </section>
 
     <!-- 9. CONTACTO, MAPA Y PIE DE PÁGINA -->
-    <section id="contacto" class="py-24 max-w-6xl mx-auto px-6 border-t border-orange-100">
+    <section id="contacto" class="public-section py-24 max-w-6xl mx-auto px-6 border-t border-orange-100">
         <div class="grid md:grid-cols-2 gap-12 items-center">
             <div class="bg-white p-6 rounded-3xl shadow-sm border">
                 <h3 class="text-xl font-black text-orange-800 mb-4">Ubicación de nuestro Territorio</h3>
@@ -394,18 +434,17 @@
         </div>
     </section>
 
-    <footer class="bg-neutral-900 text-stone-400 py-8 text-center border-t-4 border-orange-600">
+    <footer class="public-section bg-neutral-900 text-stone-400 py-8 text-center border-t-4 border-orange-600">
         <p class="font-bold text-white mb-1">Policafé UPSLP</p>
         <p class="text-xs">&copy; 2026 Comunidad de Leones Politécnicos. Todos los derechos reservados.</p>
     </footer>
 
-    <!-- LÓGICA FRONTEND Y SCRIPT DE INTEGRACIÓN DE FIREBASE (MÓDULO ES6) -->
+    <!-- LÓGICA FRONTEND Y FIREBASE -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-        import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, serverTimestamp, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-        // Configuración de Firebase
         const firebaseConfig = {
             apiKey: "AIzaSyBNMdhV48Y1oIEX-eZd20MOUuNPjoNQFXU",
             authDomain: "policafe-cf364.firebaseapp.com",
@@ -420,24 +459,29 @@
         const auth = getAuth(app);
         const db = getFirestore(app);
 
-        let usuarioActual = null;
-
-        // Monitorear estado de sesión
+        // Control de Visibilidad según Sesión Administrador
         onAuthStateChanged(auth, (user) => {
-            usuarioActual = user;
+            const publicSections = document.querySelectorAll('.public-section');
+            const publicNav = document.getElementById('public-nav');
             const seccionAdmin = document.getElementById('seccion-dashboard-admin');
             const userDisplay = document.getElementById('user-display');
             
             if (user) {
+                // Ocultar todo lo público y mostrar solo el Panel Administrador
+                publicSections.forEach(sec => sec.classList.add('hidden'));
+                publicNav.classList.add('hidden');
                 seccionAdmin.classList.remove('hidden');
                 userDisplay.innerText = user.email;
                 cargarMovimientosFirebase();
+                cargarInventarioFirebase();
             } else {
+                // Mostrar vista pública normal
+                publicSections.forEach(sec => sec.classList.remove('hidden'));
+                publicNav.classList.remove('hidden');
                 seccionAdmin.classList.add('hidden');
             }
         });
 
-        // Login de Admin
         window.loginAdmin = async function() {
             const email = document.getElementById('admin-email').value;
             const pass = document.getElementById('admin-password').value;
@@ -448,7 +492,7 @@
                 await signInWithEmailAndPassword(auth, email, pass);
                 cerrarAdminLogin();
             } catch (error) {
-                errElem.innerText = "Error: Credenciales incorrectas o usuario no registrado en Firebase.";
+                errElem.innerText = "Error: Credenciales incorrectas.";
                 errElem.classList.remove('hidden');
             }
         };
@@ -457,7 +501,7 @@
             signOut(auth);
         };
 
-        // Guardar pedido en Firestore
+        // Guardar pedidos (Ingreso)
         window.guardarPedidoFirebase = async function(total, folio, listaProductos) {
             try {
                 await addDoc(collection(db, "movimientos"), {
@@ -467,11 +511,11 @@
                     fecha: serverTimestamp()
                 });
             } catch (e) {
-                console.error("Error al registrar en Firebase: ", e);
+                console.error("Error al registrar ingreso en Firebase: ", e);
             }
         };
 
-        // Guardar egreso en Firestore
+        // Registrar Egresos
         window.registrarEgreso = async function() {
             const concepto = document.getElementById('egreso-concepto').value;
             const monto = parseFloat(document.getElementById('egreso-monto').value);
@@ -487,12 +531,14 @@
                 });
                 document.getElementById('egreso-concepto').value = "";
                 document.getElementById('egreso-monto').value = "";
+                alert("Egreso registrado correctamente.");
             } catch (e) {
                 console.error("Error al registrar egreso: ", e);
+                alert("Hubo un error al guardar el egreso.");
             }
         };
 
-        // Escuchar datos en tiempo real desde Firestore
+        // Cargar Historial de Movimientos
         function cargarMovimientosFirebase() {
             const q = query(collection(db, "movimientos"), orderBy("fecha", "desc"));
             onSnapshot(q, (snapshot) => {
@@ -500,6 +546,11 @@
                 let egresos = 0;
                 const tabla = document.getElementById('tabla-movimientos');
                 tabla.innerHTML = "";
+
+                if (snapshot.empty) {
+                    tabla.innerHTML = `<tr><td colspan="4" class="py-4 text-center text-neutral-400">No hay movimientos registrados.</td></tr>`;
+                    return;
+                }
 
                 snapshot.forEach((doc) => {
                     const data = doc.data();
@@ -526,9 +577,69 @@
                 document.getElementById('stat-balance').innerText = `$${(ingresos - egresos).toFixed(2)}`;
             });
         }
+
+        // Inventario Firestore
+        window.guardarInventario = async function() {
+            const nombre = document.getElementById('inv-nombre').value;
+            const stock = parseInt(document.getElementById('inv-stock').value);
+            const precio = parseFloat(document.getElementById('inv-precio').value);
+
+            if (!nombre || isNaN(stock) || isNaN(precio)) return;
+
+            try {
+                await addDoc(collection(db, "inventario"), {
+                    nombre,
+                    stock,
+                    precio,
+                    actualizado: serverTimestamp()
+                });
+                document.getElementById('inv-nombre').value = "";
+                document.getElementById('inv-stock').value = "";
+                document.getElementById('inv-precio').value = "";
+                alert("Producto guardado en inventario.");
+            } catch (e) {
+                console.error("Error al guardar inventario:", e);
+            }
+        };
+
+        window.eliminarItemInventario = async function(id) {
+            try {
+                await deleteDoc(doc(db, "inventario", id));
+            } catch (e) {
+                console.error("Error al eliminar item:", e);
+            }
+        };
+
+        function cargarInventarioFirebase() {
+            const q = query(collection(db, "inventario"), orderBy("nombre"));
+            onSnapshot(q, (snapshot) => {
+                const tabla = document.getElementById('tabla-inventario');
+                tabla.innerHTML = "";
+
+                if (snapshot.empty) {
+                    tabla.innerHTML = `<tr><td colspan="4" class="py-4 text-center text-neutral-400">Sin productos en inventario.</td></tr>`;
+                    return;
+                }
+
+                snapshot.forEach((docSnap) => {
+                    const item = docSnap.data();
+                    const id = docSnap.id;
+                    tabla.innerHTML += `
+                        <tr class="hover:bg-neutral-50">
+                            <td class="py-2.5 font-bold text-neutral-800">${item.nombre}</td>
+                            <td class="py-2.5 text-neutral-600 font-semibold">${item.stock} unidades</td>
+                            <td class="py-2.5 text-emerald-600 font-bold">$${item.precio.toFixed(2)}</td>
+                            <td class="py-2.5 text-right">
+                                <button onclick="eliminarItemInventario('${id}')" class="bg-red-50 text-red-600 px-2.5 py-1 rounded-lg text-[10px] font-bold hover:bg-red-100 transition">Eliminar</button>
+                            </td>
+                        </tr>
+                    `;
+                });
+            });
+        }
     </script>
 
-    <!-- LÓGICA CARRITO Y NAVEGACIÓN CLIENTE -->
+    <!-- LÓGICA CARRITO, WHATSAPP Y QR -->
     <script>
         lucide.createIcons();
 
@@ -582,7 +693,7 @@
         function activarMicrofono() {
             const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
             if (!SpeechRecognition) {
-                alert("Tu navegador no soporta control por voz. Prueba con Google Chrome.");
+                alert("Tu navegador no soporta control por voz.");
                 return;
             }
             const recognition = new SpeechRecognition();
@@ -593,23 +704,17 @@
             
             recognition.onstart = () => {
                 btnMicro.classList.add('bg-red-500', 'animate-ping');
-                statusVoz.innerText = "🎙️ Escuchando... Di algo como: 'Quiero agregar Tecolota'";
+                statusVoz.innerText = "🎙️ Escuchando...";
             };
 
             recognition.onresult = (event) => {
                 const comando = event.results[0][0].transcript.toLowerCase();
                 statusVoz.innerText = `Escuché: "${comando}"`;
-                
-                if (comando.includes('agregar') || comando.includes('añadir')) {
-                    if (comando.includes('corrida')) { agregarAlCarrito('Comida Corrida', 100.00); }
-                    else if (comando.includes('tecolota') || comando.includes('torta')) { agregarAlCarrito('Tecolota', 70.00); }
-                    else if (comando.includes('sándwich') || comando.includes('integral')) { agregarAlCarrito('Club Sándwich Integral', 70.00); }
-                    else if (comando.includes('café') || comando.includes('caliente')) { agregarAlCarrito('Café Caliente', 25.00); }
-                    else if (comando.includes('nachos')) { agregarAlCarrito('Nachos con Guiso', 80.00); }
-                } else {
-                    document.getElementById('buscador-input').value = comando;
-                    buscarProducto(comando);
-                }
+                if (comando.includes('corrida')) { agregarAlCarrito('Comida Corrida', 100.00); }
+                else if (comando.includes('tecolota')) { agregarAlCarrito('Tecolota', 70.00); }
+                else if (comando.includes('sándwich')) { agregarAlCarrito('Club Sándwich Integral', 70.00); }
+                else if (comando.includes('café')) { agregarAlCarrito('Café Caliente', 25.00); }
+                else if (comando.includes('nachos')) { agregarAlCarrito('Nachos con Guiso', 80.00); }
             };
 
             recognition.onend = () => {
@@ -626,10 +731,10 @@
         }
 
         function cambiarCantidad(nombre, cambio) {
-            const item = carrito.find(i => i.nombre === cambio || i.nombre === nombre);
+            const item = carrito.find(i => i.nombre === nombre);
             if (item) {
                 item.cantidad += cambio;
-                if (item.cantidad <= 0) carrito = carrito.filter(i => i.nombre !== item.nombre);
+                if (item.cantidad <= 0) carrito = carrito.filter(i => i.nombre !== nombre);
             }
             actualizarInterfazCarrito();
         }
@@ -662,7 +767,7 @@
                         <div class="flex items-center gap-2.5 bg-white border rounded-lg px-2 py-1">
                             <button onclick="cambiarCantidad('${item.nombre}', -1)" class="font-bold text-neutral-400 hover:text-red-500">-</button>
                             <span class="font-bold text-neutral-800">${item.cantidad}</span>
-                            <button onclick="cambiarCantidad('${item.nombre}', 1)" class="font-bold text-neutral-400 hover:text-orange-500">+</button>
+                            <button onclick="cambiarCantidad('${item.nombre}', 1)" class="font-bold text-neutral-800 hover:text-orange-500">+</button>
                         </div>
                         <span class="font-black text-neutral-800 ml-4 w-12 text-right">$${sub.toFixed(2)}</span>
                     </div>`;
@@ -676,20 +781,31 @@
             txtPuntosGarras.innerText = `+${Math.floor(total * 0.1)} Garras 🐾`;
         }
 
+        // WhatsApp guarda ingreso automático
         function enviarWhatsApp() {
             if (carrito.length === 0) return;
             let msg = `*NUEVO PEDIDO POLICAFÉ*\n`;
             let total = 0;
+            let resumenNombres = [];
+            const folio = Math.floor(1000 + Math.random() * 9000);
+
             carrito.forEach(i => {
-                msg += `• ${i.cantidad}x ${i.nombre} ($${(i.precio*i.cantidad).toFixed(2)})\n`;
-                total += i.precio*i.cantidad;
+                const sub = i.precio * i.cantidad;
+                msg += `• ${i.cantidad}x ${i.nombre} ($${sub.toFixed(2)})\n`;
+                total += sub;
+                resumenNombres.push(`${i.cantidad}x ${i.nombre}`);
             });
-            msg += `\n*Hora programada:* ${document.getElementById('hora-recogida').value}`;
-            msg += `\n*Total a pagar en mostrador:* $${total.toFixed(2)}`;
+            msg += `\n*Hora:* ${document.getElementById('hora-recogida').value}`;
+            msg += `\n*Total:* $${total.toFixed(2)} (Folio #${folio})`;
+
+            if (window.guardarPedidoFirebase) {
+                window.guardarPedidoFirebase(total, folio, resumenNombres.join(', '));
+            }
             
             window.open(`https://api.whatsapp.com/send?phone=521234567890&text=${encodeURIComponent(msg)}`);
         }
 
+        // Generar QR guarda ingreso automático
         function procesarPedidoQR() {
             if (carrito.length === 0) return;
             
@@ -711,7 +827,7 @@
 
             dataQR += `HORA: ${document.getElementById('hora-recogida').value}\nTOTAL: $${total.toFixed(2)}\nFOLIO: #${folio}`;
             resHTML += `<div class="flex justify-between border-t pt-1 mt-2 font-black text-sm text-neutral-800"><span>Total a Pagar:</span><span>$${total.toFixed(2)}</span></div>`;
-            resHTML += `<div class="mt-2 text-[10px] text-neutral-400">Hora de entrega: ${document.getElementById('hora-recogida').value} | Folio: #${folio}</div>`;
+            resHTML += `<div class="mt-2 text-[10px] text-neutral-400">Entrega: ${document.getElementById('hora-recogida').value} | Folio: #${folio}</div>`;
 
             document.getElementById('resumen-ticket-qr').innerHTML = resHTML;
 
@@ -724,7 +840,6 @@
                 correctLevel : QRCode.CorrectLevel.M
             });
 
-            // Guardar automáticamente en Firebase Firestore
             if (window.guardarPedidoFirebase) {
                 window.guardarPedidoFirebase(total, folio, resumenNombres.join(', '));
             }
@@ -738,13 +853,7 @@
         }
 
         function toggleAdminView() {
-            const seccion = document.getElementById('seccion-dashboard-admin');
-            if (seccion.classList.contains('hidden')) {
-                // Abrir modal de login si no hay sesión
-                document.getElementById('modal-admin-login').classList.remove('opacity-0', 'pointer-events-none');
-            } else {
-                seccion.scrollIntoView({ behavior: 'smooth' });
-            }
+            document.getElementById('modal-admin-login').classList.remove('opacity-0', 'pointer-events-none');
         }
 
         function cerrarAdminLogin() {
