@@ -33,10 +33,12 @@
             </div>
 
             <div class="flex items-center gap-3">
+                <!-- Botón de Acceso a Administrador -->
                 <button onclick="toggleAdminView()" id="btn-admin-nav" class="bg-neutral-800 hover:bg-neutral-900 text-white p-2.5 rounded-full text-xs font-bold flex items-center gap-1.5 transition" title="Panel Administrador">
                     <i data-lucide="shield-check" class="w-4 h-4 text-amber-400"></i>
                 </button>
 
+                <!-- Botón Carrito -->
                 <button onclick="abrirModalCarrito()" class="relative bg-gradient-to-r from-orange-600 to-amber-500 text-white px-5 py-2.5 rounded-full text-sm font-bold flex items-center gap-2 hover:shadow-md transition-all">
                     <i data-lucide="shopping-cart" class="w-4 h-4"></i>
                     <span>Mi Carrito</span>
@@ -267,7 +269,7 @@
         </div>
     </div>
 
-    <!-- 7. SECCIÓN PANEL DE ADMINISTRACIÓN / DASHBOARD FINANCIERO E INVENTARIO (OCULTO POR DEFECTO) -->
+    <!-- 7. SECCIÓN PANEL DE ADMINISTRACIÓN / DASHBOARD FINANCIERO E INVENTARIO -->
     <section id="seccion-dashboard-admin" class="py-12 max-w-6xl mx-auto px-6 hidden min-h-screen">
         <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4 bg-white p-6 rounded-3xl shadow-sm border border-orange-100">
             <div>
@@ -277,9 +279,15 @@
                 </div>
                 <h2 class="text-3xl font-serif font-black text-neutral-800 mt-1">Panel de Control Policafé</h2>
             </div>
-            <button onclick="logoutAdmin()" class="bg-red-50 hover:bg-red-100 text-red-700 px-4 py-2.5 rounded-xl text-xs font-bold flex items-center gap-1.5 transition">
-                <i data-lucide="log-out" class="w-4 h-4"></i> Cerrar Sesión y Salir
-            </button>
+            
+            <div class="flex gap-2">
+                <button onclick="cargarDatosFicticiosDemo()" class="bg-amber-100 hover:bg-amber-200 text-amber-900 px-3.5 py-2 rounded-xl text-xs font-bold transition flex items-center gap-1.5" title="Genera datos de 1 mes de ventas e inventario para 30 personas">
+                    <i data-lucide="database-zap" class="w-4 h-4"></i> Cargar Datos Demo (1 Mes)
+                </button>
+                <button onclick="logoutAdmin()" class="bg-red-50 hover:bg-red-100 text-red-700 px-4 py-2 rounded-xl text-xs font-bold flex items-center gap-1.5 transition">
+                    <i data-lucide="log-out" class="w-4 h-4"></i> Salir
+                </button>
+            </div>
         </div>
 
         <!-- TARJETAS DE MÉTRICAS FINANCIERAS -->
@@ -361,11 +369,11 @@
                 </h3>
                 <form onsubmit="event.preventDefault(); guardarInventario();" class="space-y-4">
                     <div>
-                        <label class="block text-xs font-bold text-neutral-700 mb-1">Nombre del Producto</label>
-                        <input type="text" id="inv-nombre" required class="w-full p-3 rounded-xl border border-neutral-200 text-xs focus:ring-2 focus:ring-orange-500 focus:outline-none" placeholder="Ej: Latas de Café">
+                        <label class="block text-xs font-bold text-neutral-700 mb-1">Nombre del Producto / Insumo</label>
+                        <input type="text" id="inv-nombre" required class="w-full p-3 rounded-xl border border-neutral-200 text-xs focus:ring-2 focus:ring-orange-500 focus:outline-none" placeholder="Ej: Frijol en Grano (Kg)">
                     </div>
                     <div>
-                        <label class="block text-xs font-bold text-neutral-700 mb-1">Stock / Cantidad</label>
+                        <label class="block text-xs font-bold text-neutral-700 mb-1">Stock / Cantidad Disponible</label>
                         <input type="number" id="inv-stock" required class="w-full p-3 rounded-xl border border-neutral-200 text-xs focus:ring-2 focus:ring-orange-500 focus:outline-none" placeholder="0">
                     </div>
                     <div>
@@ -380,15 +388,15 @@
 
             <div class="bg-white p-6 rounded-3xl border border-orange-100 shadow-sm md:col-span-2">
                 <h3 class="text-lg font-black text-neutral-800 mb-4 flex items-center gap-2">
-                    <i data-lucide="boxes" class="text-orange-600"></i> Control de Stock Actual
+                    <i data-lucide="boxes" class="text-orange-600"></i> Control de Stock (Calculado p/ 30 Personas)
                 </h3>
                 <div class="overflow-x-auto max-h-80">
                     <table class="w-full text-left border-collapse">
                         <thead>
                             <tr class="border-b text-xs font-bold text-neutral-400">
-                                <th class="pb-3">Producto</th>
-                                <th class="pb-3">Stock Disponibles</th>
-                                <th class="pb-3">Precio</th>
+                                <th class="pb-3">Insumo / Alimento</th>
+                                <th class="pb-3">Stock Disponible</th>
+                                <th class="pb-3">Precio Estimado</th>
                                 <th class="pb-3 text-right">Acciones</th>
                             </tr>
                         </thead>
@@ -439,7 +447,7 @@
         <p class="text-xs">&copy; 2026 Comunidad de Leones Politécnicos. Todos los derechos reservados.</p>
     </footer>
 
-    <!-- LÓGICA FRONTEND Y FIREBASE -->
+    <!-- LÓGICA FRONTEND Y FIREBASE (ES6 MODULE) -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
@@ -467,7 +475,6 @@
             const userDisplay = document.getElementById('user-display');
             
             if (user) {
-                // Ocultar todo lo público y mostrar solo el Panel Administrador
                 publicSections.forEach(sec => sec.classList.add('hidden'));
                 publicNav.classList.add('hidden');
                 seccionAdmin.classList.remove('hidden');
@@ -475,7 +482,6 @@
                 cargarMovimientosFirebase();
                 cargarInventarioFirebase();
             } else {
-                // Mostrar vista pública normal
                 publicSections.forEach(sec => sec.classList.remove('hidden'));
                 publicNav.classList.remove('hidden');
                 seccionAdmin.classList.add('hidden');
@@ -548,7 +554,7 @@
                 tabla.innerHTML = "";
 
                 if (snapshot.empty) {
-                    tabla.innerHTML = `<tr><td colspan="4" class="py-4 text-center text-neutral-400">No hay movimientos registrados.</td></tr>`;
+                    tabla.innerHTML = `<tr><td colspan="4" class="py-4 text-center text-neutral-400">No hay movimientos registrados. Haz clic en "Cargar Datos Demo" para llenar un mes completo.</td></tr>`;
                     return;
                 }
 
@@ -617,7 +623,7 @@
                 tabla.innerHTML = "";
 
                 if (snapshot.empty) {
-                    tabla.innerHTML = `<tr><td colspan="4" class="py-4 text-center text-neutral-400">Sin productos en inventario.</td></tr>`;
+                    tabla.innerHTML = `<tr><td colspan="4" class="py-4 text-center text-neutral-400">Sin productos en inventario. Haz clic en "Cargar Datos Demo".</td></tr>`;
                     return;
                 }
 
@@ -627,7 +633,7 @@
                     tabla.innerHTML += `
                         <tr class="hover:bg-neutral-50">
                             <td class="py-2.5 font-bold text-neutral-800">${item.nombre}</td>
-                            <td class="py-2.5 text-neutral-600 font-semibold">${item.stock} unidades</td>
+                            <td class="py-2.5 text-neutral-600 font-semibold">${item.stock} unidades / kg</td>
                             <td class="py-2.5 text-emerald-600 font-bold">$${item.precio.toFixed(2)}</td>
                             <td class="py-2.5 text-right">
                                 <button onclick="eliminarItemInventario('${id}')" class="bg-red-50 text-red-600 px-2.5 py-1 rounded-lg text-[10px] font-bold hover:bg-red-100 transition">Eliminar</button>
@@ -637,6 +643,74 @@
                 });
             });
         }
+
+        // GENERADOR DE DATOS FICTICIOS (1 MES DE FINANZAS + INVENTARIO PARA 30 PERSONAS)
+        window.cargarDatosFicticiosDemo = async function() {
+            if (!confirm("¿Deseas poblar la base de datos con 1 mes ficticio de finanzas e inventario inicial para 30 personas?")) return;
+
+            // 1. Cargar Inventario para 30 personas basado en el Menú
+            const inventarioBase = [
+                { nombre: "Birote / Bolillo para Torta Tecolota", stock: 35, precio: 4.50 },
+                { nombre: "Tortillas de Maíz para Tacos y Enchiladas (Kg)", stock: 8, precio: 22.00 },
+                { nombre: "Tortillas de Harina para Burritos (Paquetes)", stock: 10, precio: 28.00 },
+                { nombre: "Milanesa de Pollo / Puerco Empacada (Kg)", stock: 6, precio: 120.00 },
+                { nombre: "Totopos para Chilaquiles y Nachos (Kg)", stock: 5, precio: 45.00 },
+                { nombre: "Café en Grano Tostado de la Casa (Kg)", stock: 4, precio: 180.00 },
+                { nombre: "Pan Integral para Club Sándwich (Barra)", stock: 5, precio: 42.00 },
+                { nombre: "Frijol Negro Refrito Preparado (Kg)", stock: 6, precio: 35.00 },
+                { nombre: "Queso Cesta Potosino para Rallar (Kg)", stock: 3, precio: 110.00 },
+                { nombre: "Jitomate / Tomate Verde en Verdura (Kg)", stock: 10, precio: 25.00 },
+                { nombre: "Caja de Huevo Blanco Fresco (30 pzs)", stock: 2, precio: 85.00 }
+            ];
+
+            for (let item of inventarioBase) {
+                await addDoc(collection(db, "inventario"), { ...item, actualizado: serverTimestamp() });
+            }
+
+            // 2. Cargar 1 Mes de Movimientos Ficticios
+            const conceptosVentas = [
+                "2x Tecolota, 1x Café Caliente",
+                "1x Comida Corrida, 1x Agua de Frutas",
+                "3x Burrito de Harina, 1x Electrolit",
+                "1x Club Sándwich Integral",
+                "2x Chilaquiles con Guiso",
+                "1x Nachos con Guiso, 1x Café Caliente"
+            ];
+            const montosVentas = [165.00, 140.00, 97.00, 70.00, 150.00, 105.00];
+
+            const conceptosGastos = [
+                "Compra semanal de Panadería y Birotes",
+                "Insumos de Carne y Milanesa p/ Semana",
+                "Carga de Gas L.P. Estacionario",
+                "Compra de Café en Grano y Lácteos",
+                "Insumos de Limpieza y Servilletas"
+            ];
+            const montosGastos = [450.00, 1250.00, 680.00, 520.00, 310.00];
+
+            // Generar registros distribuidos a lo largo del último mes
+            for (let i = 0; i < 15; i++) {
+                const idxVenta = Math.floor(Math.random() * conceptosVentas.length);
+                const folio = Math.floor(1000 + Math.random() * 9000);
+                
+                await addDoc(collection(db, "movimientos"), {
+                    tipo: "ingreso",
+                    concepto: `Pedido #${folio} (${conceptosVentas[idxVenta]})`,
+                    monto: montosVentas[idxVenta],
+                    fecha: serverTimestamp()
+                });
+            }
+
+            for (let i = 0; i < conceptosGastos.length; i++) {
+                await addDoc(collection(db, "movimientos"), {
+                    tipo: "egreso",
+                    concepto: conceptosGastos[i],
+                    monto: montosGastos[i],
+                    fecha: serverTimestamp()
+                });
+            }
+
+            alert("¡Datos demostrativos cargados exitosamente!");
+        };
     </script>
 
     <!-- LÓGICA CARRITO, WHATSAPP Y QR -->
@@ -781,7 +855,6 @@
             txtPuntosGarras.innerText = `+${Math.floor(total * 0.1)} Garras 🐾`;
         }
 
-        // WhatsApp guarda ingreso automático
         function enviarWhatsApp() {
             if (carrito.length === 0) return;
             let msg = `*NUEVO PEDIDO POLICAFÉ*\n`;
@@ -805,7 +878,6 @@
             window.open(`https://api.whatsapp.com/send?phone=521234567890&text=${encodeURIComponent(msg)}`);
         }
 
-        // Generar QR guarda ingreso automático
         function procesarPedidoQR() {
             if (carrito.length === 0) return;
             
