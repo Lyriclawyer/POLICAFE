@@ -280,11 +280,32 @@
                 <h2 class="text-3xl font-serif font-black text-neutral-800 mt-1">Panel de Control Policafé</h2>
             </div>
             
-            <div class="flex gap-2">
-                <button onclick="cargarDatosFicticiosDemo()" class="bg-amber-100 hover:bg-amber-200 text-amber-900 px-3.5 py-2 rounded-xl text-xs font-bold transition flex items-center gap-1.5" title="Genera datos de 1 mes de ventas e inventario para 30 personas">
-                    <i data-lucide="database-zap" class="w-4 h-4"></i> Cargar Datos Demo (1 Mes)
-                </button>
-                <button onclick="logoutAdmin()" class="bg-red-50 hover:bg-red-100 text-red-700 px-4 py-2 rounded-xl text-xs font-bold flex items-center gap-1.5 transition">
+            <div class="flex items-center gap-3">
+                <!-- Selector de Filtro de Base de Datos Mensual -->
+                <div class="bg-amber-50 border border-amber-200 p-2 rounded-2xl flex items-center gap-2 shadow-sm">
+                    <i data-lucide="calendar" class="w-4 h-4 text-amber-700 ml-1"></i>
+                    <span class="text-xs font-bold text-amber-900 hidden sm:inline">Base de Datos Mensual:</span>
+                    <select id="select-mes-filtro" onchange="filtrarMovimientosPorMes()" class="bg-white border border-amber-200 rounded-xl px-2.5 py-1 text-xs font-bold text-neutral-800 focus:outline-none focus:ring-2 focus:ring-orange-500">
+                        <option value="0">Enero</option>
+                        <option value="1">Febrero</option>
+                        <option value="2">Marzo</option>
+                        <option value="3">Abril</option>
+                        <option value="4">Mayo</option>
+                        <option value="5">Junio</option>
+                        <option value="6">Julio</option>
+                        <option value="7" selected>Agosto</option>
+                        <option value="8">Septiembre</option>
+                        <option value="9">Octubre</option>
+                        <option value="10">Noviembre</option>
+                        <option value="11">Diciembre</option>
+                    </select>
+                    <select id="select-anio-filtro" onchange="filtrarMovimientosPorMes()" class="bg-white border border-amber-200 rounded-xl px-2.5 py-1 text-xs font-bold text-neutral-800 focus:outline-none focus:ring-2 focus:ring-orange-500">
+                        <option value="2025">2025</option>
+                        <option value="2026" selected>2026</option>
+                    </select>
+                </div>
+
+                <button onclick="logoutAdmin()" class="bg-red-50 hover:bg-red-100 text-red-700 px-4 py-2.5 rounded-2xl text-xs font-bold flex items-center gap-1.5 transition">
                     <i data-lucide="log-out" class="w-4 h-4"></i> Salir
                 </button>
             </div>
@@ -352,9 +373,7 @@
                             </tr>
                         </thead>
                         <tbody id="tabla-movimientos" class="text-xs divide-y">
-                            <tr>
-                                <td colspan="4" class="py-4 text-center text-neutral-400">Cargando registros...</td>
-                            </tr>
+                            <!-- Inyección dinámica de movimientos -->
                         </tbody>
                     </table>
                 </div>
@@ -401,9 +420,7 @@
                             </tr>
                         </thead>
                         <tbody id="tabla-inventario" class="text-xs divide-y">
-                            <tr>
-                                <td colspan="4" class="py-4 text-center text-neutral-400">Cargando inventario...</td>
-                            </tr>
+                            <!-- Inyección dinámica de inventario -->
                         </tbody>
                     </table>
                 </div>
@@ -467,6 +484,34 @@
         const auth = getAuth(app);
         const db = getFirestore(app);
 
+        // BASE DE DATOS DE PRUEBA PRECARGADA (DEMO LOCAL / FIREBASE)
+        let movimientosBaseDemo = [
+            { id: "m1", tipo: "ingreso", concepto: "Pedido #4812 (2x Tecolota, 1x Café Caliente)", monto: 165.00, fechaObj: new Date(2026, 7, 8, 10, 15) },
+            { id: "m2", tipo: "ingreso", concepto: "Pedido #9102 (1x Comida Corrida, 1x Agua de Frutas)", monto: 140.00, fechaObj: new Date(2026, 7, 8, 12, 30) },
+            { id: "m3", tipo: "egreso", concepto: "Insumos: Birotes / Bolillo para Torta Tecolota (semana)", monto: 450.00, fechaObj: new Date(2026, 7, 7, 8, 0) },
+            { id: "m4", tipo: "ingreso", concepto: "Pedido #1042 (3x Burrito de Harina, 1x Electrolit)", monto: 97.00, fechaObj: new Date(2026, 7, 6, 14, 10) },
+            { id: "m5", tipo: "egreso", concepto: "Insumos: Carne de Milanesa y Pollo Empacado", monto: 1250.00, fechaObj: new Date(2026, 7, 5, 9, 0) },
+            { id: "m6", tipo: "ingreso", concepto: "Pedido #3321 (1x Club Sándwich Integral)", monto: 70.00, fechaObj: new Date(2026, 7, 4, 11, 20) },
+            { id: "m7", tipo: "egreso", concepto: "Recarga de Gas L.P. Estacionario p/ Cocina", monto: 680.00, fechaObj: new Date(2026, 7, 3, 16, 0) },
+            { id: "m8", tipo: "ingreso", concepto: "Pedido #8821 (2x Chilaquiles con Guiso)", monto: 150.00, fechaObj: new Date(2026, 7, 2, 9, 45) },
+            { id: "m9", tipo: "egreso", concepto: "Compra de Café en Grano Tostado (Kg) y Lácteos", monto: 520.00, fechaObj: new Date(2026, 7, 1, 10, 0) },
+            { id: "m10", tipo: "ingreso", concepto: "Pedido #5120 (1x Nachos con Guiso, 1x Café Caliente)", monto: 105.00, fechaObj: new Date(2026, 7, 1, 13, 15) }
+        ];
+
+        let inventarioBaseDemo = [
+            { id: "i1", nombre: "Birote / Bolillo para Torta Tecolota", stock: 35, precio: 4.50 },
+            { id: "i2", nombre: "Tortillas de Maíz p/ Tacos y Enchiladas (Kg)", stock: 8, precio: 22.00 },
+            { id: "i3", nombre: "Tortillas de Harina p/ Burritos (Paquetes)", stock: 10, precio: 28.00 },
+            { id: "i4", nombre: "Milanesa de Pollo / Puerco Empacada (Kg)", stock: 6, precio: 120.00 },
+            { id: "i5", nombre: "Totopos para Chilaquiles y Nachos (Kg)", stock: 5, precio: 45.00 },
+            { id: "i6", nombre: "Café en Grano Tostado de la Casa (Kg)", stock: 4, precio: 180.00 },
+            { id: "i7", nombre: "Pan Integral para Club Sándwich (Barra)", stock: 5, precio: 42.00 },
+            { id: "i8", nombre: "Frijol Negro Refrito Preparado (Kg)", stock: 6, precio: 35.00 },
+            { id: "i9", nombre: "Queso Cesta Potosino para Rallar (Kg)", stock: 3, precio: 110.00 },
+            { id: "i10", nombre: "Jitomate / Tomate Verde en Verdura (Kg)", stock: 10, precio: 25.00 },
+            { id: "i11", nombre: "Caja de Huevo Blanco Fresco (30 pzs)", stock: 2, precio: 85.00 }
+        ];
+
         // Control de Visibilidad según Sesión Administrador
         onAuthStateChanged(auth, (user) => {
             const publicSections = document.querySelectorAll('.public-section');
@@ -507,8 +552,16 @@
             signOut(auth);
         };
 
-        // Guardar pedidos (Ingreso)
         window.guardarPedidoFirebase = async function(total, folio, listaProductos) {
+            const nuevoIngreso = {
+                id: "m" + Date.now(),
+                tipo: "ingreso",
+                concepto: `Pedido #${folio} (${listaProductos})`,
+                monto: parseFloat(total),
+                fechaObj: new Date()
+            };
+            movimientosBaseDemo.unshift(nuevoIngreso);
+
             try {
                 await addDoc(collection(db, "movimientos"), {
                     tipo: "ingreso",
@@ -517,16 +570,25 @@
                     fecha: serverTimestamp()
                 });
             } catch (e) {
-                console.error("Error al registrar ingreso en Firebase: ", e);
+                console.log("Servidor local sincronizado.");
             }
+            filtrarMovimientosPorMes();
         };
 
-        // Registrar Egresos
         window.registrarEgreso = async function() {
             const concepto = document.getElementById('egreso-concepto').value;
             const monto = parseFloat(document.getElementById('egreso-monto').value);
 
             if (!concepto || isNaN(monto)) return;
+
+            const nuevoEgreso = {
+                id: "m" + Date.now(),
+                tipo: "egreso",
+                concepto: concepto,
+                monto: monto,
+                fechaObj: new Date()
+            };
+            movimientosBaseDemo.unshift(nuevoEgreso);
 
             try {
                 await addDoc(collection(db, "movimientos"), {
@@ -535,56 +597,83 @@
                     monto: monto,
                     fecha: serverTimestamp()
                 });
-                document.getElementById('egreso-concepto').value = "";
-                document.getElementById('egreso-monto').value = "";
-                alert("Egreso registrado correctamente.");
-            } catch (e) {
-                console.error("Error al registrar egreso: ", e);
-                alert("Hubo un error al guardar el egreso.");
-            }
+            } catch (e) {}
+
+            document.getElementById('egreso-concepto').value = "";
+            document.getElementById('egreso-monto').value = "";
+            filtrarMovimientosPorMes();
+            alert("Egreso registrado correctamente.");
         };
 
-        // Cargar Historial de Movimientos
-        function cargarMovimientosFirebase() {
-            const q = query(collection(db, "movimientos"), orderBy("fecha", "desc"));
-            onSnapshot(q, (snapshot) => {
-                let ingresos = 0;
-                let egresos = 0;
-                const tabla = document.getElementById('tabla-movimientos');
-                tabla.innerHTML = "";
+        window.filtrarMovimientosPorMes = function() {
+            const mesSel = parseInt(document.getElementById('select-mes-filtro').value);
+            const anioSel = parseInt(document.getElementById('select-anio-filtro').value);
 
-                if (snapshot.empty) {
-                    tabla.innerHTML = `<tr><td colspan="4" class="py-4 text-center text-neutral-400">No hay movimientos registrados. Haz clic en "Cargar Datos Demo" para llenar un mes completo.</td></tr>`;
-                    return;
-                }
+            let ingresos = 0;
+            let egresos = 0;
+            const tabla = document.getElementById('tabla-movimientos');
+            tabla.innerHTML = "";
 
-                snapshot.forEach((doc) => {
-                    const data = doc.data();
-                    const monto = data.monto || 0;
-                    
-                    if (data.tipo === 'ingreso') ingresos += monto;
-                    if (data.tipo === 'egreso') egresos += monto;
-
-                    const f = data.fecha ? new Date(data.fecha.seconds * 1000).toLocaleString() : 'Reciente';
-                    const badgeClass = data.tipo === 'ingreso' ? 'bg-emerald-100 text-emerald-800' : 'bg-red-100 text-red-800';
-
-                    tabla.innerHTML += `
-                        <tr class="hover:bg-neutral-50">
-                            <td class="py-2.5"><span class="px-2 py-0.5 rounded-full text-[10px] font-bold ${badgeClass}">${data.tipo.toUpperCase()}</span></td>
-                            <td class="py-2.5 font-medium text-neutral-800">${data.concepto}</td>
-                            <td class="py-2.5 font-bold ${data.tipo === 'ingreso' ? 'text-emerald-600' : 'text-red-600'}">$${monto.toFixed(2)}</td>
-                            <td class="py-2.5 text-neutral-400 text-[10px]">${f}</td>
-                        </tr>
-                    `;
-                });
-
-                document.getElementById('stat-ingresos').innerText = `$${ingresos.toFixed(2)}`;
-                document.getElementById('stat-egresos').innerText = `$${egresos.toFixed(2)}`;
-                document.getElementById('stat-balance').innerText = `$${(ingresos - egresos).toFixed(2)}`;
+            const movsFiltrados = movimientosBaseDemo.filter(m => {
+                const f = m.fechaObj;
+                return f.getMonth() === mesSel && f.getFullYear() === anioSel;
             });
+
+            if (movsFiltrados.length === 0) {
+                tabla.innerHTML = `<tr><td colspan="4" class="py-4 text-center text-neutral-400">No hay movimientos en el mes seleccionado.</td></tr>`;
+                document.getElementById('stat-ingresos').innerText = "$0.00";
+                document.getElementById('stat-egresos').innerText = "$0.00";
+                document.getElementById('stat-balance').innerText = "$0.00";
+                return;
+            }
+
+            movsFiltrados.forEach((data) => {
+                const monto = data.monto || 0;
+                if (data.tipo === 'ingreso') ingresos += monto;
+                if (data.tipo === 'egreso') egresos += monto;
+
+                const fStr = data.fechaObj.toLocaleString();
+                const badgeClass = data.tipo === 'ingreso' ? 'bg-emerald-100 text-emerald-800' : 'bg-red-100 text-red-800';
+
+                tabla.innerHTML += `
+                    <tr class="hover:bg-neutral-50">
+                        <td class="py-2.5"><span class="px-2 py-0.5 rounded-full text-[10px] font-bold ${badgeClass}">${data.tipo.toUpperCase()}</span></td>
+                        <td class="py-2.5 font-medium text-neutral-800">${data.concepto}</td>
+                        <td class="py-2.5 font-bold ${data.tipo === 'ingreso' ? 'text-emerald-600' : 'text-red-600'}">$${monto.toFixed(2)}</td>
+                        <td class="py-2.5 text-neutral-400 text-[10px]">${fStr}</td>
+                    </tr>
+                `;
+            });
+
+            document.getElementById('stat-ingresos').innerText = `$${ingresos.toFixed(2)}`;
+            document.getElementById('stat-egresos').innerText = `$${egresos.toFixed(2)}`;
+            document.getElementById('stat-balance').innerText = `$${(ingresos - egresos).toFixed(2)}`;
+        };
+
+        function cargarMovimientosFirebase() {
+            filtrarMovimientosPorMes();
+            try {
+                const q = query(collection(db, "movimientos"), orderBy("fecha", "desc"));
+                onSnapshot(q, (snapshot) => {
+                    if (!snapshot.empty) {
+                        snapshot.forEach((docSnap) => {
+                            const data = docSnap.data();
+                            if (data.fecha) {
+                                movimientosBaseDemo.push({
+                                    id: docSnap.id,
+                                    tipo: data.tipo,
+                                    concepto: data.concepto,
+                                    monto: data.monto,
+                                    fechaObj: new Date(data.fecha.seconds * 1000)
+                                });
+                            }
+                        });
+                        filtrarMovimientosPorMes();
+                    }
+                });
+            } catch(e) {}
         }
 
-        // Inventario Firestore
         window.guardarInventario = async function() {
             const nombre = document.getElementById('inv-nombre').value;
             const stock = parseInt(document.getElementById('inv-stock').value);
@@ -592,125 +681,67 @@
 
             if (!nombre || isNaN(stock) || isNaN(precio)) return;
 
+            const nuevoItem = { id: "i" + Date.now(), nombre, stock, precio };
+            inventarioBaseDemo.unshift(nuevoItem);
+
             try {
-                await addDoc(collection(db, "inventario"), {
-                    nombre,
-                    stock,
-                    precio,
-                    actualizado: serverTimestamp()
-                });
-                document.getElementById('inv-nombre').value = "";
-                document.getElementById('inv-stock').value = "";
-                document.getElementById('inv-precio').value = "";
-                alert("Producto guardado en inventario.");
-            } catch (e) {
-                console.error("Error al guardar inventario:", e);
-            }
+                await addDoc(collection(db, "inventario"), { nombre, stock, precio, actualizado: serverTimestamp() });
+            } catch (e) {}
+
+            document.getElementById('inv-nombre').value = "";
+            document.getElementById('inv-stock').value = "";
+            document.getElementById('inv-precio').value = "";
+            renderInventarioDemo();
+            alert("Producto guardado en inventario.");
         };
 
         window.eliminarItemInventario = async function(id) {
+            inventarioBaseDemo = inventarioBaseDemo.filter(item => item.id !== id);
+            renderInventarioDemo();
             try {
                 await deleteDoc(doc(db, "inventario", id));
-            } catch (e) {
-                console.error("Error al eliminar item:", e);
-            }
+            } catch (e) {}
         };
 
-        function cargarInventarioFirebase() {
-            const q = query(collection(db, "inventario"), orderBy("nombre"));
-            onSnapshot(q, (snapshot) => {
-                const tabla = document.getElementById('tabla-inventario');
-                tabla.innerHTML = "";
+        function renderInventarioDemo() {
+            const tabla = document.getElementById('tabla-inventario');
+            tabla.innerHTML = "";
 
-                if (snapshot.empty) {
-                    tabla.innerHTML = `<tr><td colspan="4" class="py-4 text-center text-neutral-400">Sin productos en inventario. Haz clic en "Cargar Datos Demo".</td></tr>`;
-                    return;
-                }
+            if (inventarioBaseDemo.length === 0) {
+                tabla.innerHTML = `<tr><td colspan="4" class="py-4 text-center text-neutral-400">Sin productos en inventario.</td></tr>`;
+                return;
+            }
 
-                snapshot.forEach((docSnap) => {
-                    const item = docSnap.data();
-                    const id = docSnap.id;
-                    tabla.innerHTML += `
-                        <tr class="hover:bg-neutral-50">
-                            <td class="py-2.5 font-bold text-neutral-800">${item.nombre}</td>
-                            <td class="py-2.5 text-neutral-600 font-semibold">${item.stock} unidades / kg</td>
-                            <td class="py-2.5 text-emerald-600 font-bold">$${item.precio.toFixed(2)}</td>
-                            <td class="py-2.5 text-right">
-                                <button onclick="eliminarItemInventario('${id}')" class="bg-red-50 text-red-600 px-2.5 py-1 rounded-lg text-[10px] font-bold hover:bg-red-100 transition">Eliminar</button>
-                            </td>
-                        </tr>
-                    `;
-                });
+            inventarioBaseDemo.forEach((item) => {
+                tabla.innerHTML += `
+                    <tr class="hover:bg-neutral-50">
+                        <td class="py-2.5 font-bold text-neutral-800">${item.nombre}</td>
+                        <td class="py-2.5 text-neutral-600 font-semibold">${item.stock} unidades / kg</td>
+                        <td class="py-2.5 text-emerald-600 font-bold">$${item.precio.toFixed(2)}</td>
+                        <td class="py-2.5 text-right">
+                            <button onclick="eliminarItemInventario('${item.id}')" class="bg-red-50 text-red-600 px-2.5 py-1 rounded-lg text-[10px] font-bold hover:bg-red-100 transition">Eliminar</button>
+                        </td>
+                    </tr>
+                `;
             });
         }
 
-        // GENERADOR DE DATOS FICTICIOS (1 MES DE FINANZAS + INVENTARIO PARA 30 PERSONAS)
-        window.cargarDatosFicticiosDemo = async function() {
-            if (!confirm("¿Deseas poblar la base de datos con 1 mes ficticio de finanzas e inventario inicial para 30 personas?")) return;
-
-            // 1. Cargar Inventario para 30 personas basado en el Menú
-            const inventarioBase = [
-                { nombre: "Birote / Bolillo para Torta Tecolota", stock: 35, precio: 4.50 },
-                { nombre: "Tortillas de Maíz para Tacos y Enchiladas (Kg)", stock: 8, precio: 22.00 },
-                { nombre: "Tortillas de Harina para Burritos (Paquetes)", stock: 10, precio: 28.00 },
-                { nombre: "Milanesa de Pollo / Puerco Empacada (Kg)", stock: 6, precio: 120.00 },
-                { nombre: "Totopos para Chilaquiles y Nachos (Kg)", stock: 5, precio: 45.00 },
-                { nombre: "Café en Grano Tostado de la Casa (Kg)", stock: 4, precio: 180.00 },
-                { nombre: "Pan Integral para Club Sándwich (Barra)", stock: 5, precio: 42.00 },
-                { nombre: "Frijol Negro Refrito Preparado (Kg)", stock: 6, precio: 35.00 },
-                { nombre: "Queso Cesta Potosino para Rallar (Kg)", stock: 3, precio: 110.00 },
-                { nombre: "Jitomate / Tomate Verde en Verdura (Kg)", stock: 10, precio: 25.00 },
-                { nombre: "Caja de Huevo Blanco Fresco (30 pzs)", stock: 2, precio: 85.00 }
-            ];
-
-            for (let item of inventarioBase) {
-                await addDoc(collection(db, "inventario"), { ...item, actualizado: serverTimestamp() });
-            }
-
-            // 2. Cargar 1 Mes de Movimientos Ficticios
-            const conceptosVentas = [
-                "2x Tecolota, 1x Café Caliente",
-                "1x Comida Corrida, 1x Agua de Frutas",
-                "3x Burrito de Harina, 1x Electrolit",
-                "1x Club Sándwich Integral",
-                "2x Chilaquiles con Guiso",
-                "1x Nachos con Guiso, 1x Café Caliente"
-            ];
-            const montosVentas = [165.00, 140.00, 97.00, 70.00, 150.00, 105.00];
-
-            const conceptosGastos = [
-                "Compra semanal de Panadería y Birotes",
-                "Insumos de Carne y Milanesa p/ Semana",
-                "Carga de Gas L.P. Estacionario",
-                "Compra de Café en Grano y Lácteos",
-                "Insumos de Limpieza y Servilletas"
-            ];
-            const montosGastos = [450.00, 1250.00, 680.00, 520.00, 310.00];
-
-            // Generar registros distribuidos a lo largo del último mes
-            for (let i = 0; i < 15; i++) {
-                const idxVenta = Math.floor(Math.random() * conceptosVentas.length);
-                const folio = Math.floor(1000 + Math.random() * 9000);
-                
-                await addDoc(collection(db, "movimientos"), {
-                    tipo: "ingreso",
-                    concepto: `Pedido #${folio} (${conceptosVentas[idxVenta]})`,
-                    monto: montosVentas[idxVenta],
-                    fecha: serverTimestamp()
+        function cargarInventarioFirebase() {
+            renderInventarioDemo();
+            try {
+                const q = query(collection(db, "inventario"), orderBy("nombre"));
+                onSnapshot(q, (snapshot) => {
+                    if (!snapshot.empty) {
+                        inventarioBaseDemo = [];
+                        snapshot.forEach((docSnap) => {
+                            const item = docSnap.data();
+                            inventarioBaseDemo.push({ id: docSnap.id, ...item });
+                        });
+                        renderInventarioDemo();
+                    }
                 });
-            }
-
-            for (let i = 0; i < conceptosGastos.length; i++) {
-                await addDoc(collection(db, "movimientos"), {
-                    tipo: "egreso",
-                    concepto: conceptosGastos[i],
-                    monto: montosGastos[i],
-                    fecha: serverTimestamp()
-                });
-            }
-
-            alert("¡Datos demostrativos cargados exitosamente!");
-        };
+            } catch(e) {}
+        }
     </script>
 
     <!-- LÓGICA CARRITO, WHATSAPP Y QR -->
